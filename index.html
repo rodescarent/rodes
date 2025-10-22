@@ -1,51 +1,52 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mi Negocio - Acceso</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RODES | Alquiler de Autos</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="container">
-    <h1>Bienvenido a Mi Negocio</h1>
-    <p>Selecciona tu tipo de acceso:</p>
 
-    <div class="buttons">
-      <button onclick="entrarVisitante()">Entrar como Visitante</button>
-      <button onclick="loginAdmin()">Entrar como Administrador</button>
-    </div>
+  <!-- Encabezado con imagen de fondo -->
+  <header class="encabezado">
+    <div class="overlay"></div>
+    <img src="4.png" alt="Logo RODES" class="logo" />
+    
+  </header>
 
-    <!-- Zona Visitante -->
-    <div id="zonaVisitante" class="oculto panel">
-      <h2>Formulario de Clientes</h2>
-      <iframe 
-        src="https://docs.google.com/forms/d/e/1FAIpQLSdNAVWe_XU250gi8TOhlVSJOeiRgRtzZMWXGuC-5VuMUSW89A/viewform?embedded=true" 
-        width="100%" 
-        height="700" 
-        frameborder="0" 
-        marginheight="0" 
-        marginwidth="0">
-        Cargando…
-      </iframe>
-      <button class="cerrar" onclick="cerrarSesion()">Cerrar</button>
-    </div>
+  <!-- Zona visible para clientes (siempre abierta) -->
+  <section id="zonaVisitante">
+    <h2>Formulario de Clientes</h2>
+    <iframe 
+      src="https://docs.google.com/forms/d/e/1FAIpQLSdNAVWe_XU250gi8TOhlVSJOeiRgRtzZMWXGuC-5VuMUSW89A/viewform?embedded=true" 
+      width="100%" 
+      height="600" 
+      frameborder="0" 
+      marginheight="0" 
+      marginwidth="0">
+      Cargando…
+    </iframe>
+  </section>
 
-    <!-- Zona Admin -->
-    <div id="zonaAdmin" class="oculto panel">
-      <h2>Panel del Administrador</h2>
-      <iframe 
-        src="https://docs.google.com/forms/d/e/1FAIpQLSeHDPT5Vbid6dp31DemdUrQAoYY5UaW6vSY-_82jbyvYIeF2Q/viewform?embedded=true" 
-        width="100%" 
-        height="700" 
-        frameborder="0" 
-        marginheight="0" 
-        marginwidth="0">
-        Cargando…
-      </iframe>
-      <button class="cerrar" onclick="cerrarSesion()">Cerrar Sesión</button>
-    </div>
-  </div>
+  <!-- Botón para entrar al panel admin -->
+  <section id="botonAdmin">
+    <button onclick="accederAdmin()">Entrar como Administrador</button>
+  </section>
+
+  <!-- Zona del administrador (oculta por defecto) -->
+  <section id="zonaAdmin" style="display:none;">
+    <h2>Panel del Administrador</h2>
+    <iframe 
+      src="https://docs.google.com/forms/d/e/1FAIpQLSeHDPT5Vbid6dp31DemdUrQAoYY5UaW6vSY-_82jbyvYIeF2Q/viewform?embedded=true" 
+      width="100%" 
+      height="600" 
+      frameborder="0" 
+      marginheight="0" 
+      marginwidth="0">
+      Cargando…
+    </iframe>
+  </section>
 
   <script src="script.js"></script>
 </body>

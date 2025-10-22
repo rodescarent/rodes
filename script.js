@@ -1,45 +1,10 @@
-// Contraseña por defecto
-const CLAVE_ADMIN = "claveadmin123";
-
-function entrarVisitante() {
-  localStorage.setItem("rol", "visitante");
-  mostrarZona();
-}
-
-function loginAdmin() {
-  const pass = prompt("Ingrese la contraseña de administrador:");
-  if (pass === CLAVE_ADMIN) {
-    localStorage.setItem("rol", "admin");
-    mostrarZona();
-  } else {
-    alert("❌ Contraseña incorrecta");
+function accederAdmin() {
+  const password = prompt("Introduce la contraseña de administrador:");
+  if (password === "1234") { // contraseña temporal
+    document.getElementById("zonaAdmin").style.display = "block";
+    document.getElementById("botonAdmin").style.display = "none";
+    alert("Acceso concedido al panel del administrador.");
+  } else if (password) {
+    alert("Contraseña incorrecta. Intenta nuevamente.");
   }
 }
-
-function mostrarZona() {
-  const rol = localStorage.getItem("rol");
-  const zonaVisitante = document.getElementById("zonaVisitante");
-  const zonaAdmin = document.getElementById("zonaAdmin");
-
-  // Ocultamos ambas zonas
-  zonaVisitante.classList.add("oculto");
-  zonaAdmin.classList.add("oculto");
-
-  if (rol === "visitante") {
-    zonaVisitante.classList.remove("oculto");
-  } else if (rol === "admin") {
-    zonaAdmin.classList.remove("oculto");
-  }
-}
-
-function cerrarSesion() {
-  localStorage.removeItem("rol");
-  location.reload();
-}
-
-// Mantiene sesión si se recarga la página
-
-window.onload = () => {
-  localStorage.removeItem("rol"); // borra cualquier sesión previa
-  mostrarZona(); // carga la página con todo oculto
-};
