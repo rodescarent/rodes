@@ -38,4 +38,8 @@ function cerrarSesion() {
 }
 
 // Mantiene sesión si se recarga la página
-window.onload = mostrarZona;
+
+window.onload = () => {
+  localStorage.removeItem("rol"); // borra cualquier sesión previa
+  mostrarZona(); // carga la página con todo oculto
+};
