@@ -8,74 +8,56 @@
 </head>
 <body>
 
-  <!-- Encabezado con imagen de fondo -->
+  <!-- Encabezado con menú integrado -->
   <header class="encabezado">
     <div class="overlay"></div>
     <img src="4.png" alt="Logo RODES" class="logo" />
-    <div class="titulo">
-      <h1>RODES</h1>
-      <p>Your Key to Style and Adventure</p>
-    </div>
-    <!-- Botón para entrar al panel admin -->
-  <section id="botonAdmin">
-    <button onclick="accederAdmin()">Administrator</button>
-  </section>
+    <nav class="menu-header">
+      <button onclick="mostrarClientes(this)">Clientes</button>
+      <button onclick="mostrarAdmin(this)">Administrador</button>
+    </nav>
   </header>
 
-  <!-- Zona visible para clientes (siempre abierta) -->
-  <section id="zonaVisitante">
-    <h2>Formulario de Clientes</h2>
-    <iframe 
-      src="https://docs.google.com/forms/d/e/1FAIpQLSdNAVWe_XU250gi8TOhlVSJOeiRgRtzZMWXGuC-5VuMUSW89A/viewform?embedded=true" 
-      width="100%" 
-      height="600" 
-      frameborder="0" 
-      marginheight="0" 
-      marginwidth="0">
-      Cargando…
-    </iframe>
+  <!-- Contenido principal con galería por defecto -->
+  <main id="contenidoPrincipal">
+    <section class="galeria">
+      <h2>Galería de Autos</h2>
+      <div class="grid-galeria">
+        <div class="cuadro"></div>
+        <div class="cuadro"></div>
+        <div class="cuadro"></div>
+        <div class="cuadro"></div>
+        <div class="cuadro"></div>
+        <div class="cuadro"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Secciones adicionales -->
+  <section class="modelos">
+    <h2>Modelos Disponibles</h2>
+    <ul>
+      <li><strong>Auto 1:</strong> Motor 1.6L, 4 puertas, automático</li>
+      <li><strong>Auto 2:</strong> SUV 2.0L, 5 pasajeros, tracción 4x4</li>
+      <li><strong>Auto 3:</strong> Compacto 1.2L, económico y ágil</li>
+    </ul>
   </section>
 
   
 
-  <!-- Zona del administrador (oculta por defecto) -->
-  <section id="zonaAdmin" style="display:none;">
-    <h2>Panel del Administrador</h2>
-    <iframe 
-      src="https://docs.google.com/forms/d/e/1FAIpQLSeHDPT5Vbid6dp31DemdUrQAoYY5UaW6vSY-_82jbyvYIeF2Q/viewform?embedded=true" 
-      width="100%" 
-      height="600" 
-      frameborder="0" 
-      marginheight="0" 
-      marginwidth="0">
-      Cargando…
-    </iframe><br>
-   
-    <iframe 
-      src="https://docs.google.com/forms/d/e/1FAIpQLScMUPKO2RCiqvmlnLAPAogI3muDlw3ZJo7_uZkxmUIjhZFr9A/viewform?usp=header" 
-      width="100%" 
-      height="600" 
-      frameborder="0" 
-      marginheight="0" 
-      marginwidth="0">
-      Cargando…
-    </iframe>
+  <!-- Pie de página -->
+  <footer>
+    <div class="footer-content">
+      <p class="brand">RODES</p>
+      <nav class="footer-links">
+        <a href="#">Inicio</a>
+        <a href="#">Reservas</a>
+        <a href="#">Contacto</a>
+      </nav>
+    </div>
+    <p class="copyright">© 2025 RODES. Todos los derechos reservados.</p>
+  </footer>
 
-      <iframe 
-      src="https://docs.google.com/forms/d/e/1FAIpQLSeWLbd-a2hN4Rkd4KTUm-wJ152xIyvUp-WG7j6FFbHyaEdjtg/viewform?usp=header" 
-      width="100%" 
-      height="600" 
-      frameborder="0" 
-      marginheight="0" 
-      marginwidth="0">
-      Cargando…
-    </iframe>
-  </section>
-  </section>
-
-     
-      
   <script src="script.js"></script>
 </body>
 </html>
-

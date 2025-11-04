@@ -8,22 +8,19 @@ body {
 
 /* ----------- ENCABEZADO ----------- */
 .encabezado {
-  position: relative;
+  position: sticky;
+  top: 0;
   width: 100%;
   height: 320px;
   background: url('rodes.png') no-repeat center center/cover;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  color: white;
   overflow: hidden;
+  z-index: 10;
 }
 
 .encabezado .overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.35);
+  background: linear-gradient(to bottom, rgba(0,0,0,0) 60%, rgba(0,0,0,0.5) 100%);
 }
 
 .logo {
@@ -39,118 +36,154 @@ body {
   object-fit: cover;
 }
 
-.titulo {
-  position: relative;
-  z-index: 2;
+/* ----------- MENÚ EN HEADER ----------- */
+.menu-header {
+  position: absolute;
+  bottom: 20px;
+  right: 40px;
+  display: flex;
+  gap: 15px;
+  z-index: 3;
 }
 
-.titulo h1 {
-  font-size: 48px;
-  margin: 0;
-  letter-spacing: 2px;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-}
-
-.titulo p {
-  font-size: 18px;
-  margin-top: 5px;
-  font-weight: 300;
-}
-
-/* ----------- SECCIONES ----------- */
-section {
-  margin: 30px auto;
-  max-width: 900px;
-  background: white;
-  padding: 20px;
-  border-radius: 15px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-}
-
-h2 {
-  color: #1e3c72;
-  margin-bottom: 15px;
-}
-
-/* ----------- BOTONES ----------- */
-button {
-  background-color: #1e3c72;
+.menu-header button {
+  background: rgba(255, 255, 255, 0.1);
   color: white;
-  padding: 10px 20px;
-  border: none;
+  border: 2px solid white;
+  padding: 10px 25px;
   border-radius: 8px;
   cursor: pointer;
   font-size: 16px;
   transition: 0.3s;
 }
 
-button:hover {
-  background-color: #2a5298;
+.menu-header button:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.menu-header button.active {
+  background: white;
+  color: #1e3c72;
+}
+
+.menu-header button.flash {
+  box-shadow: 0 0 15px 5px white;
+  transition: box-shadow 0.3s ease-out;
+}
+
+/* ----------- CONTENIDO PRINCIPAL ----------- */
+main {
+  margin: 30px auto;
+  max-width: 900px;
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  min-height: 400px;
+}
+
+.placeholder {
+  text-align: center;
+  color: #777;
+}
+
+/* ----------- GALERÍA ----------- */
+.galeria {
+  max-width: 900px;
+  margin: 30px auto;
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.grid-galeria {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 15px;
+}
+
+.cuadro {
+  width: 100%;
+  height: 180px;
+  background: #f0f0f0;
+  border-radius: 10px;
+  border: 2px dashed #ccc;
+}
+
+/* ----------- MODELOS ----------- */
+.modelos, .ubicacion, .opiniones {
+  max-width: 900px;
+  margin: 30px auto;
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.modelos ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.modelos li {
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+/* ----------- FOOTER ----------- */
+footer {
+  background: #1e3c72;
+  color: white;
+  text-align: center;
+  padding: 25px 10px;
+}
+
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.footer-links a {
+  color: white;
+  margin: 0 10px;
+  text-decoration: none;
+}
+
+.footer-links a:hover {
+  text-decoration: underline;
+}
+
+.brand {
+  font-weight: bold;
+  font-size: 20px;
+  letter-spacing: 1px;
 }
 
 /* ----------- RESPONSIVE ----------- */
 @media (max-width: 768px) {
   .encabezado {
-    height: 250px;
-    flex-direction: column;
-    justify-content: flex-end;
-    padding-bottom: 30px;
-    text-align: center;
+    height: 260px;
   }
 
   .logo {
-    position: relative;
     top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .menu-header {
+    position: absolute;
+    bottom: 15px;
     left: 0;
-    width: 70px;
-    height: 70px;
-    border: 2px solid white;
-    margin-bottom: 10px;
+    right: 0;
+    justify-content: center;
   }
 
-  .titulo h1 {
-    font-size: 32px;
-  }
-
-  .titulo p {
-    font-size: 14px;
-  }
-
-  section {
-    margin: 20px 10px;
-    padding: 15px;
-  }
-
-  button {
-    width: 100%;
-    padding: 12px;
+  .menu-header button {
     font-size: 15px;
-  }
-
-  iframe {
-    height: 500px;
-  }
-}
-
-@media (max-width: 480px) {
-  .encabezado {
-    height: 220px;
-  }
-
-  .titulo h1 {
-    font-size: 26px;
-  }
-
-  .titulo p {
-    font-size: 13px;
-  }
-
-  .logo {
-    width: 60px;
-    height: 60px;
-  }
-
-  iframe {
-    height: 450px;
+    padding: 8px 20px;
   }
 }
