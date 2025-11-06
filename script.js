@@ -28,9 +28,9 @@ function mostrarAdmin(btn) {
     contenido.innerHTML = `
       <h2>Panel del Administrador</h2>
       <ul class="listaFormularios">
-        <li><a href="#" onclick="abrirFormulario(1)">Formulario 1</a></li>
-        <li><a href="#" onclick="abrirFormulario(2)">Formulario 2</a></li>
-        <li><a href="#" onclick="abrirFormulario(3)">Formulario 3</a></li>
+        <li><a href="#" onclick="abrirFormulario(1)">Informacion de viaje</a></li>
+        <li><a href="#" onclick="abrirFormulario(2)">Antes de entrega y recogida</a></li>
+        <li><a href="#" onclick="abrirFormulario(3)">Chequeo diario</a></li>
       </ul>`;
   } else if (password) {
     alert("Contraseña incorrecta. Intenta nuevamente.");
