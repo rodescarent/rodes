@@ -17,13 +17,11 @@ body {
 }
 
 .encabezado .overlay {
-  position: absolute;
   inset: 0;
   background: linear-gradient(to bottom, rgba(0,0,0,0) 60%, rgba(0,0,0,0.5) 100%);
 }
 
 .logo {
-  position: absolute;
   top: 25px;
   left: 40px;
   width: 90px;
@@ -37,7 +35,6 @@ body {
 
 /* ----------- MENÚ EN HEADER ----------- */
 .menu-header {
-  position: absolute;
   bottom: 20px;
   right: 40px;
   display: flex;
