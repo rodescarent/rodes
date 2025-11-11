@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reserva tu Auto</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: #fafafa;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        iframe {
+            width: 100%;
+            border: none;
+            border-radius: 10px;
+        }
+
+        .calendar {
+            height: 600px;
+            margin-bottom: 30px;
+        }
+
+        .form {
+            height: 1300px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Fechas ocupadas</h2>
+
+    <!-- GOOGLE CALENDAR -->
+    <iframe class="calendar"
+        src="AQUI_VA_EL_IFRAME_DE_TU_GOOGLE_CALENDAR">
+    </iframe>
+
+    <h2>Reservar fechas</h2>
+
+    <!-- GOOGLE FORM -->
+    <iframe class="form"
+        src="AQUI_VA_EL_IFRAME_DE_TU_GOOGLE_FORM">
+    </iframe>
+
+</div>
+
+</body>
+</html>
