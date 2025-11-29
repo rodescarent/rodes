@@ -139,4 +139,54 @@
 
   <script src="script.js"></script>
 </body>
+
+  <script>
+  const inicioInput = document.getElementById("fechaInicio");
+  const finInput = document.getElementById("fechaFin");
+  const diasInput = document.getElementById("dias");
+  const totalInput = document.getElementById("total");
+  const resultado = document.getElementById("resultadoPrecio");
+
+  function calcularPrecio() {
+    const fechaInicio = inicioInput.value;
+    const fechaFin = finInput.value;
+
+    if (!fechaInicio || !fechaFin) {
+      resultado.textContent = "";
+      diasInput.value = "";
+      totalInput.value = "";
+      return;
+    }
+
+    const inicio = new Date(fechaInicio);
+    const fin = new Date(fechaFin);
+    const diffTime = fin - inicio;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    if (diffDays <= 0) {
+      resultado.textContent = "La fecha de entrega debe ser después de la fecha de recogida.";
+      diasInput.value = "";
+      totalInput.value = "";
+      return;
+    }
+
+    // 🔹 Aquí pones tu lógica de precio.
+    // Por ahora, algo simple: 100 CAD por día.
+    const precioPorDia = 100;
+    const total = diffDays * precioPorDia;
+
+    // Mostramos al cliente
+    resultado.textContent =
+      `Reserva para ${diffDays} día(s). Total estimado: CA$ ${total}.`;
+
+    // Guardamos en los campos ocultos para que viajen a Sheets
+    diasInput.value = diffDays;
+    totalInput.value = total;
+  }
+
+  // Recalcular cada vez que el usuario cambia las fechas
+  inicioInput.addEventListener("change", calcularPrecio);
+  finInput.addEventListener("change", calcularPrecio);
+</script>
+
 </html>
