@@ -8,18 +8,18 @@
 </head>
 <body>
 
-  <!-- Encabezado con menú integrado -->
-  <header class="encabezado">
+<!-- Encabezado con menú integrado -->
+    <header class="encabezado">
     <div class="overlay"></div>
     <img src="4.png" alt="Logo RODES" class="logo" />
     <nav class="menu-header">
-      <button onclick="mostrarClientes(this)">Clientes</button>
-      <button onclick="mostrarAdmin(this)">Administrador</button>
+    <button onclick="mostrarClientes(this)">Clientes</button>
+    <button onclick="mostrarAdmin(this)">Administrador</button>
     </nav>
-  </header>
+    </header>
 
-  <!-- Contenido principal con galería por defecto -->
-  <main id="contenidoPrincipal">
+<!-- Contenido principal con galería por defecto -->
+    <main id="contenidoPrincipal">
     <section class="galeria">
       <h2>Galería de Autos</h2>
       <div class="grid-galeria">
@@ -29,13 +29,13 @@
         <div class="cuadro"></div>
         <div class="cuadro"></div>
         <div class="cuadro"></div><br>
-      </div>
-    </section>
-    <section id="reservas">
-  <h2>Reserva tu Audi Q5</h2>
-  <p>
-    Para confirmar tu reserva, paga el depósito de seguridad a través de nuestra pasarela de pago segura con Stripe.
-  </p>
+        </div>
+       </section>
+       <section id="reservas">
+      <h2>Reserva tu Audi Q5</h2>
+      <p>
+     Para confirmar tu reserva, paga el depósito de seguridad a través de nuestra pasarela de pago segura con Stripe.
+     </p>
 
   <div class="reserve-buttons-container">
     <!-- Botón DEPÓSITO -->
@@ -45,19 +45,19 @@
       Pagar solo depósito
     </a>
 
-    <!-- Botón PAGO TOTAL (opcional) -->
+<!-- Botón PAGO TOTAL (opcional) -->
     <a href="https://buy.stripe.com/3cIbJ3a3u9zL42zbwvcwg00"
        target="_blank"
        class="reserve-button reserve-button-dark">
       Pagar renta completa
-    </a>
-  </div>
-</section>
+       </a>
+     </div>
+   </section>
 
   </main>
 
-  <!-- Secciones adicionales -->
-  <section class="modelos">
+<!-- Secciones adicionales -->
+    <section class="modelos">
     <h2>Modelos Disponibles</h2>
     <ul>
       <li><strong>Auto 1:</strong> Motor 1.6L, 4 puertas, automático</li>
@@ -66,12 +66,63 @@
     </ul>
   </section>
 
- <iframe src="reservas.html" width="100%" height="2000" frameborder="0"></iframe>
+  
+  
+<iframe src="reservas.html" width="100%" height="2000" frameborder="0"></iframe>
+    <section id="reserva" style="max-width:600px;margin:40px auto;padding:20px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.08);">
+    <h2 style="text-align:center;margin-bottom:10px;">Reserva tu Audi Q5</h2>
+    <p style="text-align:center;margin-bottom:20px;">Ingresa tus datos y las fechas para calcular el costo del alquiler.</p>
+
+  <form id="reservaForm"
+        action="https://script.google.com/macros/s/AKfycbwsljyaKzsdmL08Pjc1oon77kkSSCvGp_2Uz5q5H1Tto2XUV6p7Ph9VeE3O3owkpv55/exec"
+        method="POST">
+    <div style="margin-bottom:12px;">
+      <label for="nombre">Nombre completo:</label><br>
+      <input type="text" id="nombre" name="nombre" required
+             style="width:100%;padding:8px;box-sizing:border-box;">
+    </div>
+
+    <div style="margin-bottom:12px;">
+      <label for="email">Correo electrónico:</label><br>
+      <input type="email" id="email" name="email" required
+             style="width:100%;padding:8px;box-sizing:border-box;">
+    </div>
+
+    <div style="margin-bottom:12px;">
+      <label for="fechaInicio">Fecha de recogida:</label><br>
+      <input type="date" id="fechaInicio" name="fechaInicio" required
+             style="width:100%;padding:8px;box-sizing:border-box;">
+    </div>
+
+    <div style="margin-bottom:12px;">
+      <label for="fechaFin">Fecha de entrega:</label><br>
+      <input type="date" id="fechaFin" name="fechaFin" required
+             style="width:100%;padding:8px;box-sizing:border-box;">
+    </div>
+
+    <button type="submit" style="width:100%;padding:10px 16px;border:none;border-radius:999px;cursor:pointer;font-weight:600;background:#635bff;color:white;">
+      Enviar reserva
+    </button>
+  </form>
+
+  <p id="resultadoPrecio" style="font-weight:bold;margin-top:10px;text-align:center;"></p>
+
+  <div style="text-align:center;margin-top:15px;">
+    <a href="TU_ENLACE_DE_STRIPE_AQUI"
+       class="btn-pago-stripe"
+       target="_blank"
+       rel="noopener noreferrer">
+      Pagar ahora con Stripe
+    </a>
+  </div>
+</section>
+
+  
 
 
-  <!-- Pie de página -->
-  <footer>
-    <div class="footer-content">
+<!-- Pie de página -->
+     <footer>
+     <div class="footer-content">
       <p class="brand">RODES</p>
       <nav class="footer-links">
         <a href="https://rodescarent.github.io/rodes/">Inicio</a>
