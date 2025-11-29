@@ -74,41 +74,22 @@
   <p style="text-align:center;margin-bottom:20px;">Ingresa tus datos y las fechas para guardar tu reserva y calcular el costo.</p>
 
   <form
-    id="reservaForm"
-    action="https://script.google.com/macros/s/AKfycbwsljyaKzsdmL08Pjc1oon77kkSSCvGp_2Uz5q5H1Tto2XUV6p7Ph9VeE3O3owkpv55/exec"
-    method="POST"
-  >
-    <div style="margin-bottom:12px;">
-      <label for="nombre">Nombre completo:</label><br>
-      <input type="text" id="nombre" name="nombre" required
-             style="width:100%;padding:8px;box-sizing:border-box;">
-    </div>
+  id="reservaForm"
+  action="TU_URL_DEL_WEB_APP_AQUI"
+  method="POST"
+>
+  <input type="text" id="nombre" name="nombre" placeholder="Nombre" required>
+  <input type="email" id="email" name="email" placeholder="Correo" required>
+  <input type="date" id="fechaInicio" name="fechaInicio" required>
+  <input type="date" id="fechaFin" name="fechaFin" required>
 
-    <div style="margin-bottom:12px;">
-      <label for="email">Correo electrónico:</label><br>
-      <input type="email" id="email" name="email" required
-             style="width:100%;padding:8px;box-sizing:border-box;">
-    </div>
+  <!-- AHORA visibles para probar -->
+  <input type="text" id="dias" name="dias" placeholder="Días de renta">
+  <input type="text" id="total" name="total" placeholder="Total">
 
-    <div style="margin-bottom:12px;">
-      <label for="fechaInicio">Fecha de recogida:</label><br>
-      <input type="date" id="fechaInicio" name="fechaInicio" required
-             style="width:100%;padding:8px;box-sizing:border-box;">
-    </div>
+  <button type="submit">Enviar reserva</button>
+</form>
 
-    <div style="margin-bottom:12px;">
-      <label for="fechaFin">Fecha de entrega:</label><br>
-      <input type="date" id="fechaFin" name="fechaFin" required
-             style="width:100%;padding:8px;box-sizing:border-box;">
-
-    <!-- Campos ocultos que van a viajar a Sheets -->
-    <input type="hidden" id="dias" name="dias">
-    <input type="hidden" id="total" name="total">
-
-    <button type="submit" style="width:100%;padding:10px 16px;border:none;border-radius:999px;cursor:pointer;font-weight:600;background:#635bff;color:white;">
-      Enviar reserva
-    </button>
-  </form>
 
   <p id="resultadoPrecio" style="font-weight:bold;margin-top:10px;text-align:center;"></p>
 
