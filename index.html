@@ -100,13 +100,17 @@
              style="width:100%;padding:8px;box-sizing:border-box;">
     </div>
 
-    <button type="submit" style="width:100%;padding:10px 16px;border:none;border-radius:999px;cursor:pointer;font-weight:600;background:#635bff;color:white;">
+<!-- 🔹 Campos ocultos para enviar a Sheets -->
+  <input type="hidden" id="dias" name="dias">
+  <input type="hidden" id="total" name="total">  
+  
+<button type="submit" style="width:100%;padding:10px 16px;border:none;border-radius:999px;cursor:pointer;font-weight:600;background:#635bff;color:white;">
       Enviar reserva
     </button>
   </form>
+<p id="resultadoPrecio" style="font-weight:bold;margin-top:10px;text-align:center;"></p>
 
-  <p id="resultadoPrecio" style="font-weight:bold;margin-top:10px;text-align:center;"></p>
-
+      
   <div style="text-align:center;margin-top:15px;">
     <a href="https://buy.stripe.com/3cIbJ3a3u9zL42zbwvcwg00"
        class="btn-pago-stripe"
