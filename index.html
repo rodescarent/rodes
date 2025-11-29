@@ -75,20 +75,29 @@
 
   <form
   id="reservaForm"
-  action="https://script.google.com/macros/s/AKfycbwsljyaKzsdmL08Pjc1oon77kkSSCvGp_2Uz5q5H1Tto2XUV6p7Ph9VeE3O3owkpv55/exec"
+  action="AQUI_VA_TU_URL_DEL_WEB_APP"
   method="POST"
+  style="max-width:400px;margin:40px auto;padding:20px;border:1px solid #ccc;border-radius:10px;"
 >
-  <input type="text" id="nombre" name="nombre" placeholder="Nombre" required>
-  <input type="email" id="email" name="email" placeholder="Correo" required>
-  <input type="date" id="fechaInicio" name="fechaInicio" required>
-  <input type="date" id="fechaFin" name="fechaFin" required>
+  <h3>Prueba de envío a Google Sheets</h3>
 
-  <!-- AHORA visibles para probar -->
-  <input type="text" id="dias" name="dias" placeholder="Días de renta">
-  <input type="text" id="total" name="total" placeholder="Total">
+  <label>Nombre:</label><br>
+  <input type="text" name="nombre" required style="width:100%;margin-bottom:10px;"><br>
 
-  <button type="submit">Enviar reserva</button>
+  <label>Correo:</label><br>
+  <input type="email" name="email" required style="width:100%;margin-bottom:10px;"><br>
+
+  <label>Fecha Inicio:</label><br>
+  <input type="date" name="fechaInicio" required style="width:100%;margin-bottom:10px;"><br>
+
+  <label>Fecha Fin:</label><br>
+  <input type="date" name="fechaFin" required style="width:100%;margin-bottom:10px;"><br>
+
+  <button type="submit" style="width:100%;padding:10px;background:#635bff;color:white;border:none;border-radius:5px;cursor:pointer;">
+    Enviar prueba
+  </button>
 </form>
+
 
 
   <p id="resultadoPrecio" style="font-weight:bold;margin-top:10px;text-align:center;"></p>
