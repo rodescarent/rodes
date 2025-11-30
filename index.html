@@ -1,186 +1,157 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RODES | Alquiler de Autos</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <title>Reserva Audi Q5</title>
 </head>
 <body>
 
-<!-- Encabezado con menú integrado -->
-    <header class="encabezado">
-    <div class="overlay"></div>
-    <img src="4.png" alt="Logo RODES" class="logo" />
-    <nav class="menu-header">
-    <button onclick="mostrarClientes(this)">Clientes</button>
-    <button onclick="mostrarAdmin(this)">Administrador</button>
-    </nav>
-    </header>
-
-<!-- Contenido principal con galería por defecto -->
-    <main id="contenidoPrincipal">
-    <section class="galeria">
-      <h2>Galería de Autos</h2>
-      <div class="grid-galeria">
-        <div class="cuadro"></div>
-        <div class="cuadro"></div>
-        <div class="cuadro"></div>
-        <div class="cuadro"></div>
-        <div class="cuadro"></div>
-        <div class="cuadro"></div><br>
-        </div>
-       </section>
-       <section id="reservas">
-      <h2>Reserva tu Audi Q5</h2>
-      <p>
-     Para confirmar tu reserva, paga el depósito de seguridad a través de nuestra pasarela de pago segura con Stripe.
-     </p>
-
-  <div class="reserve-buttons-container">
-    <!-- Botón DEPÓSITO -->
-    <a href="https://buy.stripe.com/3cIbJ3a3u9zL42zbwvcwg00"
-       target="_blank"
-       class="reserve-button">
-      Pagar solo depósito
-    </a>
-
-<!-- Botón PAGO TOTAL (opcional) -->
-    <a href="https://buy.stripe.com/3cIbJ3a3u9zL42zbwvcwg00"
-       target="_blank"
-       class="reserve-button reserve-button-dark">
-      Pagar renta completa
-       </a>
-     </div>
-   </section>
-
-  </main>
-
-<!-- Secciones adicionales -->
-    <section class="modelos">
-    <h2>Modelos Disponibles</h2>
-    <ul>
-      <li><strong>Auto 1:</strong> Motor 1.6L, 4 puertas, automático</li>
-      <li><strong>Auto 2:</strong> SUV 2.0L, 5 pasajeros, tracción 4x4</li>
-      <li><strong>Auto 3:</strong> Compacto 1.2L, económico y ágil</li>
-    </ul>
-  </section>
-
-  
-  
-<iframe src="reservas.html" width="100%" height="2000" frameborder="0"></iframe>
-   <section id="reserva" style="max-width:600px;margin:40px auto;padding:20px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.08);">
-  <h2 style="text-align:center;margin-bottom:10px;">Reserva tu Audi Q5</h2>
-  <p style="text-align:center;margin-bottom:20px;">Ingresa tus datos y las fechas para guardar tu reserva y calcular el costo.</p>
-
   <form
-  id="reservaForm"
-  action="https://script.google.com/macros/s/AKfycbwsljyaKzsdmL08Pjc1oon77kkSSCvGp_2Uz5q5H1Tto2XUV6p7Ph9VeE3O3owkpv55/exec"
-  method="POST"
-  style="max-width:400px;margin:40px auto;padding:20px;border:1px solid #ccc;border-radius:10px;"
->
-  <h3>Prueba de envío a Google Sheets</h3>
+    id="reservaForm"
+    method="POST"
+    style="max-width:400px;margin:40px auto;padding:20px;border:1px solid #ccc;border-radius:10px;"
+  >
+    <h3>Reserva tu Audi Q5</h3>
 
-  <label>Nombre:</label><br>
-  <input type="text" name="nombre" required style="width:100%;margin-bottom:10px;"><br>
+    <label>Nombre:</label><br>
+    <input type="text" name="nombre" required style="width:100%;margin-bottom:10px;">
 
-  <label>Correo:</label><br>
-  <input type="email" name="email" required style="width:100%;margin-bottom:10px;"><br>
+    <label>Correo:</label><br>
+    <input type="email" name="email" required style="width:100%;margin-bottom:10px;">
 
-  <label>Fecha Inicio:</label><br>
-  <input type="date" name="fechaInicio" required style="width:100%;margin-bottom:10px;"><br>
+    <label>Fecha Inicio:</label><br>
+    <input type="date" name="fechaInicio" required style="width:100%;margin-bottom:10px;">
 
-  <label>Fecha Fin:</label><br>
-  <input type="date" name="fechaFin" required style="width:100%;margin-bottom:10px;"><br>
+    <label>Fecha Fin:</label><br>
+    <input type="date" name="fechaFin" required style="width:100%;margin-bottom:10px;">
 
-  <button type="submit" style="width:100%;padding:10px;background:#635bff;color:white;border:none;border-radius:5px;cursor:pointer;">
-    Enviar prueba
-  </button>
-</form>
+    <!-- Campos ocultos para enviar a Sheets -->
+    <input type="hidden" id="dias" name="dias">
+    <input type="hidden" id="total" name="total">
 
+    <!-- Mensaje para mostrar al cliente -->
+    <p id="resultadoPrecio" style="font-weight:bold;margin-top:10px;text-align:center;"></p>
 
+    <button type="submit" style="width:100%;padding:10px;background:#635bff;color:white;border:none;border-radius:5px;cursor:pointer;">
+      Reservar y pagar nuevo
+    </button>
+  </form>
 
-  <p id="resultadoPrecio" style="font-weight:bold;margin-top:10px;text-align:center;"></p>
+<script>
+  // 👉 PON AQUÍ LA URL DE TU WEB APP (la de /exec)
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzVo8ZrktiCHzXgsyDrRhy5BF78OiQvmaPJUi7iuJb02X7eALsqwac7ZneB9qMd8mRy/exec";
 
-  <div style="text-align:center;margin-top:15px;">
-    <a href="https://buy.stripe.com/3cIbJ3a3u9zL42zbwvcwg00"
-       class="btn-pago-stripe"
-       target="_blank"
-       rel="noopener noreferrer">
-      Pagar ahora con Stripe
-    </a>
-  </div>
-</section>
+  // 👉 PON AQUÍ TU ENLACE DE PAGO DE STRIPE
+  const STRIPE_URL = "https://buy.stripe.com/3cIbJ3a3u9zL42zbwvcwg00";
 
-  
-
-
-<!-- Pie de página -->
-     <footer>
-     <div class="footer-content">
-      <p class="brand">RODES</p>
-      <nav class="footer-links">
-        <a href="https://rodescarent.github.io/rodes/">Inicio</a>
-        <a href="#">Reservas</a>
-        <a href="#">Contacto</a>
-      </nav>
-    </div>
-    <p class="copyright">© 2025 RODES. Todos los derechos reservados.</p>
-  </footer>
-
-  <script src="script.js"></script>
-
-   <script>
   const form = document.getElementById("reservaForm");
-  const inicioInput = document.getElementById("fechaInicio");
-  const finInput = document.getElementById("fechaFin");
-  const diasInput = document.getElementById("dias");
+  const inicioInput = document.querySelector('input[name="fechaInicio"]');
+  const finInput   = document.querySelector('input[name="fechaFin"]');
+  const diasInput  = document.getElementById("dias");
   const totalInput = document.getElementById("total");
-  const resultado = document.getElementById("resultadoPrecio");
+  const resultado  = document.getElementById("resultadoPrecio");
+
+  // Precios
+  const PRECIO_SEMANA   = 100; // lunes a viernes
+  const PRECIO_FINDE    = 135; // sábado y domingo
+
+  function calcularPrecio() {
+    const fechaInicio = inicioInput.value;
+    const fechaFin    = finInput.value;
+
+    if (!fechaInicio || !fechaFin) {
+      if (resultado) resultado.textContent = "";
+      diasInput.value  = "";
+      totalInput.value = "";
+      return false;
+    }
+
+    const inicio = new Date(fechaInicio);
+    const fin    = new Date(fechaFin);
+
+    // diferencia total en días (sin incluir el día de entrega)
+    const diffTime = fin - inicio;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    if (diffDays <= 0) {
+      if (resultado) {
+        resultado.textContent = "La fecha de entrega debe ser después de la fecha de recogida.";
+      }
+      diasInput.value  = "";
+      totalInput.value = "";
+      return false;
+    }
+
+    // Contar días entre semana y fines de semana
+    let diasSemana = 0;
+    let diasFinde  = 0;
+
+    // Clonamos la fecha de inicio para no modificar el original
+    const cursor = new Date(inicio);
+
+    // Recorremos desde inicio (incluido) hasta justo antes de fin
+    while (cursor < fin) {
+      const diaSemana = cursor.getDay(); // 0 = domingo, 6 = sábado
+
+      if (diaSemana === 0 || diaSemana === 6) {
+        diasFinde++;
+      } else {
+        diasSemana++;
+      }
+
+      cursor.setDate(cursor.getDate() + 1);
+    }
+
+    const total = (diasSemana * PRECIO_SEMANA) + (diasFinde * PRECIO_FINDE);
+
+    // Mostrar mensaje más detallado al cliente
+    if (resultado) {
+      resultado.innerHTML = `
+        Has seleccionado <strong>${diffDays}</strong> día(s):<br>
+        ${diasSemana} día(s) entre semana a CA$ ${PRECIO_SEMANA} + 
+        ${diasFinde} día(s) de fin de semana a CA$ ${PRECIO_FINDE}.<br>
+        <strong>Total estimado: CA$ ${total}</strong>.
+      `;
+    }
+
+    // Guardamos los valores en los campos ocultos para que viajen a Sheets
+    diasInput.value  = diffDays;
+    totalInput.value = total;
+
+    return true;
+  }
+
+  // Recalcular cuando el usuario cambia las fechas
+  if (inicioInput) inicioInput.addEventListener("change", calcularPrecio);
+  if (finInput)   finInput.addEventListener("change", calcularPrecio);
 
   if (form) {
-    form.addEventListener("submit", function (e) {
-      const fechaInicio = inicioInput.value;
-      const fechaFin = finInput.value;
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault(); // manejamos todo por JS
 
-      if (!fechaInicio || !fechaFin) {
-        e.preventDefault();
-        resultado.textContent = "Por favor selecciona ambas fechas.";
+      const ok = calcularPrecio();
+      if (!ok) return;
+
+      const formData = new FormData(form);
+
+      try {
+        await fetch(WEB_APP_URL, {
+          method: "POST",
+          body: formData,
+          mode: "no-cors" // no necesitamos leer la respuesta
+        });
+      } catch (err) {
+        console.error("Error enviando datos al Web App:", err);
+        alert("Hubo un problema guardando tu reserva. Intenta de nuevo.");
         return;
       }
 
-      const inicio = new Date(fechaInicio);
-      const fin = new Date(fechaFin);
-      const diffTime = fin - inicio;
-      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-      if (diffDays <= 0) {
-        e.preventDefault();
-        resultado.textContent = "La fecha de entrega debe ser después de la fecha de recogida.";
-        return;
-      }
-
-      // Lógica de precio (puedes cambiar los valores)
-      const precioPorDia = 100; // CA$100 por día (ejemplo)
-      const total = diffDays * precioPorDia;
-
-      // Mostramos al cliente
-      resultado.textContent =
-        `Reserva para ${diffDays} día(s). Total estimado: CA$ ${total}.`;
-
-      // Rellenamos los campos ocultos ANTES de enviar
-      diasInput.value = diffDays;
-      totalInput.value = total;
-
-      // NO hacemos preventDefault aquí si todo está bien
-      // El formulario se enviará normalmente a Google Apps Script
+      // Si todo bien, redirigimos a Stripe
+      window.location.href = STRIPE_URL;
     });
   }
 </script>
 
 
-  
 </body>
-
-
 </html>
