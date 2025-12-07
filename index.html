@@ -9,6 +9,7 @@
   <form
     id="reservaForm"
     method="POST"
+    action="https://script.google.com/macros/s/AKfycbzpdsZOMzcgPC6mhalA6SU49amApvquiwAXmkMzIOa10YH3J63y6w2c7BuHhbZHXoPf/exec"
     style="max-width:400px;margin:40px auto;padding:20px;border:1px solid #ccc;border-radius:10px;"
   >
     <h3>Reserva tu Audi Q5</h3>
@@ -25,7 +26,7 @@
     <label>Fecha Fin:</label><br>
     <input type="date" name="fechaFin" required style="width:100%;margin-bottom:10px;">
 
-    <!-- Campos ocultos para enviar a Sheets -->
+    <!-- Campos ocultos para enviar a la Web App -->
     <input type="hidden" id="dias" name="dias">
     <input type="hidden" id="total" name="total">
 
@@ -33,17 +34,11 @@
     <p id="resultadoPrecio" style="font-weight:bold;margin-top:10px;text-align:center;"></p>
 
     <button type="submit" style="width:100%;padding:10px;background:#635bff;color:white;border:none;border-radius:5px;cursor:pointer;">
-      Reservar y pagar nuevo
+      Reservar y pagar
     </button>
   </form>
 
 <script>
-  // 👉 PON AQUÍ LA URL DE TU WEB APP (la de /exec)
-  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzVo8ZrktiCHzXgsyDrRhy5BF78OiQvmaPJUi7iuJb02X7eALsqwac7ZneB9qMd8mRy/exec";
-
-  // 👉 PON AQUÍ TU ENLACE DE PAGO DE STRIPE
-  const STRIPE_URL = "https://buy.stripe.com/3cIbJ3a3u9zL42zbwvcwg00";
-
   const form = document.getElementById("reservaForm");
   const inicioInput = document.querySelector('input[name="fechaInicio"]');
   const finInput   = document.querySelector('input[name="fechaFin"]');
@@ -51,7 +46,7 @@
   const totalInput = document.getElementById("total");
   const resultado  = document.getElementById("resultadoPrecio");
 
-  // Precios
+  // Precios por día
   const PRECIO_SEMANA   = 100; // lunes a viernes
   const PRECIO_FINDE    = 135; // sábado y domingo
 
@@ -69,7 +64,7 @@
     const inicio = new Date(fechaInicio);
     const fin    = new Date(fechaFin);
 
-    // diferencia total en días (sin incluir el día de entrega)
+    // diferencia total en días (sin incluir el día de devolución)
     const diffTime = fin - inicio;
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
@@ -86,7 +81,7 @@
     let diasSemana = 0;
     let diasFinde  = 0;
 
-    // Clonamos la fecha de inicio para no modificar el original
+    // Clonamos la fecha de inicio para iterar
     const cursor = new Date(inicio);
 
     // Recorremos desde inicio (incluido) hasta justo antes de fin
@@ -104,54 +99,38 @@
 
     const total = (diasSemana * PRECIO_SEMANA) + (diasFinde * PRECIO_FINDE);
 
-    // Mostrar mensaje más detallado al cliente
+    // Mostrar mensaje al cliente
     if (resultado) {
       resultado.innerHTML = `
         Has seleccionado <strong>${diffDays}</strong> día(s):<br>
-        ${diasSemana} día(s) entre semana a CA$ ${PRECIO_SEMANA} + 
+        ${diasSemana} día(s) entre semana a CA$ ${PRECIO_SEMANA} +
         ${diasFinde} día(s) de fin de semana a CA$ ${PRECIO_FINDE}.<br>
         <strong>Total estimado: CA$ ${total}</strong>.
       `;
     }
 
-    // Guardamos los valores en los campos ocultos para que viajen a Sheets
+    // Guardar valores en campos ocultos
     diasInput.value  = diffDays;
     totalInput.value = total;
 
     return true;
   }
 
-  // Recalcular cuando el usuario cambia las fechas
+  // Recalcular cuando cambian las fechas
   if (inicioInput) inicioInput.addEventListener("change", calcularPrecio);
   if (finInput)   finInput.addEventListener("change", calcularPrecio);
 
   if (form) {
-    form.addEventListener("submit", async function (e) {
-      e.preventDefault(); // manejamos todo por JS
-
+    form.addEventListener("submit", function (e) {
       const ok = calcularPrecio();
-      if (!ok) return;
-
-      const formData = new FormData(form);
-
-      try {
-        await fetch(WEB_APP_URL, {
-          method: "POST",
-          body: formData,
-          mode: "no-cors" // no necesitamos leer la respuesta
-        });
-      } catch (err) {
-        console.error("Error enviando datos al Web App:", err);
-        alert("Hubo un problema guardando tu reserva. Intenta de nuevo.");
-        return;
+      if (!ok) {
+        e.preventDefault();
+        alert("Revisa las fechas de inicio y fin antes de continuar.");
       }
-
-      // Si todo bien, redirigimos a Stripe
-      window.location.href = STRIPE_URL;
+      // Si ok === true, dejamos que el navegador haga el POST normal a la Web App
     });
   }
 </script>
-
 
 </body>
 </html>
