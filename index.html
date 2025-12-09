@@ -9,6 +9,7 @@
   <form
     id="reservaForm"
     method="POST"
+    action="https://script.google.com/macros/s/AKfycbwpl3AtSsBCVE_jzC9CfGVhWLV8bfTGHqkI7hmrUuQz-jTBMsaQ3rpALPX2_dkBnYiiGg/exec"
     style="max-width:400px;margin:40px auto;padding:20px;border:1px solid #ccc;border-radius:10px;"
   >
     <h3>Reserva tu Audi Q5</h3>
@@ -25,25 +26,19 @@
     <label>Fecha Fin:</label><br>
     <input type="date" name="fechaFin" required style="width:100%;margin-bottom:10px;">
 
-    <!-- Campos ocultos para enviar a Sheets -->
+    <!-- Campos ocultos para mandar el cálculo al servidor -->
     <input type="hidden" id="dias" name="dias">
     <input type="hidden" id="total" name="total">
 
-    <!-- Mensaje para mostrar al cliente -->
+    <!-- Texto para mostrarle al usuario el detalle del precio -->
     <p id="resultadoPrecio" style="font-weight:bold;margin-top:10px;text-align:center;"></p>
 
     <button type="submit" style="width:100%;padding:10px;background:#635bff;color:white;border:none;border-radius:5px;cursor:pointer;">
-      Reservar y pagar nuevo
+      Reservar y pagar
     </button>
   </form>
 
 <script>
-  // 👉 PON AQUÍ LA URL DE TU WEB APP (la de /exec)
-  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzjiHVolIcQTgaj_0Ct56e9xk4QJvVJej-K1dKdk5F3hl88ErkvH2bkmm1hi6ur_2V1/exec";
-
-  // 👉 PON AQUÍ TU ENLACE DE PAGO DE STRIPE
-  const STRIPE_URL = "https://buy.stripe.com/3cIbJ3a3u9zL42zbwvcwg00";
-
   const form = document.getElementById("reservaForm");
   const inicioInput = document.querySelector('input[name="fechaInicio"]');
   const finInput   = document.querySelector('input[name="fechaFin"]');
@@ -51,16 +46,16 @@
   const totalInput = document.getElementById("total");
   const resultado  = document.getElementById("resultadoPrecio");
 
-  // Precios
-  const PRECIO_SEMANA   = 100; // lunes a viernes
-  const PRECIO_FINDE    = 135; // sábado y domingo
+  // Precios por día
+  const PRECIO_SEMANA = 100;  // lunes–viernes
+  const PRECIO_FINDE  = 135;  // sábado–domingo
 
   function calcularPrecio() {
     const fechaInicio = inicioInput.value;
     const fechaFin    = finInput.value;
 
     if (!fechaInicio || !fechaFin) {
-      if (resultado) resultado.textContent = "";
+      resultado.textContent = "";
       diasInput.value  = "";
       totalInput.value = "";
       return false;
@@ -69,29 +64,22 @@
     const inicio = new Date(fechaInicio);
     const fin    = new Date(fechaFin);
 
-    // diferencia total en días (sin incluir el día de entrega)
     const diffTime = fin - inicio;
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
     if (diffDays <= 0) {
-      if (resultado) {
-        resultado.textContent = "La fecha de entrega debe ser después de la fecha de recogida.";
-      }
+      resultado.textContent = "La fecha de entrega debe ser después de la fecha de recogida.";
       diasInput.value  = "";
       totalInput.value = "";
       return false;
     }
 
-    // Contar días entre semana y fines de semana
     let diasSemana = 0;
     let diasFinde  = 0;
 
-    // Clonamos la fecha de inicio para no modificar el original
     const cursor = new Date(inicio);
-
-    // Recorremos desde inicio (incluido) hasta justo antes de fin
     while (cursor < fin) {
-      const diaSemana = cursor.getDay(); // 0 = domingo, 6 = sábado
+      const diaSemana = cursor.getDay(); // 0 domingo, 6 sábado
 
       if (diaSemana === 0 || diaSemana === 6) {
         diasFinde++;
@@ -104,54 +92,31 @@
 
     const total = (diasSemana * PRECIO_SEMANA) + (diasFinde * PRECIO_FINDE);
 
-    // Mostrar mensaje más detallado al cliente
-    if (resultado) {
-      resultado.innerHTML = `
-        Has seleccionado <strong>${diffDays}</strong> día(s):<br>
-        ${diasSemana} día(s) entre semana a CA$ ${PRECIO_SEMANA} + 
-        ${diasFinde} día(s) de fin de semana a CA$ ${PRECIO_FINDE}.<br>
-        <strong>Total estimado: CA$ ${total}</strong>.
-      `;
-    }
+    resultado.innerHTML = `
+      Has seleccionado <strong>${diffDays}</strong> día(s):<br>
+      ${diasSemana} día(s) entre semana a CA$ ${PRECIO_SEMANA} +
+      ${diasFinde} día(s) de fin de semana a CA$ ${PRECIO_FINDE}.<br>
+      <strong>Total estimado: CA$ ${total}</strong>.
+    `;
 
-    // Guardamos los valores en los campos ocultos para que viajen a Sheets
     diasInput.value  = diffDays;
     totalInput.value = total;
 
     return true;
   }
 
-  // Recalcular cuando el usuario cambia las fechas
-  if (inicioInput) inicioInput.addEventListener("change", calcularPrecio);
-  if (finInput)   finInput.addEventListener("change", calcularPrecio);
+  inicioInput.addEventListener("change", calcularPrecio);
+  finInput.addEventListener("change", calcularPrecio);
 
-  if (form) {
-    form.addEventListener("submit", async function (e) {
-      e.preventDefault(); // manejamos todo por JS
-
-      const ok = calcularPrecio();
-      if (!ok) return;
-
-      const formData = new FormData(form);
-
-      try {
-        await fetch(WEB_APP_URL, {
-          method: "POST",
-          body: formData,
-          mode: "no-cors" // no necesitamos leer la respuesta
-        });
-      } catch (err) {
-        console.error("Error enviando datos al Web App:", err);
-        alert("Hubo un problema guardando tu reserva. Intenta de nuevo.");
-        return;
-      }
-
-      // Si todo bien, redirigimos a Stripe
-      window.location.href = STRIPE_URL;
-    });
-  }
+  form.addEventListener("submit", function (e) {
+    const ok = calcularPrecio();
+    if (!ok) {
+      e.preventDefault();
+      alert("Revisa las fechas antes de continuar.");
+    }
+    // Si ok === true, el navegador hace el POST normal a la Web App
+  });
 </script>
-
 
 </body>
 </html>
