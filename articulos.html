@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Artículos adicionales</title>
+  <style>
+    body{font-family:Arial,sans-serif;margin:0;background:#0b0f19;color:#e5e7eb}
+    .wrap{max-width:950px;margin:0 auto;padding:20px}
+    h2{margin:10px 0 6px}
+    .pill{margin:10px 0 16px;padding:8px 12px;border:1px solid rgba(255,255,255,.14);border-radius:999px;background:rgba(0,0,0,.2);font-size:12px;color:#cbd5e1}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    @media(max-width:820px){.grid{grid-template-columns:repeat(2,1fr)}}
+    .card{border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:12px;background:rgba(255,255,255,.04)}
+    .card label{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+    .thumb{width:64px;height:64px;border-radius:12px;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;font-size:11px;color:#9ca3af;flex:0 0 auto}
+    .name{font-weight:800}
+    .small{font-size:12px;color:#9ca3af}
+    .price{font-weight:900;margin-top:6px}
+    .bar{margin-top:16px;border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:12px;background:rgba(255,255,255,.04);display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+    .btn{padding:10px 14px;border:0;border-radius:10px;background:#10b981;color:#fff;font-weight:900;cursor:pointer}
+    .btn[disabled]{opacity:.6;cursor:not-allowed}
+    input[type="checkbox"]{transform:scale(1.2);margin-top:2px}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <h2>Artículos adicionales</h2>
+  <div class="pill" id="resumen">Cargando datos de reserva…</div>
+
+  <form id="finalForm">
+    <input type="hidden" name="action" value="finalize_items">
+
+    <input type="hidden" name="row_index" id="row_index">
+    <input type="hidden" name="email" id="email">
+
+    <input type="hidden" name="items_ids" id="items_ids">
+    <input type="hidden" name="items_total" id="items_total">
+
+    <div class="grid" id="grid"></div>
+
+    <div class="bar">
+      <div>
+        <div class="small">IDs seleccionados (se guardan en 1 celda)</div>
+        <div id="idsText" style="font-weight:900">—</div>
+      </div>
+
+      <div>
+        <div class="small">Total artículos</div>
+        <div id="itemsSum" style="font-weight:900">CA$ 0.00</div>
+        <div class="small" style="margin-top:4px">Total a pagar (auto + artículos)</div>
+        <div id="paySum" style="font-weight:900">CA$ 0.00</div>
+      </div>
+
+      <button class="btn" id="payBtn" type="submit">Pagar con Stripe</button>
+    </div>
+  </form>
+</div>
+
+<script>
+  // ✅ PEGA AQUÍ TU URL REAL /exec
+  const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbyx9opi1-tDruMAKAWDGqCzmoGx_dky707JAjKfm43dDVsCU8sr2n3k4z7VngXXSnQc/exec";
+
+  // 👇 Cambia estos items por los reales (id único + precio)
+  const ITEMS = [
+    { id:"item01", name:"Artículo 1", price:15 },
+    { id:"item02", name:"Artículo 2", price:25 },
+    { id:"item03", name:"Artículo 3", price:10 },
+    { id:"item04", name:"Artículo 4", price:30 },
+    { id:"item05", name:"Artículo 5", price:18 },
+    { id:"item06", name:"Artículo 6", price:12 },
+  ];
+
+  function must(key){ return (localStorage.getItem(key) || "").trim(); }
+
+  const row_index  = must("row_index");
+  const email      = must("email");
+  const fi         = must("fechaInicio");
+  const ff         = must("fechaFin");
+  const dias       = must("dias");
+  const auto_total = Number(must("auto_total") || 0);
+
+  const resumen = document.getElementById("resumen");
+
+  if (!row_index || !email) {
+    resumen.textContent = "Faltan datos de reserva. Vuelve al index y entra por el flujo normal.";
+  } else {
+    resumen.textContent = `Reserva: ${email} | ${fi} → ${ff} | ${dias} día(s) | Auto: CA$ ${auto_total.toFixed(2)}`;
+  }
+
+  document.getElementById("row_index").value = row_index;
+  document.getElementById("email").value = email;
+
+  const grid = document.getElementById("grid");
+  ITEMS.forEach(it => {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `
+      <label>
+        <input type="checkbox" data-id="${it.id}" data-price="${it.price}">
+        <div class="thumb">IMG</div>
+        <div>
+          <div class="name">${it.name}</div>
+          <div class="small">ID: ${it.id}</div>
+          <div class="price">CA$ ${Number(it.price).toFixed(2)}</div>
+        </div>
+      </label>
+    `;
+    grid.appendChild(card);
+  });
+
+  function recompute(){
+    const checks = [...document.querySelectorAll('#grid input[type="checkbox"][data-id]')];
+
+    const ids = checks.filter(c => c.checked).map(c => c.dataset.id);
+    const itemsTotal = checks
+      .filter(c => c.checked)
+      .reduce((a,c) => a + Number(c.dataset.price||0), 0);
+
+    document.getElementById("items_ids").value = ids.join(",");
+    document.getElementById("items_total").value = itemsTotal.toFixed(2);
+
+    document.getElementById("idsText").textContent = ids.length ? ids.join(",") : "—";
+    document.getElementById("itemsSum").textContent = "CA$ " + itemsTotal.toFixed(2);
+    document.getElementById("paySum").textContent = "CA$ " + (auto_total + itemsTotal).toFixed(2);
+  }
+
+  grid.addEventListener("change", recompute);
+  recompute();
+
+  // ✅ SUBMIT CON FETCH + REDIRECT A STRIPE (NO MUESTRA JSON)
+  document.getElementById("finalForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    if (!row_index || !email) {
+      alert("Faltan datos de reserva. Vuelve al index.");
+      return;
+    }
+
+    const btn = document.getElementById("payBtn");
+    btn.disabled = true;
+    const oldText = btn.textContent;
+    btn.textContent = "Abriendo Stripe…";
+
+    try {
+      const fd = new FormData(e.target);
+
+      const resp = await fetch(WEBAPP_URL, { method: "POST", body: fd });
+
+      // OJO: Apps Script a veces responde text/html si hay error; intentamos parsear JSON
+      const text = await resp.text();
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch {
+        throw new Error("Respuesta no-JSON del servidor: " + text.slice(0, 200));
+      }
+
+      if (!data.ok) throw new Error(data.error || "Error desconocido");
+      if (!data.stripe_url) throw new Error("No llegó stripe_url en la respuesta.");
+
+      // 🔥 Redirect directo a Stripe
+      window.location.href = data.stripe_url;
+
+    } catch (err) {
+      alert(String(err));
+      btn.disabled = false;
+      btn.textContent = oldText;
+    }
+  });
+</script>
+</body>
+</html>

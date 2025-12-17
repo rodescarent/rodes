@@ -2,119 +2,109 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Reserva Audi Q5</title>
 </head>
 <body>
 
-  <form
-    id="reservaForm"
-    method="POST"
-    action="https://script.google.com/macros/s/AKfycbwpl3AtSsBCVE_jzC9CfGVhWLV8bfTGHqkI7hmrUuQz-jTBMsaQ3rpALPX2_dkBnYiiGg/exec"
-    style="max-width:400px;margin:40px auto;padding:20px;border:1px solid #ccc;border-radius:10px;"
-  >
-    <h3>Reserva tu Audi Q5</h3>
+<form id="reservaForm" style="max-width:420px;margin:40px auto;padding:20px;border:1px solid #ccc;border-radius:12px;">
+  <h3>Reserva tu Audi Q5</h3>
 
-    <label>Nombre:</label><br>
-    <input type="text" name="nombre" required style="width:100%;margin-bottom:10px;">
+  <label>Nombre:</label><br>
+  <input type="text" id="nombre" required style="width:100%;margin-bottom:10px;">
 
-    <label>Correo:</label><br>
-    <input type="email" name="email" required style="width:100%;margin-bottom:10px;">
+  <label>Email:</label><br>
+  <input type="email" id="email" required style="width:100%;margin-bottom:10px;">
 
-    <label>Fecha Inicio:</label><br>
-    <input type="date" name="fechaInicio" required style="width:100%;margin-bottom:10px;">
+  <label>Fecha Inicio:</label><br>
+  <input type="date" id="fechaInicio" required style="width:100%;margin-bottom:10px;">
 
-    <label>Fecha Fin:</label><br>
-    <input type="date" name="fechaFin" required style="width:100%;margin-bottom:10px;">
+  <label>Fecha Fin:</label><br>
+  <input type="date" id="fechaFin" required style="width:100%;margin-bottom:10px;">
 
-    <!-- Campos ocultos para mandar el cálculo al servidor -->
-    <input type="hidden" id="dias" name="dias">
-    <input type="hidden" id="total" name="total">
+  <p id="resultadoPrecio" style="font-weight:bold;margin:12px 0;text-align:center;"></p>
 
-    <!-- Texto para mostrarle al usuario el detalle del precio -->
-    <p id="resultadoPrecio" style="font-weight:bold;margin-top:10px;text-align:center;"></p>
-
-    <button type="submit" style="width:100%;padding:10px;background:#635bff;color:white;border:none;border-radius:5px;cursor:pointer;">
-      Reservar y pagar
-    </button>
-  </form>
+  <button type="submit" style="width:100%;padding:10px;background:#635bff;color:white;border:none;border-radius:8px;cursor:pointer;">
+    Continuar → elegir artículos
+  </button>
+</form>
 
 <script>
-  const form = document.getElementById("reservaForm");
-  const inicioInput = document.querySelector('input[name="fechaInicio"]');
-  const finInput   = document.querySelector('input[name="fechaFin"]');
-  const diasInput  = document.getElementById("dias");
-  const totalInput = document.getElementById("total");
-  const resultado  = document.getElementById("resultadoPrecio");
+  const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbyx9opi1-tDruMAKAWDGqCzmoGx_dky707JAjKfm43dDVsCU8sr2n3k4z7VngXXSnQc/exec";
 
-  // Precios por día
-  const PRECIO_SEMANA = 100;  // lunes–viernes
-  const PRECIO_FINDE  = 135;  // sábado–domingo
+  // Ajusta tus precios reales
+  const PRECIO_SEMANA = 100;
+  const PRECIO_FINDE  = 135;
 
-  function calcularPrecio() {
-    const fechaInicio = inicioInput.value;
-    const fechaFin    = finInput.value;
+  const nombreEl = document.getElementById("nombre");
+  const emailEl  = document.getElementById("email");
+  const fiEl     = document.getElementById("fechaInicio");
+  const ffEl     = document.getElementById("fechaFin");
+  const outEl    = document.getElementById("resultadoPrecio");
 
-    if (!fechaInicio || !fechaFin) {
-      resultado.textContent = "";
-      diasInput.value  = "";
-      totalInput.value = "";
-      return false;
+  function calc() {
+    if (!fiEl.value || !ffEl.value) return null;
+
+    const inicio = new Date(fiEl.value);
+    const fin = new Date(ffEl.value);
+
+    const dias = Math.ceil((fin - inicio) / (1000*60*60*24));
+    if (dias <= 0) return { error: "La fecha fin debe ser después de la fecha inicio." };
+
+    let ds=0, df=0;
+    const cur = new Date(inicio);
+    while (cur < fin) {
+      const d = cur.getDay();
+      (d===0 || d===6) ? df++ : ds++;
+      cur.setDate(cur.getDate()+1);
     }
-
-    const inicio = new Date(fechaInicio);
-    const fin    = new Date(fechaFin);
-
-    const diffTime = fin - inicio;
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-    if (diffDays <= 0) {
-      resultado.textContent = "La fecha de entrega debe ser después de la fecha de recogida.";
-      diasInput.value  = "";
-      totalInput.value = "";
-      return false;
-    }
-
-    let diasSemana = 0;
-    let diasFinde  = 0;
-
-    const cursor = new Date(inicio);
-    while (cursor < fin) {
-      const diaSemana = cursor.getDay(); // 0 domingo, 6 sábado
-
-      if (diaSemana === 0 || diaSemana === 6) {
-        diasFinde++;
-      } else {
-        diasSemana++;
-      }
-
-      cursor.setDate(cursor.getDate() + 1);
-    }
-
-    const total = (diasSemana * PRECIO_SEMANA) + (diasFinde * PRECIO_FINDE);
-
-    resultado.innerHTML = `
-      Has seleccionado <strong>${diffDays}</strong> día(s):<br>
-      ${diasSemana} día(s) entre semana a CA$ ${PRECIO_SEMANA} +
-      ${diasFinde} día(s) de fin de semana a CA$ ${PRECIO_FINDE}.<br>
-      <strong>Total estimado: CA$ ${total}</strong>.
-    `;
-
-    diasInput.value  = diffDays;
-    totalInput.value = total;
-
-    return true;
+    const auto_total = ds*PRECIO_SEMANA + df*PRECIO_FINDE;
+    return { dias, ds, df, auto_total };
   }
 
-  inicioInput.addEventListener("change", calcularPrecio);
-  finInput.addEventListener("change", calcularPrecio);
+  function render() {
+    const r = calc();
+    if (!r) { outEl.textContent=""; return; }
+    if (r.error) { outEl.textContent=r.error; return; }
+    outEl.innerHTML = `${r.dias} día(s) — <strong>Total auto: CA$ ${r.auto_total}</strong>`;
+  }
 
-  form.addEventListener("submit", function (e) {
-    const ok = calcularPrecio();
-    if (!ok) {
-      e.preventDefault();
-      alert("Revisa las fechas antes de continuar.");
-    }
-    // Si ok === true, el navegador hace el POST normal a la Web App
+  fiEl.addEventListener("change", render);
+  ffEl.addEventListener("change", render);
+
+  document.getElementById("reservaForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const r = calc();
+    if (!r || r.error) { alert("Revisa fechas."); return; }
+
+    const payload = new URLSearchParams();
+    payload.append("action", "save_reserva");
+    payload.append("nombre", nombreEl.value);
+    payload.append("email", emailEl.value);
+    payload.append("fechaInicio", fiEl.value);
+    payload.append("fechaFin", ffEl.value);
+    payload.append("dias", String(r.dias));
+    payload.append("auto_total", String(r.auto_total));
+
+    const resp = await fetch(WEBAPP_URL, {
+      method: "POST",
+      headers: { "Content-Type":"application/x-www-form-urlencoded;charset=UTF-8" },
+      body: payload.toString()
+    });
+
+    const data = await resp.json();
+    if (!data.ok) { alert(data.error || "Error guardando reserva"); return; }
+
+    // Guardar TODO para articulos.html
+    localStorage.setItem("row_index", String(data.row_index));
+    localStorage.setItem("nombre", data.nombre);
+    localStorage.setItem("email", data.email);
+    localStorage.setItem("fechaInicio", data.fechaInicio);
+    localStorage.setItem("fechaFin", data.fechaFin);
+    localStorage.setItem("dias", data.dias);
+    localStorage.setItem("auto_total", String(data.auto_total));
+
+    window.location.href = "articulos.html";
   });
 </script>
 
