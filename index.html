@@ -39,17 +39,42 @@
   <label>Fecha Fin:</label><br>
   <input type="date" id="fechaFin" required style="width:100%;margin-bottom:10px;">
 
-  <p id="resultadoPrecio" style="font-weight:bold;margin:12px 0;text-align:center;"></p>
+  <!-- Mensaje de disponibilidad -->
+  <p id="availabilityMsg" style="font-weight:700;margin:10px 0;text-align:center;display:none;"></p>
 
-  <button type="submit" style="width:100%;padding:10px;background:#635bff;color:white;border:none;border-radius:8px;cursor:pointer;">
+  <!-- Calendario: SOLO aparece si el rango está OCUPADO -->
+  <div id="calendarBox" style="display:none;margin:12px 0;">
+    <div style="font-size:13px;color:#555;margin-bottom:6px;text-align:center;">
+      Disponibilidad (días ocupados sombreados)
+    </div>
+
+    <iframe
+      id="calendarIframe"
+      src="https://calendar.google.com/calendar/embed?src=a131346a7e1a176d2af7567823a3ae415030eaf33d8947a154d88289a33d8150%40group.calendar.google.com&ctz=UTC"
+      style="border:0;width:100%;height:520px;border-radius:10px;"
+      frameborder="0"
+      scrolling="no">
+    </iframe>
+  </div>
+
+  <!-- Cálculo: SOLO aparece si está DISPONIBLE -->
+  <p id="resultadoPrecio" style="font-weight:bold;margin:12px 0;text-align:center;display:none;"></p>
+
+  <button
+    id="btnContinue"
+    type="submit"
+    style="width:100%;padding:10px;background:#635bff;color:white;border:none;border-radius:8px;cursor:pointer;"
+    disabled
+    title="Selecciona fechas disponibles para continuar"
+  >
     Continuar → elegir artículos
   </button>
 </form>
 
 <script>
-  const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbxUADRjw0CtSZH65fNJzkeNLyu1SB4Pq0XCqMINEgU00tt2pabBnTsjj55i4IpQDWia/exec";
+  const WEBAPP_URL = "https://script.google.com/macros/s/AKfycby9J7ojd45cWxaq6hx-IgrU0ih3jU_Uu5wBB8fNF4kGCQM_GFQoqUPXJ9WQAqsYM6HMmg/exec";
 
-  // Ajusta tus precios reales
+  // Precio (lo dejamos EXACTO como lo tenías)
   const PRECIO_SEMANA = 100;
   const PRECIO_FINDE  = 135;
 
@@ -60,8 +85,11 @@
   const ffEl     = document.getElementById("fechaFin");
   const outEl    = document.getElementById("resultadoPrecio");
   const btnVerify = document.getElementById("btnVerifyMap");
+  const availabilityMsg = document.getElementById("availabilityMsg");
+  const calendarBox = document.getElementById("calendarBox");
+  const btnContinue = document.getElementById("btnContinue");
 
-  // Botón: abre Google Maps con la búsqueda de la dirección escrita
+  // ======= Google Maps (sin API): abrir búsqueda para verificar dirección =======
   btnVerify.addEventListener("click", () => {
     const addr = dirEl.value.trim();
     if (!addr) {
@@ -73,41 +101,160 @@
     window.open(url, "_blank");
   });
 
+  // ======= RANGOS OCUPADOS (desde tu Web App) =======
+  let BUSY_RANGES = []; // [{start:"YYYY-MM-DD", end:"YYYY-MM-DD"}]
+
+  async function loadBusyRanges() {
+    try {
+      const url = WEBAPP_URL + "?action=get_busy";
+      const resp = await fetch(url, { method: "GET" });
+      const data = await resp.json();
+      if (data && data.ok && Array.isArray(data.ranges)) {
+        BUSY_RANGES = data.ranges;
+      } else {
+        BUSY_RANGES = [];
+      }
+    } catch (e) {
+      // Si falla, no bloqueamos (para que no se rompa el flujo)
+      BUSY_RANGES = [];
+    }
+  }
+
+  // ======= Validación inclusiva: recogida y entrega cuentan como ocupados =======
+  function rangesOverlapInclusive(start, end, busyStart, busyEnd) {
+    const s  = new Date(start + "T00:00:00");
+    const e  = new Date(end   + "T00:00:00");
+    const bs = new Date(busyStart + "T00:00:00");
+    const be = new Date(busyEnd   + "T00:00:00");
+
+    // INCLUSIVO: toca si s <= be y e >= bs
+    return (s <= be) && (e >= bs);
+  }
+
+  function validateAvailability() {
+    if (!fiEl.value || !ffEl.value) return { ready:false, occupied:false };
+
+    const start = fiEl.value;
+    const end   = ffEl.value;
+
+    // Mantengo tu regla actual: fin debe ser posterior a inicio
+    const inicio = new Date(start);
+    const fin = new Date(end);
+    if (fin <= inicio) return { ready:true, occupied:true, error:"La fecha fin debe ser posterior." };
+
+    for (const r of BUSY_RANGES) {
+      if (!r || !r.start || !r.end) continue;
+      if (rangesOverlapInclusive(start, end, r.start, r.end)) {
+        return { ready:true, occupied:true };
+      }
+    }
+    return { ready:true, occupied:false };
+  }
+
+  // ======= Cálculo de precio (SIN CAMBIOS) =======
   function calc() {
     if (!fiEl.value || !ffEl.value) return null;
 
     const inicio = new Date(fiEl.value);
     const fin = new Date(ffEl.value);
-
     const dias = Math.ceil((fin - inicio) / (1000*60*60*24));
-    if (dias <= 0) return { error: "La fecha fin debe ser después de la fecha inicio." };
 
-    let ds=0, df=0;
+    if (dias <= 0) return { error: "La fecha fin debe ser posterior." };
+
+    let ds = 0, df = 0;
     const cur = new Date(inicio);
     while (cur < fin) {
       const d = cur.getDay();
-      (d===0 || d===6) ? df++ : ds++;
-      cur.setDate(cur.getDate()+1);
+      (d === 0 || d === 6) ? df++ : ds++;
+      cur.setDate(cur.getDate() + 1);
     }
-    const auto_total = ds*PRECIO_SEMANA + df*PRECIO_FINDE;
-    return { dias, ds, df, auto_total };
+
+    return { dias, auto_total: ds * PRECIO_SEMANA + df * PRECIO_FINDE };
   }
 
-  function render() {
+  function showAvailabilityUI() {
+    const v = validateAvailability();
+
+    // Si no están listas las fechas, ocultamos todo y bloqueamos continuar
+    if (!v.ready) {
+      availabilityMsg.style.display = "none";
+      calendarBox.style.display = "none";
+      outEl.style.display = "none";
+      outEl.textContent = "";
+      btnContinue.disabled = true;
+      btnContinue.title = "Selecciona fechas para continuar";
+      return;
+    }
+
+    availabilityMsg.style.display = "block";
+
+    // Error de fechas (tratamos como ocupado)
+    if (v.error) {
+      availabilityMsg.textContent = v.error;
+      availabilityMsg.style.color = "crimson";
+
+      calendarBox.style.display = "none"; // ✅ no mostrar almanaque por error de formato
+      outEl.style.display = "none";
+      outEl.textContent = "";
+      btnContinue.disabled = true;
+      btnContinue.title = "Corrige las fechas para continuar";
+      return;
+    }
+
+    if (v.occupied) {
+      availabilityMsg.textContent = "Rango de fecha ocupado";
+      availabilityMsg.style.color = "crimson";
+
+      calendarBox.style.display = "block"; // ✅ mostrar SOLO si ocupado
+      outEl.style.display = "none";
+      outEl.textContent = "";
+      btnContinue.disabled = true;
+      btnContinue.title = "Elige un rango disponible para continuar";
+      return;
+    }
+
+    // DISPONIBLE
+    availabilityMsg.textContent = "Disponible";
+    availabilityMsg.style.color = "green";
+
+    calendarBox.style.display = "none"; // ✅ NO mostrar almanaque si disponible
+
     const r = calc();
-    if (!r) { outEl.textContent=""; return; }
-    if (r.error) { outEl.textContent=r.error; return; }
+    if (!r || r.error) {
+      outEl.style.display = "none";
+      outEl.textContent = "";
+      btnContinue.disabled = true;
+      btnContinue.title = "Revisa las fechas";
+      return;
+    }
+
+    outEl.style.display = "block";
     outEl.innerHTML = `${r.dias} día(s) — <strong>Total auto: CA$ ${r.auto_total}</strong>`;
+
+    btnContinue.disabled = false;
+    btnContinue.title = "";
   }
 
-  fiEl.addEventListener("change", render);
-  ffEl.addEventListener("change", render);
+  // Cuando cambian fechas, revisamos disponibilidad y UI
+  fiEl.addEventListener("change", showAvailabilityUI);
+  ffEl.addEventListener("change", showAvailabilityUI);
 
+  // Cargar ocupados al iniciar
+  window.addEventListener("load", async () => {
+    await loadBusyRanges();
+    showAvailabilityUI();
+  });
+
+  // ======= SUBMIT: solo si está disponible =======
   document.getElementById("reservaForm").addEventListener("submit", async (e) => {
     e.preventDefault();
 
+    const v = validateAvailability();
+    if (!v.ready) return alert("Selecciona las fechas.");
+    if (v.occupied || v.error) return alert("El rango seleccionado no está disponible.");
+
     const r = calc();
-    if (!r || r.error) { alert("Revisa fechas."); return; }
+    if (!r || r.error) return alert("Revisa las fechas.");
 
     const pickupAddress = dirEl.value.trim();
     if (!pickupAddress) {
@@ -133,9 +280,9 @@
     });
 
     const data = await resp.json();
-    if (!data.ok) { alert(data.error || "Error guardando reserva"); return; }
+    if (!data.ok) return alert(data.error || "Error guardando reserva");
 
-    // Guardar TODO para articulos.html
+    // Guardar datos para articulos.html
     localStorage.setItem("row_index", String(data.row_index));
     localStorage.setItem("nombre", data.nombre);
     localStorage.setItem("email", data.email);
