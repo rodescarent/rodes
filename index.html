@@ -16,12 +16,12 @@
   <label>Email:</label><br>
   <input type="email" id="email" required style="width:100%;margin-bottom:10px;">
 
-  <label>Dirección de recogida:</label><br>
+  <label>Dirección de recogida (Toronto/GTA):</label><br>
   <div style="position:relative;margin-bottom:10px;">
     <input
       type="text"
       id="pickup_address"
-      placeholder="Escribe la dirección (ej: 123 Queen St W, Toronto)"
+      placeholder="Ej: 123 Queen St W, Toronto"
       autocomplete="off"
       required
       style="width:100%;"
@@ -64,11 +64,19 @@
   const ffEl     = document.getElementById("fechaFin");
   const outEl    = document.getElementById("resultadoPrecio");
 
-  // ====== Autocomplete GRATIS: OpenStreetMap / Nominatim ======
+  // ====== Autocomplete GRATIS: OpenStreetMap / Nominatim (limitado a Toronto/GTA) ======
   const suggestionsEl = document.getElementById("suggestions");
   let abortController = null;
   let selectedFromList = false;
   let debounceTimer = null;
+
+  // GTA aprox (WEST, NORTH, EAST, SOUTH)
+  // Ajusta si quieres más/menos zona:
+  // West:  -79.90  (Mississauga/Oakville borde)
+  // East:  -78.90  (Pickering/Ajax borde)
+  // North:  44.35  (Newmarket borde)
+  // South:  43.30  (lago/etobicoke sur)
+  const GTA_VIEWBOX = "-79.90,44.35,-78.90,43.30";
 
   function hideSuggestions() {
     suggestionsEl.style.display = "none";
@@ -84,8 +92,8 @@
       div.style.cursor = "pointer";
       div.style.borderTop = "1px solid #eee";
 
+      // mousedown para que no pierda foco antes de click (mobile/desktop)
       div.addEventListener("mousedown", (e) => {
-        // mousedown para que no pierda foco antes de click (mobile/desktop)
         e.preventDefault();
         dirEl.value = place.display_name;
         selectedFromList = true;
@@ -99,14 +107,15 @@
   }
 
   async function fetchAddressSuggestions(query) {
-    // Limitar a Canadá: countrycodes=ca
-    // Mejorar resultados: addressdetails=1
+    // Tip: bounded=1 obliga a devolver resultados dentro del viewbox
     const url =
       "https://nominatim.openstreetmap.org/search" +
       "?format=json" +
       "&addressdetails=1" +
       "&countrycodes=ca" +
       "&limit=6" +
+      "&bounded=1" +
+      "&viewbox=" + encodeURIComponent(GTA_VIEWBOX) +
       "&q=" + encodeURIComponent(query);
 
     if (abortController) abortController.abort();
@@ -114,11 +123,7 @@
 
     const res = await fetch(url, {
       signal: abortController.signal,
-      headers: {
-        // Nominatim sugiere identificar app; en browser no podemos setear User-Agent,
-        // pero sí podemos mandar un header simple. (No siempre lo usan.)
-        "Accept": "application/json"
-      }
+      headers: { "Accept": "application/json" }
     });
 
     if (!res.ok) return [];
@@ -136,10 +141,9 @@
         const results = await fetchAddressSuggestions(q);
         showSuggestions(results || []);
       } catch (err) {
-        // Abort es normal; otros errores ocultamos sugerencias
         hideSuggestions();
       }
-    }, 180);
+    }, 200);
   });
 
   // Evita que ENTER en la dirección dispare submit accidental
@@ -152,9 +156,6 @@
     const within = e.target === dirEl || suggestionsEl.contains(e.target);
     if (!within) hideSuggestions();
   });
-
-  // Si el usuario escribe y se va sin seleccionar, igual permitimos guardar (tú pediste solo texto)
-  // Si quieres obligar selección de lista: descomenta el check en submit.
 
   // ====== Cálculo de precio ======
   function calc() {
