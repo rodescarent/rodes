@@ -16,26 +16,22 @@
   <label>Email:</label><br>
   <input type="email" id="email" required style="width:100%;margin-bottom:10px;">
 
-  <label>Dirección de recogida (Toronto/GTA):</label><br>
-  <div style="position:relative;margin-bottom:10px;">
-    <input
-      type="text"
-      id="pickup_address"
-      placeholder="Ej: 123 Queen St W, Toronto"
-      autocomplete="off"
-      required
-      style="width:100%;"
-    >
-    <div
-      id="suggestions"
-      style="
-        position:absolute; left:0; right:0; top:100%;
-        border:1px solid #ccc; border-top:none;
-        background:#fff; display:none; z-index:9999;
-        max-height:220px; overflow:auto;
-      "
-    ></div>
-  </div>
+  <label>Dirección de recogida:</label><br>
+  <input
+    type="text"
+    id="pickup_address"
+    required
+    placeholder="Ej: 123 Queen St W, Toronto, ON"
+    style="width:100%;margin-bottom:8px;"
+  >
+
+  <button
+    type="button"
+    id="btnVerifyMap"
+    style="width:100%;padding:10px;margin-bottom:12px;background:#f2f2f2;border:1px solid #ccc;border-radius:8px;cursor:pointer;"
+  >
+    Verificar / corregir en Google Maps
+  </button>
 
   <label>Fecha Inicio:</label><br>
   <input type="date" id="fechaInicio" required style="width:100%;margin-bottom:10px;">
@@ -63,101 +59,20 @@
   const fiEl     = document.getElementById("fechaInicio");
   const ffEl     = document.getElementById("fechaFin");
   const outEl    = document.getElementById("resultadoPrecio");
+  const btnVerify = document.getElementById("btnVerifyMap");
 
-  // ====== Autocomplete GRATIS: OpenStreetMap / Nominatim (limitado a Toronto/GTA) ======
-  const suggestionsEl = document.getElementById("suggestions");
-  let abortController = null;
-  let selectedFromList = false;
-  let debounceTimer = null;
-
-  // GTA aprox (WEST, NORTH, EAST, SOUTH)
-  // Ajusta si quieres más/menos zona:
-  // West:  -79.90  (Mississauga/Oakville borde)
-  // East:  -78.90  (Pickering/Ajax borde)
-  // North:  44.35  (Newmarket borde)
-  // South:  43.30  (lago/etobicoke sur)
-  const GTA_VIEWBOX = "-79.90,44.35,-78.90,43.30";
-
-  function hideSuggestions() {
-    suggestionsEl.style.display = "none";
-    suggestionsEl.innerHTML = "";
-  }
-
-  function showSuggestions(items) {
-    suggestionsEl.innerHTML = "";
-    items.forEach((place) => {
-      const div = document.createElement("div");
-      div.textContent = place.display_name;
-      div.style.padding = "8px";
-      div.style.cursor = "pointer";
-      div.style.borderTop = "1px solid #eee";
-
-      // mousedown para que no pierda foco antes de click (mobile/desktop)
-      div.addEventListener("mousedown", (e) => {
-        e.preventDefault();
-        dirEl.value = place.display_name;
-        selectedFromList = true;
-        hideSuggestions();
-      });
-
-      suggestionsEl.appendChild(div);
-    });
-
-    suggestionsEl.style.display = items.length ? "block" : "none";
-  }
-
-  async function fetchAddressSuggestions(query) {
-    // Tip: bounded=1 obliga a devolver resultados dentro del viewbox
-    const url =
-      "https://nominatim.openstreetmap.org/search" +
-      "?format=json" +
-      "&addressdetails=1" +
-      "&countrycodes=ca" +
-      "&limit=6" +
-      "&bounded=1" +
-      "&viewbox=" + encodeURIComponent(GTA_VIEWBOX) +
-      "&q=" + encodeURIComponent(query);
-
-    if (abortController) abortController.abort();
-    abortController = new AbortController();
-
-    const res = await fetch(url, {
-      signal: abortController.signal,
-      headers: { "Accept": "application/json" }
-    });
-
-    if (!res.ok) return [];
-    return await res.json();
-  }
-
-  dirEl.addEventListener("input", () => {
-    selectedFromList = false;
-    const q = dirEl.value.trim();
-
-    clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(async () => {
-      if (q.length < 3) { hideSuggestions(); return; }
-      try {
-        const results = await fetchAddressSuggestions(q);
-        showSuggestions(results || []);
-      } catch (err) {
-        hideSuggestions();
-      }
-    }, 200);
+  // Botón: abre Google Maps con la búsqueda de la dirección escrita
+  btnVerify.addEventListener("click", () => {
+    const addr = dirEl.value.trim();
+    if (!addr) {
+      alert("Escribe la dirección primero.");
+      dirEl.focus();
+      return;
+    }
+    const url = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(addr);
+    window.open(url, "_blank");
   });
 
-  // Evita que ENTER en la dirección dispare submit accidental
-  dirEl.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") e.preventDefault();
-  });
-
-  // Cerrar sugerencias si clic afuera
-  document.addEventListener("click", (e) => {
-    const within = e.target === dirEl || suggestionsEl.contains(e.target);
-    if (!within) hideSuggestions();
-  });
-
-  // ====== Cálculo de precio ======
   function calc() {
     if (!fiEl.value || !ffEl.value) return null;
 
@@ -188,17 +103,18 @@
   fiEl.addEventListener("change", render);
   ffEl.addEventListener("change", render);
 
-  // ====== Submit ======
   document.getElementById("reservaForm").addEventListener("submit", async (e) => {
     e.preventDefault();
+
     const r = calc();
     if (!r || r.error) { alert("Revisa fechas."); return; }
 
     const pickupAddress = dirEl.value.trim();
-    if (!pickupAddress) { alert("Escribe la dirección de recogida."); return; }
-
-    // Si quieres obligar que sea seleccionada de la lista:
-    // if (!selectedFromList) { alert("Selecciona una dirección de la lista."); return; }
+    if (!pickupAddress) {
+      alert("Escribe la dirección de recogida.");
+      dirEl.focus();
+      return;
+    }
 
     const payload = new URLSearchParams();
     payload.append("action", "save_reserva");
