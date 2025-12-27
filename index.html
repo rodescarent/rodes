@@ -27,11 +27,34 @@
 
   <button
     type="button"
-    id="btnVerifyMap"
+    id="btnVerifyPickupMap"
     style="width:100%;padding:10px;margin-bottom:12px;background:#f2f2f2;border:1px solid #ccc;border-radius:8px;cursor:pointer;"
   >
-    Verificar / corregir en Google Maps
+    Verificar / corregir recogida en Google Maps
   </button>
+
+  <label style="display:block;margin:8px 0 8px;">
+    <input type="checkbox" id="dropoffDifferent">
+    La dirección de entrega es diferente
+  </label>
+
+  <div id="dropoffBox" style="display:none;">
+    <label>Dirección de entrega:</label><br>
+    <input
+      type="text"
+      id="dropoff_address"
+      placeholder="Ej: 200 Bay St, Toronto, ON"
+      style="width:100%;margin-bottom:8px;"
+    >
+
+    <button
+      type="button"
+      id="btnVerifyDropoffMap"
+      style="width:100%;padding:10px;margin-bottom:12px;background:#f2f2f2;border:1px solid #ccc;border-radius:8px;cursor:pointer;"
+    >
+      Verificar / corregir entrega en Google Maps
+    </button>
+  </div>
 
   <label>Fecha Inicio:</label><br>
   <input type="date" id="fechaInicio" required style="width:100%;margin-bottom:10px;">
@@ -72,62 +95,70 @@
 </form>
 
 <script>
-  const WEBAPP_URL = "https://script.google.com/macros/s/AKfycby9J7ojd45cWxaq6hx-IgrU0ih3jU_Uu5wBB8fNF4kGCQM_GFQoqUPXJ9WQAqsYM6HMmg/exec";
+  const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzWEQAN0qPXZS-KXU1_RAfMRo11uMBSQyv1oitaRgL92dzlbs1kYB6Nj5Hso_h7m5Al/exec";
 
-  // Precio (lo dejamos EXACTO como lo tenías)
+  // Precios actuales (los dejamos como están; luego lo pasamos a horas)
   const PRECIO_SEMANA = 100;
   const PRECIO_FINDE  = 135;
 
   const nombreEl = document.getElementById("nombre");
   const emailEl  = document.getElementById("email");
-  const dirEl    = document.getElementById("pickup_address");
-  const fiEl     = document.getElementById("fechaInicio");
-  const ffEl     = document.getElementById("fechaFin");
-  const outEl    = document.getElementById("resultadoPrecio");
-  const btnVerify = document.getElementById("btnVerifyMap");
+
+  const pickupEl = document.getElementById("pickup_address");
+  const btnVerifyPickup = document.getElementById("btnVerifyPickupMap");
+
+  const dropoffDifferentEl = document.getElementById("dropoffDifferent");
+  const dropoffBox = document.getElementById("dropoffBox");
+  const dropoffEl = document.getElementById("dropoff_address");
+  const btnVerifyDropoff = document.getElementById("btnVerifyDropoffMap");
+
+  const fiEl = document.getElementById("fechaInicio");
+  const ffEl = document.getElementById("fechaFin");
+
   const availabilityMsg = document.getElementById("availabilityMsg");
   const calendarBox = document.getElementById("calendarBox");
+
+  const outEl = document.getElementById("resultadoPrecio");
   const btnContinue = document.getElementById("btnContinue");
 
-  // ======= Google Maps (sin API): abrir búsqueda para verificar dirección =======
-  btnVerify.addEventListener("click", () => {
-    const addr = dirEl.value.trim();
-    if (!addr) {
-      alert("Escribe la dirección primero.");
-      dirEl.focus();
-      return;
-    }
-    const url = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(addr);
-    window.open(url, "_blank");
+  // ===== Google Maps (sin API) =====
+  btnVerifyPickup.addEventListener("click", () => {
+    const addr = (pickupEl.value || "").trim();
+    if (!addr) { alert("Escribe la dirección de recogida primero."); pickupEl.focus(); return; }
+    window.open("https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(addr), "_blank");
   });
 
-  // ======= RANGOS OCUPADOS (desde tu Web App) =======
+  dropoffDifferentEl.addEventListener("change", () => {
+    const on = dropoffDifferentEl.checked;
+    dropoffBox.style.display = on ? "block" : "none";
+    if (!on) dropoffEl.value = "";
+  });
+
+  btnVerifyDropoff.addEventListener("click", () => {
+    const addr = (dropoffEl.value || "").trim();
+    if (!addr) { alert("Escribe la dirección de entrega primero."); dropoffEl.focus(); return; }
+    window.open("https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(addr), "_blank");
+  });
+
+  // ===== RANGOS OCUPADOS desde Apps Script =====
   let BUSY_RANGES = []; // [{start:"YYYY-MM-DD", end:"YYYY-MM-DD"}]
 
   async function loadBusyRanges() {
     try {
-      const url = WEBAPP_URL + "?action=get_busy";
-      const resp = await fetch(url, { method: "GET" });
+      const resp = await fetch(WEBAPP_URL + "?action=get_busy", { method: "GET" });
       const data = await resp.json();
-      if (data && data.ok && Array.isArray(data.ranges)) {
-        BUSY_RANGES = data.ranges;
-      } else {
-        BUSY_RANGES = [];
-      }
+      BUSY_RANGES = (data && data.ok && Array.isArray(data.ranges)) ? data.ranges : [];
     } catch (e) {
-      // Si falla, no bloqueamos (para que no se rompa el flujo)
       BUSY_RANGES = [];
     }
   }
 
-  // ======= Validación inclusiva: recogida y entrega cuentan como ocupados =======
+  // ===== Solape INCLUSIVO (recogida y entrega cuentan ocupados) =====
   function rangesOverlapInclusive(start, end, busyStart, busyEnd) {
     const s  = new Date(start + "T00:00:00");
     const e  = new Date(end   + "T00:00:00");
     const bs = new Date(busyStart + "T00:00:00");
     const be = new Date(busyEnd   + "T00:00:00");
-
-    // INCLUSIVO: toca si s <= be y e >= bs
     return (s <= be) && (e >= bs);
   }
 
@@ -137,7 +168,6 @@
     const start = fiEl.value;
     const end   = ffEl.value;
 
-    // Mantengo tu regla actual: fin debe ser posterior a inicio
     const inicio = new Date(start);
     const fin = new Date(end);
     if (fin <= inicio) return { ready:true, occupied:true, error:"La fecha fin debe ser posterior." };
@@ -151,14 +181,13 @@
     return { ready:true, occupied:false };
   }
 
-  // ======= Cálculo de precio (SIN CAMBIOS) =======
+  // ===== Cálculo (SIN CAMBIOS) =====
   function calc() {
     if (!fiEl.value || !ffEl.value) return null;
 
     const inicio = new Date(fiEl.value);
     const fin = new Date(ffEl.value);
     const dias = Math.ceil((fin - inicio) / (1000*60*60*24));
-
     if (dias <= 0) return { error: "La fecha fin debe ser posterior." };
 
     let ds = 0, df = 0;
@@ -168,14 +197,12 @@
       (d === 0 || d === 6) ? df++ : ds++;
       cur.setDate(cur.getDate() + 1);
     }
-
     return { dias, auto_total: ds * PRECIO_SEMANA + df * PRECIO_FINDE };
   }
 
   function showAvailabilityUI() {
     const v = validateAvailability();
 
-    // Si no están listas las fechas, ocultamos todo y bloqueamos continuar
     if (!v.ready) {
       availabilityMsg.style.display = "none";
       calendarBox.style.display = "none";
@@ -188,14 +215,11 @@
 
     availabilityMsg.style.display = "block";
 
-    // Error de fechas (tratamos como ocupado)
     if (v.error) {
       availabilityMsg.textContent = v.error;
       availabilityMsg.style.color = "crimson";
-
-      calendarBox.style.display = "none"; // ✅ no mostrar almanaque por error de formato
+      calendarBox.style.display = "none";
       outEl.style.display = "none";
-      outEl.textContent = "";
       btnContinue.disabled = true;
       btnContinue.title = "Corrige las fechas para continuar";
       return;
@@ -204,8 +228,7 @@
     if (v.occupied) {
       availabilityMsg.textContent = "Rango de fecha ocupado";
       availabilityMsg.style.color = "crimson";
-
-      calendarBox.style.display = "block"; // ✅ mostrar SOLO si ocupado
+      calendarBox.style.display = "block";
       outEl.style.display = "none";
       outEl.textContent = "";
       btnContinue.disabled = true;
@@ -213,11 +236,9 @@
       return;
     }
 
-    // DISPONIBLE
     availabilityMsg.textContent = "Disponible";
     availabilityMsg.style.color = "green";
-
-    calendarBox.style.display = "none"; // ✅ NO mostrar almanaque si disponible
+    calendarBox.style.display = "none";
 
     const r = calc();
     if (!r || r.error) {
@@ -230,22 +251,19 @@
 
     outEl.style.display = "block";
     outEl.innerHTML = `${r.dias} día(s) — <strong>Total auto: CA$ ${r.auto_total}</strong>`;
-
     btnContinue.disabled = false;
     btnContinue.title = "";
   }
 
-  // Cuando cambian fechas, revisamos disponibilidad y UI
   fiEl.addEventListener("change", showAvailabilityUI);
   ffEl.addEventListener("change", showAvailabilityUI);
 
-  // Cargar ocupados al iniciar
   window.addEventListener("load", async () => {
     await loadBusyRanges();
     showAvailabilityUI();
   });
 
-  // ======= SUBMIT: solo si está disponible =======
+  // ===== SUBMIT =====
   document.getElementById("reservaForm").addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -256,18 +274,24 @@
     const r = calc();
     if (!r || r.error) return alert("Revisa las fechas.");
 
-    const pickupAddress = dirEl.value.trim();
-    if (!pickupAddress) {
-      alert("Escribe la dirección de recogida.");
-      dirEl.focus();
-      return;
+    const pickupAddress = (pickupEl.value || "").trim();
+    if (!pickupAddress) { alert("Escribe la dirección de recogida."); pickupEl.focus(); return; }
+
+    // ✅ Solo se guarda dropoff si el usuario marca que es diferente
+    let dropoffAddress = "";
+    if (dropoffDifferentEl.checked) {
+      dropoffAddress = (dropoffEl.value || "").trim();
+      if (!dropoffAddress) { alert("Marcaste entrega diferente. Escribe la dirección de entrega."); dropoffEl.focus(); return; }
     }
 
     const payload = new URLSearchParams();
     payload.append("action", "save_reserva");
     payload.append("nombre", nombreEl.value);
     payload.append("email", emailEl.value);
+
     payload.append("pickup_address", pickupAddress);
+    payload.append("dropoff_address", dropoffAddress); // puede ir vacío
+
     payload.append("fechaInicio", fiEl.value);
     payload.append("fechaFin", ffEl.value);
     payload.append("dias", String(r.dias));
@@ -282,11 +306,14 @@
     const data = await resp.json();
     if (!data.ok) return alert(data.error || "Error guardando reserva");
 
-    // Guardar datos para articulos.html
+    // Guardar para articulos.html
     localStorage.setItem("row_index", String(data.row_index));
     localStorage.setItem("nombre", data.nombre);
     localStorage.setItem("email", data.email);
+
     localStorage.setItem("pickup_address", pickupAddress);
+    localStorage.setItem("dropoff_address", dropoffAddress);
+
     localStorage.setItem("fechaInicio", data.fechaInicio);
     localStorage.setItem("fechaFin", data.fechaFin);
     localStorage.setItem("dias", data.dias);
