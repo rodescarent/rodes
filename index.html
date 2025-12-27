@@ -16,6 +16,15 @@
   <label>Email:</label><br>
   <input type="email" id="email" required style="width:100%;margin-bottom:10px;">
 
+  <label>Dirección de recogida:</label><br>
+  <input
+    type="text"
+    id="pickup_address"
+    placeholder="Escribe la dirección de recogida"
+    required
+    style="width:100%;margin-bottom:10px;"
+  >
+
   <label>Fecha Inicio:</label><br>
   <input type="date" id="fechaInicio" required style="width:100%;margin-bottom:10px;">
 
@@ -29,15 +38,27 @@
   </button>
 </form>
 
-<script>
-  const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbxlTW5YwM7ilkc_1mLcfWekcyMhktgpgKhqYaSFc86z34wBfYeo7veAQ2VWzk-P3BT4Hw/exec";
+<!-- Google Places Autocomplete -->
+<script src="https://maps.googleapis.com/maps/api/js?key=TU_API_KEY_AQUI&libraries=places"></script>
 
-  // Ajusta tus precios reales
+<script>
+  // Autocomplete dirección
+  window.addEventListener("load", () => {
+    const input = document.getElementById("pickup_address");
+    new google.maps.places.Autocomplete(input, {
+      types: ["geocode"],
+      componentRestrictions: { country: "ca" }
+    });
+  });
+
+  const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbw5GDkCLZVKSOt6wgXhDcOQBbLk2DVvYXVhDCDJE0NKDhICZGm_PCEituiavo_rqO7c/exec";
+
   const PRECIO_SEMANA = 100;
   const PRECIO_FINDE  = 135;
 
   const nombreEl = document.getElementById("nombre");
   const emailEl  = document.getElementById("email");
+  const dirEl    = document.getElementById("pickup_address");
   const fiEl     = document.getElementById("fechaInicio");
   const ffEl     = document.getElementById("fechaFin");
   const outEl    = document.getElementById("resultadoPrecio");
@@ -47,26 +68,26 @@
 
     const inicio = new Date(fiEl.value);
     const fin = new Date(ffEl.value);
-
     const dias = Math.ceil((fin - inicio) / (1000*60*60*24));
-    if (dias <= 0) return { error: "La fecha fin debe ser después de la fecha inicio." };
 
-    let ds=0, df=0;
+    if (dias <= 0) return { error: "La fecha fin debe ser posterior." };
+
+    let ds = 0, df = 0;
     const cur = new Date(inicio);
     while (cur < fin) {
       const d = cur.getDay();
-      (d===0 || d===6) ? df++ : ds++;
-      cur.setDate(cur.getDate()+1);
+      (d === 0 || d === 6) ? df++ : ds++;
+      cur.setDate(cur.getDate() + 1);
     }
-    const auto_total = ds*PRECIO_SEMANA + df*PRECIO_FINDE;
-    return { dias, ds, df, auto_total };
+
+    return { dias, auto_total: ds * PRECIO_SEMANA + df * PRECIO_FINDE };
   }
 
   function render() {
     const r = calc();
-    if (!r) { outEl.textContent=""; return; }
-    if (r.error) { outEl.textContent=r.error; return; }
-    outEl.innerHTML = `${r.dias} día(s) — <strong>Total auto: CA$ ${r.auto_total}</strong>`;
+    if (!r) return;
+    if (r.error) { outEl.textContent = r.error; return; }
+    outEl.innerHTML = `${r.dias} día(s) — <strong>Total: CA$ ${r.auto_total}</strong>`;
   }
 
   fiEl.addEventListener("change", render);
@@ -74,35 +95,32 @@
 
   document.getElementById("reservaForm").addEventListener("submit", async (e) => {
     e.preventDefault();
+
     const r = calc();
-    if (!r || r.error) { alert("Revisa fechas."); return; }
+    if (!r) return alert("Revisa las fechas.");
+    if (!dirEl.value.trim()) return alert("Debes ingresar una dirección válida.");
 
     const payload = new URLSearchParams();
     payload.append("action", "save_reserva");
     payload.append("nombre", nombreEl.value);
     payload.append("email", emailEl.value);
+    payload.append("pickup_address", dirEl.value);
     payload.append("fechaInicio", fiEl.value);
     payload.append("fechaFin", ffEl.value);
-    payload.append("dias", String(r.dias));
-    payload.append("auto_total", String(r.auto_total));
+    payload.append("dias", r.dias);
+    payload.append("auto_total", r.auto_total);
 
     const resp = await fetch(WEBAPP_URL, {
       method: "POST",
-      headers: { "Content-Type":"application/x-www-form-urlencoded;charset=UTF-8" },
+      headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
       body: payload.toString()
     });
 
     const data = await resp.json();
-    if (!data.ok) { alert(data.error || "Error guardando reserva"); return; }
+    if (!data.ok) return alert(data.error || "Error al guardar");
 
-    // Guardar TODO para articulos.html
-    localStorage.setItem("row_index", String(data.row_index));
-    localStorage.setItem("nombre", data.nombre);
-    localStorage.setItem("email", data.email);
-    localStorage.setItem("fechaInicio", data.fechaInicio);
-    localStorage.setItem("fechaFin", data.fechaFin);
-    localStorage.setItem("dias", data.dias);
-    localStorage.setItem("auto_total", String(data.auto_total));
+    localStorage.setItem("row_index", data.row_index);
+    localStorage.setItem("pickup_address", dirEl.value);
 
     window.location.href = "articulos.html";
   });
