@@ -17,13 +17,25 @@
   <input type="email" id="email" required style="width:100%;margin-bottom:10px;">
 
   <label>Dirección de recogida:</label><br>
-  <input
-    type="text"
-    id="pickup_address"
-    placeholder="Escribe la dirección de recogida"
-    required
-    style="width:100%;margin-bottom:10px;"
-  >
+  <div style="position:relative;margin-bottom:10px;">
+    <input
+      type="text"
+      id="pickup_address"
+      placeholder="Escribe la dirección (ej: 123 Queen St W, Toronto)"
+      autocomplete="off"
+      required
+      style="width:100%;"
+    >
+    <div
+      id="suggestions"
+      style="
+        position:absolute; left:0; right:0; top:100%;
+        border:1px solid #ccc; border-top:none;
+        background:#fff; display:none; z-index:9999;
+        max-height:220px; overflow:auto;
+      "
+    ></div>
+  </div>
 
   <label>Fecha Inicio:</label><br>
   <input type="date" id="fechaInicio" required style="width:100%;margin-bottom:10px;">
@@ -38,21 +50,10 @@
   </button>
 </form>
 
-<!-- Google Places Autocomplete -->
-<script src="https://maps.googleapis.com/maps/api/js?key=TU_API_KEY_AQUI&libraries=places"></script>
-
 <script>
-  // Autocomplete dirección
-  window.addEventListener("load", () => {
-    const input = document.getElementById("pickup_address");
-    new google.maps.places.Autocomplete(input, {
-      types: ["geocode"],
-      componentRestrictions: { country: "ca" }
-    });
-  });
+  const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbxUADRjw0CtSZH65fNJzkeNLyu1SB4Pq0XCqMINEgU00tt2pabBnTsjj55i4IpQDWia/exec";
 
-  const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbw5GDkCLZVKSOt6wgXhDcOQBbLk2DVvYXVhDCDJE0NKDhICZGm_PCEituiavo_rqO7c/exec";
-
+  // Ajusta tus precios reales
   const PRECIO_SEMANA = 100;
   const PRECIO_FINDE  = 135;
 
@@ -63,64 +64,169 @@
   const ffEl     = document.getElementById("fechaFin");
   const outEl    = document.getElementById("resultadoPrecio");
 
+  // ====== Autocomplete GRATIS: OpenStreetMap / Nominatim ======
+  const suggestionsEl = document.getElementById("suggestions");
+  let abortController = null;
+  let selectedFromList = false;
+  let debounceTimer = null;
+
+  function hideSuggestions() {
+    suggestionsEl.style.display = "none";
+    suggestionsEl.innerHTML = "";
+  }
+
+  function showSuggestions(items) {
+    suggestionsEl.innerHTML = "";
+    items.forEach((place) => {
+      const div = document.createElement("div");
+      div.textContent = place.display_name;
+      div.style.padding = "8px";
+      div.style.cursor = "pointer";
+      div.style.borderTop = "1px solid #eee";
+
+      div.addEventListener("mousedown", (e) => {
+        // mousedown para que no pierda foco antes de click (mobile/desktop)
+        e.preventDefault();
+        dirEl.value = place.display_name;
+        selectedFromList = true;
+        hideSuggestions();
+      });
+
+      suggestionsEl.appendChild(div);
+    });
+
+    suggestionsEl.style.display = items.length ? "block" : "none";
+  }
+
+  async function fetchAddressSuggestions(query) {
+    // Limitar a Canadá: countrycodes=ca
+    // Mejorar resultados: addressdetails=1
+    const url =
+      "https://nominatim.openstreetmap.org/search" +
+      "?format=json" +
+      "&addressdetails=1" +
+      "&countrycodes=ca" +
+      "&limit=6" +
+      "&q=" + encodeURIComponent(query);
+
+    if (abortController) abortController.abort();
+    abortController = new AbortController();
+
+    const res = await fetch(url, {
+      signal: abortController.signal,
+      headers: {
+        // Nominatim sugiere identificar app; en browser no podemos setear User-Agent,
+        // pero sí podemos mandar un header simple. (No siempre lo usan.)
+        "Accept": "application/json"
+      }
+    });
+
+    if (!res.ok) return [];
+    return await res.json();
+  }
+
+  dirEl.addEventListener("input", () => {
+    selectedFromList = false;
+    const q = dirEl.value.trim();
+
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(async () => {
+      if (q.length < 3) { hideSuggestions(); return; }
+      try {
+        const results = await fetchAddressSuggestions(q);
+        showSuggestions(results || []);
+      } catch (err) {
+        // Abort es normal; otros errores ocultamos sugerencias
+        hideSuggestions();
+      }
+    }, 180);
+  });
+
+  // Evita que ENTER en la dirección dispare submit accidental
+  dirEl.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") e.preventDefault();
+  });
+
+  // Cerrar sugerencias si clic afuera
+  document.addEventListener("click", (e) => {
+    const within = e.target === dirEl || suggestionsEl.contains(e.target);
+    if (!within) hideSuggestions();
+  });
+
+  // Si el usuario escribe y se va sin seleccionar, igual permitimos guardar (tú pediste solo texto)
+  // Si quieres obligar selección de lista: descomenta el check en submit.
+
+  // ====== Cálculo de precio ======
   function calc() {
     if (!fiEl.value || !ffEl.value) return null;
 
     const inicio = new Date(fiEl.value);
     const fin = new Date(ffEl.value);
+
     const dias = Math.ceil((fin - inicio) / (1000*60*60*24));
+    if (dias <= 0) return { error: "La fecha fin debe ser después de la fecha inicio." };
 
-    if (dias <= 0) return { error: "La fecha fin debe ser posterior." };
-
-    let ds = 0, df = 0;
+    let ds=0, df=0;
     const cur = new Date(inicio);
     while (cur < fin) {
       const d = cur.getDay();
-      (d === 0 || d === 6) ? df++ : ds++;
-      cur.setDate(cur.getDate() + 1);
+      (d===0 || d===6) ? df++ : ds++;
+      cur.setDate(cur.getDate()+1);
     }
-
-    return { dias, auto_total: ds * PRECIO_SEMANA + df * PRECIO_FINDE };
+    const auto_total = ds*PRECIO_SEMANA + df*PRECIO_FINDE;
+    return { dias, ds, df, auto_total };
   }
 
   function render() {
     const r = calc();
-    if (!r) return;
-    if (r.error) { outEl.textContent = r.error; return; }
-    outEl.innerHTML = `${r.dias} día(s) — <strong>Total: CA$ ${r.auto_total}</strong>`;
+    if (!r) { outEl.textContent=""; return; }
+    if (r.error) { outEl.textContent=r.error; return; }
+    outEl.innerHTML = `${r.dias} día(s) — <strong>Total auto: CA$ ${r.auto_total}</strong>`;
   }
 
   fiEl.addEventListener("change", render);
   ffEl.addEventListener("change", render);
 
+  // ====== Submit ======
   document.getElementById("reservaForm").addEventListener("submit", async (e) => {
     e.preventDefault();
-
     const r = calc();
-    if (!r) return alert("Revisa las fechas.");
-    if (!dirEl.value.trim()) return alert("Debes ingresar una dirección válida.");
+    if (!r || r.error) { alert("Revisa fechas."); return; }
+
+    const pickupAddress = dirEl.value.trim();
+    if (!pickupAddress) { alert("Escribe la dirección de recogida."); return; }
+
+    // Si quieres obligar que sea seleccionada de la lista:
+    // if (!selectedFromList) { alert("Selecciona una dirección de la lista."); return; }
 
     const payload = new URLSearchParams();
     payload.append("action", "save_reserva");
     payload.append("nombre", nombreEl.value);
     payload.append("email", emailEl.value);
-    payload.append("pickup_address", dirEl.value);
+    payload.append("pickup_address", pickupAddress);
     payload.append("fechaInicio", fiEl.value);
     payload.append("fechaFin", ffEl.value);
-    payload.append("dias", r.dias);
-    payload.append("auto_total", r.auto_total);
+    payload.append("dias", String(r.dias));
+    payload.append("auto_total", String(r.auto_total));
 
     const resp = await fetch(WEBAPP_URL, {
       method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
+      headers: { "Content-Type":"application/x-www-form-urlencoded;charset=UTF-8" },
       body: payload.toString()
     });
 
     const data = await resp.json();
-    if (!data.ok) return alert(data.error || "Error al guardar");
+    if (!data.ok) { alert(data.error || "Error guardando reserva"); return; }
 
-    localStorage.setItem("row_index", data.row_index);
-    localStorage.setItem("pickup_address", dirEl.value);
+    // Guardar TODO para articulos.html
+    localStorage.setItem("row_index", String(data.row_index));
+    localStorage.setItem("nombre", data.nombre);
+    localStorage.setItem("email", data.email);
+    localStorage.setItem("pickup_address", pickupAddress);
+    localStorage.setItem("fechaInicio", data.fechaInicio);
+    localStorage.setItem("fechaFin", data.fechaFin);
+    localStorage.setItem("dias", data.dias);
+    localStorage.setItem("auto_total", String(data.auto_total));
 
     window.location.href = "articulos.html";
   });
