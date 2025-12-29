@@ -1,11 +1,53 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+  <link rel="stylesheet" href="styles.css">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Reserva Audi Q5</title>
 </head>
 <body>
+
+<div class="wrap">
+  <!-- ===== Galería / Carrusel ===== -->
+  <section class="car-hero card">
+    <div class="hero-top">
+      <div>
+        <h3 class="hero-title">Audi Q5 Progressive S-Line</h3>
+        <p class="hero-sub">Desliza para ver fotos</p>
+      </div>
+      <span class="hero-pill">Premium</span>
+    </div>
+
+    <div class="carousel" id="carCarousel" aria-label="Galería del auto">
+      <button class="carousel-btn prev" type="button" aria-label="Anterior">‹</button>
+
+      <div class="carousel-track" id="carouselTrack">
+        <!-- Cambia estas rutas por tus imágenes reales -->
+        <div class="carousel-slide">
+          <img src="img/audi-1.jpg" alt="Audi Q5 - frente">
+        </div>
+        <div class="carousel-slide">
+          <img src="img/audi-2.jpg" alt="Audi Q5 - lateral">
+        </div>
+        <div class="carousel-slide">
+          <img src="img/audi-3.jpg" alt="Audi Q5 - interior">
+        </div>
+        <div class="carousel-slide">
+          <img src="img/audi-4.jpg" alt="Audi Q5 - maletero">
+        </div>
+      </div>
+
+      <button class="carousel-btn next" type="button" aria-label="Siguiente">›</button>
+    </div>
+
+    <div class="carousel-dots" id="carouselDots" aria-label="Indicadores"></div>
+  </section>
+
+  <!-- ===== Tu formulario va aquí debajo ===== -->
+  <!-- <form id="reservaForm" class="card"> ... -->
+</div>
+
 
 <form id="reservaForm" style="max-width:420px;margin:40px auto;padding:20px;border:1px solid #ccc;border-radius:12px;">
   <h3>Reserva tu Audi Q5</h3>
@@ -444,6 +486,71 @@
 
     window.location.href = "articulos.html";
   });
+
+// ===== Carousel logic (swipe + flechas + dots) =====
+(function initCarousel(){
+  const track = document.getElementById("carouselTrack");
+  const dotsWrap = document.getElementById("carouselDots");
+  const prevBtn = document.querySelector(".carousel-btn.prev");
+  const nextBtn = document.querySelector(".carousel-btn.next");
+
+  if (!track || !dotsWrap || !prevBtn || !nextBtn) return;
+
+  const slides = Array.from(track.querySelectorAll(".carousel-slide"));
+  if (slides.length === 0) return;
+
+  // Create dots
+  dotsWrap.innerHTML = "";
+  slides.forEach((_, i) => {
+    const d = document.createElement("button");
+    d.type = "button";
+    d.className = "carousel-dot" + (i === 0 ? " active" : "");
+    d.setAttribute("aria-label", "Ir a imagen " + (i + 1));
+    d.addEventListener("click", () => scrollToIndex(i));
+    dotsWrap.appendChild(d);
+  });
+
+  function getIndexFromScroll(){
+    const w = track.clientWidth || 1;
+    return Math.round(track.scrollLeft / w);
+  }
+
+  function setActiveDot(i){
+    const dots = dotsWrap.querySelectorAll(".carousel-dot");
+    dots.forEach((dot, idx) => dot.classList.toggle("active", idx === i));
+  }
+
+  function scrollToIndex(i){
+    const w = track.clientWidth || 1;
+    track.scrollTo({ left: i * w, behavior: "smooth" });
+    setActiveDot(i);
+  }
+
+  prevBtn.addEventListener("click", () => {
+    const i = getIndexFromScroll();
+    scrollToIndex(Math.max(0, i - 1));
+  });
+
+  nextBtn.addEventListener("click", () => {
+    const i = getIndexFromScroll();
+    scrollToIndex(Math.min(slides.length - 1, i + 1));
+  });
+
+  // Update dots on swipe/scroll
+  let scrollTimer = null;
+  track.addEventListener("scroll", () => {
+    clearTimeout(scrollTimer);
+    scrollTimer = setTimeout(() => setActiveDot(getIndexFromScroll()), 80);
+  });
+
+  // Keep correct index on resize (orientation changes)
+  window.addEventListener("resize", () => {
+    const i = getIndexFromScroll();
+    scrollToIndex(i);
+  });
+})();
+
+
 </script>
 
 </body>
