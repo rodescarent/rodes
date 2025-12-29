@@ -28,10 +28,21 @@
   <button
     type="button"
     id="btnVerifyPickupMap"
-    style="width:100%;padding:10px;margin-bottom:12px;background:#f2f2f2;border:1px solid #ccc;border-radius:8px;cursor:pointer;"
+    style="width:100%;padding:10px;margin-bottom:10px;background:#f2f2f2;border:1px solid #ccc;border-radius:8px;cursor:pointer;"
   >
     Verificar / corregir recogida en Google Maps
   </button>
+
+  <!-- Detalles aeropuerto pickup (auto) -->
+  <div id="pickupAirportBox" style="display:none;margin:8px 0 12px;padding:10px;border:1px solid #ddd;border-radius:10px;">
+    <div style="font-weight:700;margin-bottom:8px;">Detalles aeropuerto (recogida)</div>
+
+    <label>Terminal:</label><br>
+    <input id="pickup_terminal" type="text" placeholder="Ej: T1 / T3" style="width:100%;margin-bottom:8px;">
+
+    <label>Gate / Puerta:</label><br>
+    <input id="pickup_gate" type="text" placeholder="Ej: D12 (o área/puerta)" style="width:100%;">
+  </div>
 
   <label style="display:block;margin:8px 0 8px;">
     <input type="checkbox" id="dropoffDifferent">
@@ -50,10 +61,21 @@
     <button
       type="button"
       id="btnVerifyDropoffMap"
-      style="width:100%;padding:10px;margin-bottom:12px;background:#f2f2f2;border:1px solid #ccc;border-radius:8px;cursor:pointer;"
+      style="width:100%;padding:10px;margin-bottom:10px;background:#f2f2f2;border:1px solid #ccc;border-radius:8px;cursor:pointer;"
     >
       Verificar / corregir entrega en Google Maps
     </button>
+
+    <!-- Detalles aeropuerto dropoff (auto) -->
+    <div id="dropoffAirportBox" style="display:none;margin:8px 0 12px;padding:10px;border:1px solid #ddd;border-radius:10px;">
+      <div style="font-weight:700;margin-bottom:8px;">Detalles aeropuerto (entrega)</div>
+
+      <label>Terminal:</label><br>
+      <input id="dropoff_terminal" type="text" placeholder="Ej: T1 / T3" style="width:100%;margin-bottom:8px;">
+
+      <label>Gate / Puerta:</label><br>
+      <input id="dropoff_gate" type="text" placeholder="Ej: D12 (o área/puerta)" style="width:100%;">
+    </div>
   </div>
 
   <label>Fecha Inicio:</label><br>
@@ -95,9 +117,9 @@
 </form>
 
 <script>
-  const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzWEQAN0qPXZS-KXU1_RAfMRo11uMBSQyv1oitaRgL92dzlbs1kYB6Nj5Hso_h7m5Al/exec";
+  const WEBAPP_URL = "https://script.google.com/macros/s/AKfycby7Doy3lP3tOlzXFuGofXCUYp54AoP_9MuWZ6yO0DPyUWQxNhy96C-7z_dKcBMcRK-G/exec";
 
-  // Precios actuales (los dejamos como están; luego lo pasamos a horas)
+  // Precios actuales (se quedan igual por ahora)
   const PRECIO_SEMANA = 100;
   const PRECIO_FINDE  = 135;
 
@@ -111,6 +133,14 @@
   const dropoffBox = document.getElementById("dropoffBox");
   const dropoffEl = document.getElementById("dropoff_address");
   const btnVerifyDropoff = document.getElementById("btnVerifyDropoffMap");
+
+  const pickupAirportBox = document.getElementById("pickupAirportBox");
+  const pickupTerminalEl = document.getElementById("pickup_terminal");
+  const pickupGateEl = document.getElementById("pickup_gate");
+
+  const dropoffAirportBox = document.getElementById("dropoffAirportBox");
+  const dropoffTerminalEl = document.getElementById("dropoff_terminal");
+  const dropoffGateEl = document.getElementById("dropoff_gate");
 
   const fiEl = document.getElementById("fechaInicio");
   const ffEl = document.getElementById("fechaFin");
@@ -128,16 +158,73 @@
     window.open("https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(addr), "_blank");
   });
 
-  dropoffDifferentEl.addEventListener("change", () => {
-    const on = dropoffDifferentEl.checked;
-    dropoffBox.style.display = on ? "block" : "none";
-    if (!on) dropoffEl.value = "";
-  });
-
   btnVerifyDropoff.addEventListener("click", () => {
     const addr = (dropoffEl.value || "").trim();
     if (!addr) { alert("Escribe la dirección de entrega primero."); dropoffEl.focus(); return; }
     window.open("https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(addr), "_blank");
+  });
+
+  // ===== Detección automática de aeropuerto =====
+  const AIRPORT_TRIGGERS = [
+    "6301",
+    "pearson",
+    "airport",
+    "yyz",
+    "ytz"
+  ];
+
+  function normalizeText(s) {
+    return (s || "")
+      .toLowerCase()
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function isAirportAddress(addr) {
+    const t = normalizeText(addr);
+    return AIRPORT_TRIGGERS.some(k => t.includes(k));
+  }
+
+  function debounce(fn, ms=250) {
+    let timer;
+    return (...args) => {
+      clearTimeout(timer);
+      timer = setTimeout(() => fn(...args), ms);
+    };
+  }
+
+  const updatePickupAirportUI = debounce(() => {
+    const on = isAirportAddress(pickupEl.value);
+    pickupAirportBox.style.display = on ? "block" : "none";
+    if (!on) { pickupTerminalEl.value = ""; pickupGateEl.value = ""; }
+  }, 250);
+
+  const updateDropoffAirportUI = debounce(() => {
+    if (dropoffBox.style.display === "none") {
+      dropoffAirportBox.style.display = "none";
+      dropoffTerminalEl.value = ""; dropoffGateEl.value = "";
+      return;
+    }
+    const on = isAirportAddress(dropoffEl.value);
+    dropoffAirportBox.style.display = on ? "block" : "none";
+    if (!on) { dropoffTerminalEl.value = ""; dropoffGateEl.value = ""; }
+  }, 250);
+
+  pickupEl.addEventListener("input", updatePickupAirportUI);
+  dropoffEl.addEventListener("input", updateDropoffAirportUI);
+
+  // Dropoff show/hide
+  dropoffDifferentEl.addEventListener("change", () => {
+    const on = dropoffDifferentEl.checked;
+    dropoffBox.style.display = on ? "block" : "none";
+    if (!on) {
+      dropoffEl.value = "";
+      dropoffAirportBox.style.display = "none";
+      dropoffTerminalEl.value = "";
+      dropoffGateEl.value = "";
+    } else {
+      updateDropoffAirportUI();
+    }
   });
 
   // ===== RANGOS OCUPADOS desde Apps Script =====
@@ -261,6 +348,8 @@
   window.addEventListener("load", async () => {
     await loadBusyRanges();
     showAvailabilityUI();
+    updatePickupAirportUI();
+    updateDropoffAirportUI();
   });
 
   // ===== SUBMIT =====
@@ -277,11 +366,34 @@
     const pickupAddress = (pickupEl.value || "").trim();
     if (!pickupAddress) { alert("Escribe la dirección de recogida."); pickupEl.focus(); return; }
 
-    // ✅ Solo se guarda dropoff si el usuario marca que es diferente
+    // Dropoff: solo se guarda si el checkbox está marcado
     let dropoffAddress = "";
     if (dropoffDifferentEl.checked) {
       dropoffAddress = (dropoffEl.value || "").trim();
       if (!dropoffAddress) { alert("Marcaste entrega diferente. Escribe la dirección de entrega."); dropoffEl.focus(); return; }
+    }
+
+    // Aeropuerto: exigir terminal/gate SOLO si la dirección activa modo aeropuerto
+    let pickup_terminal = "", pickup_gate = "";
+    if (isAirportAddress(pickupAddress)) {
+      pickup_terminal = (pickupTerminalEl.value || "").trim();
+      pickup_gate = (pickupGateEl.value || "").trim();
+      if (!pickup_terminal || !pickup_gate) {
+        alert("Para aeropuerto, escribe Terminal y Gate (recogida).");
+        if (!pickup_terminal) pickupTerminalEl.focus(); else pickupGateEl.focus();
+        return;
+      }
+    }
+
+    let dropoff_terminal = "", dropoff_gate = "";
+    if (dropoffAddress && isAirportAddress(dropoffAddress)) {
+      dropoff_terminal = (dropoffTerminalEl.value || "").trim();
+      dropoff_gate = (dropoffGateEl.value || "").trim();
+      if (!dropoff_terminal || !dropoff_gate) {
+        alert("Para aeropuerto, escribe Terminal y Gate (entrega).");
+        if (!dropoff_terminal) dropoffTerminalEl.focus(); else dropoffGateEl.focus();
+        return;
+      }
     }
 
     const payload = new URLSearchParams();
@@ -290,7 +402,12 @@
     payload.append("email", emailEl.value);
 
     payload.append("pickup_address", pickupAddress);
-    payload.append("dropoff_address", dropoffAddress); // puede ir vacío
+    payload.append("dropoff_address", dropoffAddress);
+
+    payload.append("pickup_terminal", pickup_terminal);
+    payload.append("pickup_gate", pickup_gate);
+    payload.append("dropoff_terminal", dropoff_terminal);
+    payload.append("dropoff_gate", dropoff_gate);
 
     payload.append("fechaInicio", fiEl.value);
     payload.append("fechaFin", ffEl.value);
@@ -313,6 +430,11 @@
 
     localStorage.setItem("pickup_address", pickupAddress);
     localStorage.setItem("dropoff_address", dropoffAddress);
+
+    localStorage.setItem("pickup_terminal", pickup_terminal);
+    localStorage.setItem("pickup_gate", pickup_gate);
+    localStorage.setItem("dropoff_terminal", dropoff_terminal);
+    localStorage.setItem("dropoff_gate", dropoff_gate);
 
     localStorage.setItem("fechaInicio", data.fechaInicio);
     localStorage.setItem("fechaFin", data.fechaFin);
