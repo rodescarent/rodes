@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>RODES|Audi Q5 Progressive Sline</title>
+</head>
+<body>
+
+<div class="wrap">
+ 
+
+  <!-- ===== Tu formulario va aquí debajo ===== -->
+  <!-- <form id="reservaForm" class="card"> ... -->
+</div>
+
+
+<form id="reservaForm" style="max-width:420px;margin:40px auto;padding:20px;border:1px solid #ccc;border-radius:12px;">
+  <h3>Audi Q5 Progressive Sline</h3>
+
+  <label>Nombre:</label><br>
+  <input type="text" id="nombre" required style="width:100%;margin-bottom:10px;">
+
+  <label>Email:</label><br>
+  <input type="email" id="email" required style="width:100%;margin-bottom:10px;">
+
+  <label>Dirección de recogida:</label><br>
+  <input
+    type="text"
+    id="pickup_address"
+    required
+    placeholder="Ej: 123 Queen St W, Toronto, ON"
+    style="width:100%;margin-bottom:8px;"
+  >
+
+  <button
+    type="button"
+    id="btnVerifyPickupMap"
+    style="width:100%;padding:10px;margin-bottom:10px;background:#f2f2f2;border:1px solid #ccc;border-radius:8px;cursor:pointer;"
+  >
+    Verificar / corregir recogida en Google Maps
+  </button>
+
+  <!-- Detalles aeropuerto pickup (auto) -->
+  <div id="pickupAirportBox" style="display:none;margin:8px 0 12px;padding:10px;border:1px solid #ddd;border-radius:10px;">
+    <div style="font-weight:700;margin-bottom:8px;">Detalles aeropuerto (recogida)</div>
+
+    <label>Terminal:</label><br>
+    <input id="pickup_terminal" type="text" placeholder="Ej: T1 / T3" style="width:100%;margin-bottom:8px;">
+
+    <label>Gate / Puerta:</label><br>
+    <input id="pickup_gate" type="text" placeholder="Ej: D12 (o área/puerta)" style="width:100%;">
+  </div>
+
+  <label style="display:block;margin:8px 0 8px;">
+    <input type="checkbox" id="dropoffDifferent">
+    La dirección de entrega es diferente
+  </label>
+
+  <div id="dropoffBox" style="display:none;">
+    <label>Dirección de entrega:</label><br>
+    <input
+      type="text"
+      id="dropoff_address"
+      placeholder="Ej: 200 Bay St, Toronto, ON"
+      style="width:100%;margin-bottom:8px;"
+    >
+
+    <button
+      type="button"
+      id="btnVerifyDropoffMap"
+      style="width:100%;padding:10px;margin-bottom:10px;background:#f2f2f2;border:1px solid #ccc;border-radius:8px;cursor:pointer;"
+    >
+      Verificar / corregir entrega en Google Maps
+    </button>
+
+    <!-- Detalles aeropuerto dropoff (auto) -->
+    <div id="dropoffAirportBox" style="display:none;margin:8px 0 12px;padding:10px;border:1px solid #ddd;border-radius:10px;">
+      <div style="font-weight:700;margin-bottom:8px;">Detalles aeropuerto (entrega)</div>
+
+      <label>Terminal:</label><br>
+      <input id="dropoff_terminal" type="text" placeholder="Ej: T1 / T3" style="width:100%;margin-bottom:8px;">
+
+      <label>Gate / Puerta:</label><br>
+      <input id="dropoff_gate" type="text" placeholder="Ej: D12 (o área/puerta)" style="width:100%;">
+    </div>
+  </div>
+
+  <label>Fecha Inicio:</label><br>
+  <input type="date" id="fechaInicio" required style="width:100%;margin-bottom:10px;">
+
+  <label>Fecha Fin:</label><br>
+  <input type="date" id="fechaFin" required style="width:100%;margin-bottom:10px;">
+
+  <!-- Mensaje de disponibilidad -->
+  <p id="availabilityMsg" style="font-weight:700;margin:10px 0;text-align:center;display:none;"></p>
+
+  <!-- Calendario: SOLO aparece si el rango está OCUPADO -->
+  <div id="calendarBox" style="display:none;margin:12px 0;">
+    <div style="font-size:13px;color:#555;margin-bottom:6px;text-align:center;">
+      Disponibilidad (días ocupados sombreados)
+    </div>
+
+    <iframe
+      id="calendarIframe"
+      src="https://calendar.google.com/calendar/embed?src=a131346a7e1a176d2af7567823a3ae415030eaf33d8947a154d88289a33d8150%40group.calendar.google.com&ctz=UTC"
+      style="border:0;width:100%;height:520px;border-radius:10px;"
+      frameborder="0"
+      scrolling="no">
+    </iframe>
+  </div>
+
+  <!-- Cálculo: SOLO aparece si está DISPONIBLE -->
+  <p id="resultadoPrecio" style="font-weight:bold;margin:12px 0;text-align:center;display:none;"></p>
+
+  <button
+    id="btnContinue"
+    type="submit"
+    style="width:100%;padding:10px;background:#635bff;color:white;border:none;border-radius:8px;cursor:pointer;"
+    disabled
+    title="Selecciona fechas disponibles para continuar"
+  >
+    Continuar → elegir artículos
+  </button>
+</form>
+
+<script>
+  const WEBAPP_URL = "https://script.google.com/macros/s/AKfycby7Doy3lP3tOlzXFuGofXCUYp54AoP_9MuWZ6yO0DPyUWQxNhy96C-7z_dKcBMcRK-G/exec";
+
+  // Precios actuales (se quedan igual por ahora)
+  const PRECIO_SEMANA = 100;
+  const PRECIO_FINDE  = 135;
+
+  const nombreEl = document.getElementById("nombre");
+  const emailEl  = document.getElementById("email");
+
+  const pickupEl = document.getElementById("pickup_address");
+  const btnVerifyPickup = document.getElementById("btnVerifyPickupMap");
+
+  const dropoffDifferentEl = document.getElementById("dropoffDifferent");
+  const dropoffBox = document.getElementById("dropoffBox");
+  const dropoffEl = document.getElementById("dropoff_address");
+  const btnVerifyDropoff = document.getElementById("btnVerifyDropoffMap");
+
+  const pickupAirportBox = document.getElementById("pickupAirportBox");
+  const pickupTerminalEl = document.getElementById("pickup_terminal");
+  const pickupGateEl = document.getElementById("pickup_gate");
+
+  const dropoffAirportBox = document.getElementById("dropoffAirportBox");
+  const dropoffTerminalEl = document.getElementById("dropoff_terminal");
+  const dropoffGateEl = document.getElementById("dropoff_gate");
+
+  const fiEl = document.getElementById("fechaInicio");
+  const ffEl = document.getElementById("fechaFin");
+
+  const availabilityMsg = document.getElementById("availabilityMsg");
+  const calendarBox = document.getElementById("calendarBox");
+
+  const outEl = document.getElementById("resultadoPrecio");
+  const btnContinue = document.getElementById("btnContinue");
+
+  // ===== Google Maps (sin API) =====
+  btnVerifyPickup.addEventListener("click", () => {
+    const addr = (pickupEl.value || "").trim();
+    if (!addr) { alert("Escribe la dirección de recogida primero."); pickupEl.focus(); return; }
+    window.open("https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(addr), "_blank");
+  });
+
+  btnVerifyDropoff.addEventListener("click", () => {
+    const addr = (dropoffEl.value || "").trim();
+    if (!addr) { alert("Escribe la dirección de entrega primero."); dropoffEl.focus(); return; }
+    window.open("https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(addr), "_blank");
+  });
+
+  // ===== Detección automática de aeropuerto =====
+  const AIRPORT_TRIGGERS = [
+    "6301",
+    "pearson",
+    "2 eireann",
+    "airport",
+    "yyz",
+    "ytz"
+  ];
+
+  function normalizeText(s) {
+    return (s || "")
+      .toLowerCase()
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function isAirportAddress(addr) {
+    const t = normalizeText(addr);
+    return AIRPORT_TRIGGERS.some(k => t.includes(k));
+  }
+
+  function debounce(fn, ms=250) {
+    let timer;
+    return (...args) => {
+      clearTimeout(timer);
+      timer = setTimeout(() => fn(...args), ms);
+    };
+  }
+
+  const updatePickupAirportUI = debounce(() => {
+    const on = isAirportAddress(pickupEl.value);
+    pickupAirportBox.style.display = on ? "block" : "none";
+    if (!on) { pickupTerminalEl.value = ""; pickupGateEl.value = ""; }
+  }, 250);
+
+  const updateDropoffAirportUI = debounce(() => {
+    if (dropoffBox.style.display === "none") {
+      dropoffAirportBox.style.display = "none";
+      dropoffTerminalEl.value = ""; dropoffGateEl.value = "";
+      return;
+    }
+    const on = isAirportAddress(dropoffEl.value);
+    dropoffAirportBox.style.display = on ? "block" : "none";
+    if (!on) { dropoffTerminalEl.value = ""; dropoffGateEl.value = ""; }
+  }, 250);
+
+  pickupEl.addEventListener("input", updatePickupAirportUI);
+  dropoffEl.addEventListener("input", updateDropoffAirportUI);
+
+  // Dropoff show/hide
+  dropoffDifferentEl.addEventListener("change", () => {
+    const on = dropoffDifferentEl.checked;
+    dropoffBox.style.display = on ? "block" : "none";
+    if (!on) {
+      dropoffEl.value = "";
+      dropoffAirportBox.style.display = "none";
+      dropoffTerminalEl.value = "";
+      dropoffGateEl.value = "";
+    } else {
+      updateDropoffAirportUI();
+    }
+  });
+
+  // ===== RANGOS OCUPADOS desde Apps Script =====
+  let BUSY_RANGES = []; // [{start:"YYYY-MM-DD", end:"YYYY-MM-DD"}]
+
+  async function loadBusyRanges() {
+    try {
+      const resp = await fetch(WEBAPP_URL + "?action=get_busy", { method: "GET" });
+      const data = await resp.json();
+      BUSY_RANGES = (data && data.ok && Array.isArray(data.ranges)) ? data.ranges : [];
+    } catch (e) {
+      BUSY_RANGES = [];
+    }
+  }
+
+  // ===== Solape INCLUSIVO (recogida y entrega cuentan ocupados) =====
+  function rangesOverlapInclusive(start, end, busyStart, busyEnd) {
+    const s  = new Date(start + "T00:00:00");
+    const e  = new Date(end   + "T00:00:00");
+    const bs = new Date(busyStart + "T00:00:00");
+    const be = new Date(busyEnd   + "T00:00:00");
+    return (s <= be) && (e >= bs);
+  }
+
+  function validateAvailability() {
+    if (!fiEl.value || !ffEl.value) return { ready:false, occupied:false };
+
+    const start = fiEl.value;
+    const end   = ffEl.value;
+
+    const inicio = new Date(start);
+    const fin = new Date(end);
+    if (fin <= inicio) return { ready:true, occupied:true, error:"La fecha fin debe ser posterior." };
+
+    for (const r of BUSY_RANGES) {
+      if (!r || !r.start || !r.end) continue;
+      if (rangesOverlapInclusive(start, end, r.start, r.end)) {
+        return { ready:true, occupied:true };
+      }
+    }
+    return { ready:true, occupied:false };
+  }
+
+  // ===== Cálculo (SIN CAMBIOS) =====
+  function calc() {
+    if (!fiEl.value || !ffEl.value) return null;
+
+    const inicio = new Date(fiEl.value);
+    const fin = new Date(ffEl.value);
+    const dias = Math.ceil((fin - inicio) / (1000*60*60*24));
+    if (dias <= 0) return { error: "La fecha fin debe ser posterior." };
+
+    let ds = 0, df = 0;
+    const cur = new Date(inicio);
+    while (cur < fin) {
+      const d = cur.getDay();
+      (d === 0 || d === 6) ? df++ : ds++;
+      cur.setDate(cur.getDate() + 1);
+    }
+    return { dias, auto_total: ds * PRECIO_SEMANA + df * PRECIO_FINDE };
+  }
+
+  function showAvailabilityUI() {
+    const v = validateAvailability();
+
+    if (!v.ready) {
+      availabilityMsg.style.display = "none";
+      calendarBox.style.display = "none";
+      outEl.style.display = "none";
+      outEl.textContent = "";
+      btnContinue.disabled = true;
+      btnContinue.title = "Selecciona fechas para continuar";
+      return;
+    }
+
+    availabilityMsg.style.display = "block";
+
+    if (v.error) {
+      availabilityMsg.textContent = v.error;
+      availabilityMsg.style.color = "crimson";
+      calendarBox.style.display = "none";
+      outEl.style.display = "none";
+      btnContinue.disabled = true;
+      btnContinue.title = "Corrige las fechas para continuar";
+      return;
+    }
+
+    if (v.occupied) {
+      availabilityMsg.textContent = "Rango de fecha ocupado";
+      availabilityMsg.style.color = "crimson";
+      calendarBox.style.display = "block";
+      outEl.style.display = "none";
+      outEl.textContent = "";
+      btnContinue.disabled = true;
+      btnContinue.title = "Elige un rango disponible para continuar";
+      return;
+    }
+
+    availabilityMsg.textContent = "Disponible";
+    availabilityMsg.style.color = "green";
+    calendarBox.style.display = "none";
+
+    const r = calc();
+    if (!r || r.error) {
+      outEl.style.display = "none";
+      outEl.textContent = "";
+      btnContinue.disabled = true;
+      btnContinue.title = "Revisa las fechas";
+      return;
+    }
+
+    outEl.style.display = "block";
+    outEl.innerHTML = `${r.dias} día(s) — <strong>Total auto: CA$ ${r.auto_total}</strong>`;
+    btnContinue.disabled = false;
+    btnContinue.title = "";
+  }
+
+  fiEl.addEventListener("change", showAvailabilityUI);
+  ffEl.addEventListener("change", showAvailabilityUI);
+
+  window.addEventListener("load", async () => {
+    await loadBusyRanges();
+    showAvailabilityUI();
+    updatePickupAirportUI();
+    updateDropoffAirportUI();
+  });
+
+  // ===== SUBMIT =====
+  document.getElementById("reservaForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const v = validateAvailability();
+    if (!v.ready) return alert("Selecciona las fechas.");
+    if (v.occupied || v.error) return alert("El rango seleccionado no está disponible.");
+
+    const r = calc();
+    if (!r || r.error) return alert("Revisa las fechas.");
+
+    const pickupAddress = (pickupEl.value || "").trim();
+    if (!pickupAddress) { alert("Escribe la dirección de recogida."); pickupEl.focus(); return; }
+
+    // Dropoff: solo se guarda si el checkbox está marcado
+    let dropoffAddress = "";
+    if (dropoffDifferentEl.checked) {
+      dropoffAddress = (dropoffEl.value || "").trim();
+      if (!dropoffAddress) { alert("Marcaste entrega diferente. Escribe la dirección de entrega."); dropoffEl.focus(); return; }
+    }
+
+    // Aeropuerto: exigir terminal/gate SOLO si la dirección activa modo aeropuerto
+    let pickup_terminal = "", pickup_gate = "";
+    if (isAirportAddress(pickupAddress)) {
+      pickup_terminal = (pickupTerminalEl.value || "").trim();
+      pickup_gate = (pickupGateEl.value || "").trim();
+      if (!pickup_terminal || !pickup_gate) {
+        alert("Para aeropuerto, escribe Terminal y Gate (recogida).");
+        if (!pickup_terminal) pickupTerminalEl.focus(); else pickupGateEl.focus();
+        return;
+      }
+    }
+
+    let dropoff_terminal = "", dropoff_gate = "";
+    if (dropoffAddress && isAirportAddress(dropoffAddress)) {
+      dropoff_terminal = (dropoffTerminalEl.value || "").trim();
+      dropoff_gate = (dropoffGateEl.value || "").trim();
+      if (!dropoff_terminal || !dropoff_gate) {
+        alert("Para aeropuerto, escribe Terminal y Gate (entrega).");
+        if (!dropoff_terminal) dropoffTerminalEl.focus(); else dropoffGateEl.focus();
+        return;
+      }
+    }
+
+    const payload = new URLSearchParams();
+    payload.append("action", "save_reserva");
+    payload.append("nombre", nombreEl.value);
+    payload.append("email", emailEl.value);
+
+    payload.append("pickup_address", pickupAddress);
+    payload.append("dropoff_address", dropoffAddress);
+
+    payload.append("pickup_terminal", pickup_terminal);
+    payload.append("pickup_gate", pickup_gate);
+    payload.append("dropoff_terminal", dropoff_terminal);
+    payload.append("dropoff_gate", dropoff_gate);
+
+    payload.append("fechaInicio", fiEl.value);
+    payload.append("fechaFin", ffEl.value);
+    payload.append("dias", String(r.dias));
+    payload.append("auto_total", String(r.auto_total));
+
+    const resp = await fetch(WEBAPP_URL, {
+      method: "POST",
+      headers: { "Content-Type":"application/x-www-form-urlencoded;charset=UTF-8" },
+      body: payload.toString()
+    });
+
+    const data = await resp.json();
+    if (!data.ok) return alert(data.error || "Error guardando reserva");
+
+    // Guardar para articulos.html
+    localStorage.setItem("row_index", String(data.row_index));
+    localStorage.setItem("nombre", data.nombre);
+    localStorage.setItem("email", data.email);
+
+    localStorage.setItem("pickup_address", pickupAddress);
+    localStorage.setItem("dropoff_address", dropoffAddress);
+
+    localStorage.setItem("pickup_terminal", pickup_terminal);
+    localStorage.setItem("pickup_gate", pickup_gate);
+    localStorage.setItem("dropoff_terminal", dropoff_terminal);
+    localStorage.setItem("dropoff_gate", dropoff_gate);
+
+    localStorage.setItem("fechaInicio", data.fechaInicio);
+    localStorage.setItem("fechaFin", data.fechaFin);
+    localStorage.setItem("dias", data.dias);
+    localStorage.setItem("auto_total", String(data.auto_total));
+
+    window.location.href = "articulos.html";
+  });
+
+// ===== Carousel logic (swipe + flechas + dots) =====
+(function initCarousel(){
+  const track = document.getElementById("carouselTrack");
+  const dotsWrap = document.getElementById("carouselDots");
+  const prevBtn = document.querySelector(".carousel-btn.prev");
+  const nextBtn = document.querySelector(".carousel-btn.next");
+
+  if (!track || !dotsWrap || !prevBtn || !nextBtn) return;
+
+  const slides = Array.from(track.querySelectorAll(".carousel-slide"));
+  if (slides.length === 0) return;
+
+  // Create dots
+  dotsWrap.innerHTML = "";
+  slides.forEach((_, i) => {
+    const d = document.createElement("button");
+    d.type = "button";
+    d.className = "carousel-dot" + (i === 0 ? " active" : "");
+    d.setAttribute("aria-label", "Ir a imagen " + (i + 1));
+    d.addEventListener("click", () => scrollToIndex(i));
+    dotsWrap.appendChild(d);
+  });
+
+  function getIndexFromScroll(){
+    const w = track.clientWidth || 1;
+    return Math.round(track.scrollLeft / w);
+  }
+
+  function setActiveDot(i){
+    const dots = dotsWrap.querySelectorAll(".carousel-dot");
+    dots.forEach((dot, idx) => dot.classList.toggle("active", idx === i));
+  }
+
+  function scrollToIndex(i){
+    const w = track.clientWidth || 1;
+    track.scrollTo({ left: i * w, behavior: "smooth" });
+    setActiveDot(i);
+  }
+
+  prevBtn.addEventListener("click", () => {
+    const i = getIndexFromScroll();
+    scrollToIndex(Math.max(0, i - 1));
+  });
+
+  nextBtn.addEventListener("click", () => {
+    const i = getIndexFromScroll();
+    scrollToIndex(Math.min(slides.length - 1, i + 1));
+  });
+
+  // Update dots on swipe/scroll
+  let scrollTimer = null;
+  track.addEventListener("scroll", () => {
+    clearTimeout(scrollTimer);
+    scrollTimer = setTimeout(() => setActiveDot(getIndexFromScroll()), 80);
+  });
+
+  // Keep correct index on resize (orientation changes)
+  window.addEventListener("resize", () => {
+    const i = getIndexFromScroll();
+    scrollToIndex(i);
+  });
+})();
+
+
+</script>
+
+</body>
+</html>
