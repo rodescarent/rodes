@@ -358,11 +358,11 @@ button{
   gap: 8px;
   padding: 12px 16px;
   border-radius: 14px;
-  background: rgba(15, 23, 42, .25);
-  border: 1px solid rgba(255,255,255,.35);
+  background: rgba(255,255,255,0.15); /* transparencia .18 a .25 */
+  border: 1px solid rgba(255,255,255,0.20);
   color: rgba(255,255,255,.95);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 10px 25px rgba(0,0,0,.12);
+  backdrop-filter: blur(8px); /* empa;ado de 6px a 14px */
+  box-shadow: 0 10px 25px rgba(0,0,0,0.12);
   font-weight: 700;
 }
 .page-home .glass-btn:hover{ background: rgba(15, 23, 42, .33); }
@@ -558,9 +558,57 @@ button{
   .page-home .footer__bottom{ justify-content: center; text-align: center; }
 }
 
-@media (max-width: 460px){
-  .page-home .hero__content{ padding-top: 46px; }
-  .page-home .hero__subtitle{ font-size: 16px; }
-  .page-home .glass-btn{ width: 100%; justify-content: center; }
-}
 
+@media (max-width: 460px){
+
+  /* -----------------------------------
+     1) HERO: tamaño (alto) + imagen fondo
+     ----------------------------------- */
+  .page-home .hero{
+    position: relative;
+    min-height: 300px;   /* altura de la imagen */
+    background-size: cover;   /* zoom imagen ← cover | contain | 120% (ej: 115%) */
+    background-position: 60% 35%;      /* imagen ← ajusta X/Y para encuadrar skyline/auto */}
+  .page-home .hero{
+    background-image:linear-gradient(to bottom,
+        rgba(255,255,255,.55),         /* ← oscurecer imagen arriba (transparencia) */
+        rgba(255,255,255,.12)          /* ← oscurecer imagen abajo (transparencia) */),
+        var(--hero-image);}
+  .page-home .hero__content{
+    position: relative;
+    padding-bottom: 110px;             /* ← espacio inferior de botones */}
+
+  /* -----------------------------------
+     3) BOTONES GLASS: 3 en fila, abajo-izquierda
+     ----------------------------------- */
+  .page-home .hero__quicklinks{
+    position: absolute;
+    left: 18px;         /* ← mueve botones hacia la derecha/izquierda */
+    bottom: 18px;       /* ← sube/baja los botones */
+    right: auto;        /* mantener botones pegados a la izquierda */
+    width: 330px;       /* ← ancho de botones (ej: 300–380) */
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 botones uno al lado del otro */
+    gap: 10px;           /* ← distancia entre botones */
+    margin-top: 0;       /* evita que se empujen hacia abajo */}
+
+  .page-home .glass-btn{
+    padding: 10px 8px;                 /* ← alto/ancho del botón */
+    font-size: 13px;                   /* ← texto */
+    border-radius: 14px;               /* ← redondeo */
+    background: rgba(255,255,255,0.15); /*transparencia botón 0.15 a 0.40 */
+    border: 1px solid rgba(255,255,255,0.20);
+    color: rgba(255,255,255,0.95);  /* color Texto */
+    width: 100%;
+    justify-content: center;  /*Alineación */}
+
+  .page-home .glass-btn:hover{
+    background: rgba(15, 23, 42, 0.35); /* ← hover (en móvil casi no aplica) */}
+
+  .page-home .hero__title{
+    font-size: 34px;                   /* ← ajusta headline */
+    line-height: 1.05;}
+
+  .page-home .hero__subtitle{
+    font-size: 16px;                   /* ← ajusta sub-headline */}
+}
