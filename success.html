@@ -6,9 +6,59 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Pago exitoso</title>
 </head>
-<body style="font-family:Arial;padding:30px;max-width:700px;margin:auto;">
-  <h2>✅ Pago exitoso</h2>
-  <p id="msg">Confirmando tu pago…</p>
+
+<body class="page-success">
+
+  <!-- HERO / HEADER (igual estilo que las otras páginas) -->
+  <header class="hero hero--success">
+    <div class="hero__content container">
+      <h1 class="hero__title">Confirmación de pago</h1>
+      <p class="hero__subtitle">Estamos validando tu pago con Stripe y registrándolo en el sistema.</p>
+
+      <nav class="hero__quicklinks" aria-label="Accesos rápidos">
+        <a class="glass-btn" href="index.html">Inicio</a>
+        <a class="glass-btn" href="q5progressive.html">Reservar</a>
+        <a class="glass-btn" href="contacto.html">Contacto</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main">
+    <section class="section container">
+
+      <div class="card card--success">
+        <div class="success-head">
+          <div class="success-icon" id="statusIcon" aria-hidden="true">⏳</div>
+          <div>
+            <h2 class="success-title" id="statusTitle">Confirmando tu pago…</h2>
+            <p class="success-subtitle" id="statusSub">
+              Esto puede tardar unos segundos. No cierres esta pestaña.
+            </p>
+          </div>
+        </div>
+
+        <!-- Mensaje principal que actualiza el JS -->
+        <div class="success-message" id="msgBox">
+          <p id="msg" class="success-text">Validando sesión…</p>
+          <div class="success-meta" id="metaLine" style="display:none;"></div>
+        </div>
+
+        <div class="success-actions">
+          <a class="btn btn-ghost" href="index.html">Volver al inicio</a>
+          <a class="btn btn-primary" href="q5progressive.html">Hacer otra reserva</a>
+        </div>
+
+        <div class="success-help">
+          <div class="success-help__title">¿Tienes un problema?</div>
+          <div class="success-help__text">
+            Si ya pagaste y aquí no aparece confirmado, espera 1 minuto y recarga la página.
+            Si sigue igual, contáctanos con tu email de reserva.
+          </div>
+        </div>
+      </div>
+
+    </section>
+  </main>
 
   <script>
     const WEBAPP_URL = "https://script.google.com/macros/s/AKfycby7Doy3lP3tOlzXFuGofXCUYp54AoP_9MuWZ6yO0DPyUWQxNhy96C-7z_dKcBMcRK-G/exec";
@@ -16,9 +66,60 @@
     const params = new URLSearchParams(location.search);
     const session_id = params.get("session_id");
 
+    const elMsg = document.getElementById("msg");
+    const elMeta = document.getElementById("metaLine");
+
+    const icon = document.getElementById("statusIcon");
+    const title = document.getElementById("statusTitle");
+    const sub = document.getElementById("statusSub");
+    const msgBox = document.getElementById("msgBox");
+
+    function setState(kind, mainText, metaText) {
+      // kind: "loading" | "success" | "warn" | "error"
+      msgBox.classList.remove("is-success", "is-warn", "is-error", "is-loading");
+      msgBox.classList.add("is-" + kind);
+
+      if (kind === "loading") {
+        icon.textContent = "⏳";
+        title.textContent = "Confirmando tu pago…";
+        sub.textContent = "Esto puede tardar unos segundos. No cierres esta pestaña.";
+      }
+      if (kind === "success") {
+        icon.textContent = "✅";
+        title.textContent = "Pago exitoso";
+        sub.textContent = "Tu reserva quedó confirmada. ¡Gracias!";
+      }
+      if (kind === "warn") {
+        icon.textContent = "🕒";
+        title.textContent = "Aún no aparece confirmado";
+        sub.textContent = "A veces Stripe tarda un poco en reportar el estado.";
+      }
+      if (kind === "error") {
+        icon.textContent = "⚠️";
+        title.textContent = "No pudimos confirmar el pago";
+        sub.textContent = "Revisa el mensaje y, si pagaste, contáctanos.";
+      }
+
+      elMsg.textContent = mainText;
+
+      if (metaText) {
+        elMeta.style.display = "block";
+        elMeta.textContent = metaText;
+      } else {
+        elMeta.style.display = "none";
+        elMeta.textContent = "";
+      }
+    }
+
     async function run(){
+      setState("loading", "Validando sesión…");
+
       if (!session_id) {
-        document.getElementById("msg").textContent = "No llegó session_id. Si pagaste, escríbeme para revisar.";
+        setState(
+          "error",
+          "No llegó session_id en la URL. Si pagaste, escríbenos para revisar.",
+          "Tip: vuelve a Stripe y confirma que el pago terminó correctamente."
+        );
         return;
       }
 
@@ -31,14 +132,24 @@
         const data = await r.json();
 
         if (data.ok && data.paid) {
-          document.getElementById("msg").textContent =
-            `Listo ✅ Tu pago fue confirmado. Reserva #${data.row_index}. ¡Gracias!`;
+          setState(
+            "success",
+            `Listo ✅ Tu pago fue confirmado. Reserva #${data.row_index}.`,
+            `Estado: ${data.payment_status || "paid"}`
+          );
         } else {
-          document.getElementById("msg").textContent =
-            `Aún no aparece como pagado (status: ${data.payment_status || "unknown"}). Revisa en 1 minuto o contáctame.`;
+          setState(
+            "warn",
+            `Aún no aparece como pagado (status: ${data.payment_status || "unknown"}).`,
+            "Espera 1 minuto y recarga esta página."
+          );
         }
       } catch (e) {
-        document.getElementById("msg").textContent = "Error confirmando el pago: " + e;
+        setState(
+          "error",
+          "Error confirmando el pago: " + e,
+          "Si el error persiste, contáctanos."
+        );
       }
     }
     run();

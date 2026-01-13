@@ -1,129 +1,174 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <link rel="stylesheet" href="styles.css">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>RODES|Audi Q5 Progressive Sline</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
-<body>
 
-<div class="wrap">
- 
+<body class="page-car">
 
-  <!-- ===== Tu formulario va aquí debajo ===== -->
-  <!-- <form id="reservaForm" class="card"> ... -->
-</div>
+  <!-- =========================
+       HERO / HEADER (estilo index)
+       ========================= -->
+  <header class="hero hero--car">
+    <div class="hero__content container">
+      <h1 class="hero__title">Audi Q5 Progressive Sline</h1>
+      <p class="hero__subtitle">Reserva rápida · Disponibilidad en tiempo real · Toronto</p>
 
-
-<form id="reservaForm" style="max-width:420px;margin:40px auto;padding:20px;border:1px solid #ccc;border-radius:12px;">
-  <h3>Audi Q5 Progressive Sline</h3>
-
-  <label>Nombre:</label><br>
-  <input type="text" id="nombre" required style="width:100%;margin-bottom:10px;">
-
-  <label>Email:</label><br>
-  <input type="email" id="email" required style="width:100%;margin-bottom:10px;">
-
-  <label>Dirección de recogida:</label><br>
-  <input
-    type="text"
-    id="pickup_address"
-    required
-    placeholder="Ej: 123 Queen St W, Toronto, ON"
-    style="width:100%;margin-bottom:8px;"
-  >
-
-  <button
-    type="button"
-    id="btnVerifyPickupMap"
-    style="width:100%;padding:10px;margin-bottom:10px;background:#f2f2f2;border:1px solid #ccc;border-radius:8px;cursor:pointer;"
-  >
-    Verificar / corregir recogida en Google Maps
-  </button>
-
-  <!-- Detalles aeropuerto pickup (auto) -->
-  <div id="pickupAirportBox" style="display:none;margin:8px 0 12px;padding:10px;border:1px solid #ddd;border-radius:10px;">
-    <div style="font-weight:700;margin-bottom:8px;">Detalles aeropuerto (recogida)</div>
-
-    <label>Terminal:</label><br>
-    <input id="pickup_terminal" type="text" placeholder="Ej: T1 / T3" style="width:100%;margin-bottom:8px;">
-
-    <label>Gate / Puerta:</label><br>
-    <input id="pickup_gate" type="text" placeholder="Ej: D12 (o área/puerta)" style="width:100%;">
-  </div>
-
-  <label style="display:block;margin:8px 0 8px;">
-    <input type="checkbox" id="dropoffDifferent">
-    La dirección de entrega es diferente
-  </label>
-
-  <div id="dropoffBox" style="display:none;">
-    <label>Dirección de entrega:</label><br>
-    <input
-      type="text"
-      id="dropoff_address"
-      placeholder="Ej: 200 Bay St, Toronto, ON"
-      style="width:100%;margin-bottom:8px;"
-    >
-
-    <button
-      type="button"
-      id="btnVerifyDropoffMap"
-      style="width:100%;padding:10px;margin-bottom:10px;background:#f2f2f2;border:1px solid #ccc;border-radius:8px;cursor:pointer;"
-    >
-      Verificar / corregir entrega en Google Maps
-    </button>
-
-    <!-- Detalles aeropuerto dropoff (auto) -->
-    <div id="dropoffAirportBox" style="display:none;margin:8px 0 12px;padding:10px;border:1px solid #ddd;border-radius:10px;">
-      <div style="font-weight:700;margin-bottom:8px;">Detalles aeropuerto (entrega)</div>
-
-      <label>Terminal:</label><br>
-      <input id="dropoff_terminal" type="text" placeholder="Ej: T1 / T3" style="width:100%;margin-bottom:8px;">
-
-      <label>Gate / Puerta:</label><br>
-      <input id="dropoff_gate" type="text" placeholder="Ej: D12 (o área/puerta)" style="width:100%;">
+      <nav class="hero__quicklinks" aria-label="Accesos rápidos">
+        <a class="glass-btn" href="index.html">Inicio</a>
+        <a class="glass-btn" href="detallesq5progressive.html">Detalles</a>
+        <a class="glass-btn" href="contacto.html">Contacto</a>
+      </nav>
     </div>
-  </div>
+  </header>
 
-  <label>Fecha Inicio:</label><br>
-  <input type="date" id="fechaInicio" required style="width:100%;margin-bottom:10px;">
+  <main class="main">
+    <section class="section container">
 
-  <label>Fecha Fin:</label><br>
-  <input type="date" id="fechaFin" required style="width:100%;margin-bottom:10px;">
+      <!-- Card principal -->
+      <div class="card card--form">
+        <div class="card__head">
+          <div>
+            <h2 class="card__title">Formulario de renta</h2>
+            <p class="card__meta">Completa tus datos y elige fechas disponibles.</p>
+          </div>
+          <span class="pill">Q5 Progressive</span>
+        </div>
 
-  <!-- Mensaje de disponibilidad -->
-  <p id="availabilityMsg" style="font-weight:700;margin:10px 0;text-align:center;display:none;"></p>
+        <form id="reservaForm" class="form">
 
-  <!-- Calendario: SOLO aparece si el rango está OCUPADO -->
-  <div id="calendarBox" style="display:none;margin:12px 0;">
-    <div style="font-size:13px;color:#555;margin-bottom:6px;text-align:center;">
-      Disponibilidad (días ocupados sombreados)
-    </div>
+          <div class="field">
+            <label for="nombre">Nombre</label>
+            <input type="text" id="nombre" required placeholder="Tu nombre">
+          </div>
 
-    <iframe
-      id="calendarIframe"
-      src="https://calendar.google.com/calendar/embed?src=a131346a7e1a176d2af7567823a3ae415030eaf33d8947a154d88289a33d8150%40group.calendar.google.com&ctz=UTC"
-      style="border:0;width:100%;height:520px;border-radius:10px;"
-      frameborder="0"
-      scrolling="no">
-    </iframe>
-  </div>
+          <div class="field">
+            <label for="email">Email</label>
+            <input type="email" id="email" required placeholder="tucorreo@email.com">
+          </div>
 
-  <!-- Cálculo: SOLO aparece si está DISPONIBLE -->
-  <p id="resultadoPrecio" style="font-weight:bold;margin:12px 0;text-align:center;display:none;"></p>
+          <div class="field field--full">
+            <label for="pickup_address">Dirección de recogida</label>
+            <input
+              type="text"
+              id="pickup_address"
+              required
+              placeholder="Ej: 123 Queen St W, Toronto, ON (o YYZ / YTZ)"
+            >
+          </div>
 
-  <button
-    id="btnContinue"
-    type="submit"
-    style="width:100%;padding:10px;background:#635bff;color:white;border:none;border-radius:8px;cursor:pointer;"
-    disabled
-    title="Selecciona fechas disponibles para continuar"
-  >
-    Continuar → elegir artículos
-  </button>
-</form>
+          <div class="field field--full">
+            <button type="button" id="btnVerifyPickupMap" class="btn btn-ghost btn-block">
+              Verificar / corregir recogida en Google Maps
+            </button>
+          </div>
+
+          <!-- Detalles aeropuerto pickup (auto) -->
+          <div id="pickupAirportBox" class="airport-box">
+            <div class="airport-box__title">Detalles aeropuerto (recogida)</div>
+
+            <div class="grid-2">
+              <div class="field">
+                <label for="pickup_terminal">Terminal</label>
+                <input id="pickup_terminal" type="text" placeholder="Ej: T1 / T3">
+              </div>
+
+              <div class="field">
+                <label for="pickup_gate">Gate / Puerta</label>
+                <input id="pickup_gate" type="text" placeholder="Ej: D12 (o área/puerta)">
+              </div>
+            </div>
+          </div>
+
+          <div class="field field--full checkline">
+            <input type="checkbox" id="dropoffDifferent">
+            <label for="dropoffDifferent">La dirección de entrega es diferente</label>
+          </div>
+
+          <div id="dropoffBox" class="dropoff-box">
+            <div class="field field--full">
+              <label for="dropoff_address">Dirección de entrega</label>
+              <input
+                type="text"
+                id="dropoff_address"
+                placeholder="Ej: 200 Bay St, Toronto, ON (o YYZ / YTZ)"
+              >
+            </div>
+
+            <div class="field field--full">
+              <button type="button" id="btnVerifyDropoffMap" class="btn btn-ghost btn-block">
+                Verificar / corregir entrega en Google Maps
+              </button>
+            </div>
+
+            <!-- Detalles aeropuerto dropoff (auto) -->
+            <div id="dropoffAirportBox" class="airport-box">
+              <div class="airport-box__title">Detalles aeropuerto (entrega)</div>
+
+              <div class="grid-2">
+                <div class="field">
+                  <label for="dropoff_terminal">Terminal</label>
+                  <input id="dropoff_terminal" type="text" placeholder="Ej: T1 / T3">
+                </div>
+
+                <div class="field">
+                  <label for="dropoff_gate">Gate / Puerta</label>
+                  <input id="dropoff_gate" type="text" placeholder="Ej: D12 (o área/puerta)">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="field">
+              <label for="fechaInicio">Fecha Inicio</label>
+              <input type="date" id="fechaInicio" required>
+            </div>
+
+            <div class="field">
+              <label for="fechaFin">Fecha Fin</label>
+              <input type="date" id="fechaFin" required>
+            </div>
+          </div>
+
+          <!-- Mensaje de disponibilidad -->
+          <p id="availabilityMsg" class="availability"></p>
+
+          <!-- Calendario: SOLO aparece si el rango está OCUPADO -->
+          <div id="calendarBox" class="calendar">
+            <div class="calendar__hint">
+              Disponibilidad (días ocupados sombreados)
+            </div>
+
+            <iframe
+              id="calendarIframe"
+              src="https://calendar.google.com/calendar/embed?src=a131346a7e1a176d2af7567823a3ae415030eaf33d8947a154d88289a33d8150%40group.calendar.google.com&ctz=UTC"
+              frameborder="0"
+              scrolling="no">
+            </iframe>
+          </div>
+
+          <!-- Cálculo: SOLO aparece si está DISPONIBLE -->
+          <p id="resultadoPrecio" class="pricebox"></p>
+
+          <button
+            id="btnContinue"
+            type="submit"
+            class="btn btn-primary btn-block"
+            disabled
+            title="Selecciona fechas disponibles para continuar"
+          >
+            Continuar → elegir artículos
+          </button>
+
+        </form>
+      </div>
+
+    </section>
+  </main>
 
 <script>
   const WEBAPP_URL = "https://script.google.com/macros/s/AKfycby7Doy3lP3tOlzXFuGofXCUYp54AoP_9MuWZ6yO0DPyUWQxNhy96C-7z_dKcBMcRK-G/exec";
@@ -454,70 +499,68 @@
     window.location.href = "articulos.html";
   });
 
-// ===== Carousel logic (swipe + flechas + dots) =====
-(function initCarousel(){
-  const track = document.getElementById("carouselTrack");
-  const dotsWrap = document.getElementById("carouselDots");
-  const prevBtn = document.querySelector(".carousel-btn.prev");
-  const nextBtn = document.querySelector(".carousel-btn.next");
+  // ===== Carousel logic (swipe + flechas + dots) =====
+  (function initCarousel(){
+    const track = document.getElementById("carouselTrack");
+    const dotsWrap = document.getElementById("carouselDots");
+    const prevBtn = document.querySelector(".carousel-btn.prev");
+    const nextBtn = document.querySelector(".carousel-btn.next");
 
-  if (!track || !dotsWrap || !prevBtn || !nextBtn) return;
+    if (!track || !dotsWrap || !prevBtn || !nextBtn) return;
 
-  const slides = Array.from(track.querySelectorAll(".carousel-slide"));
-  if (slides.length === 0) return;
+    const slides = Array.from(track.querySelectorAll(".carousel-slide"));
+    if (slides.length === 0) return;
 
-  // Create dots
-  dotsWrap.innerHTML = "";
-  slides.forEach((_, i) => {
-    const d = document.createElement("button");
-    d.type = "button";
-    d.className = "carousel-dot" + (i === 0 ? " active" : "");
-    d.setAttribute("aria-label", "Ir a imagen " + (i + 1));
-    d.addEventListener("click", () => scrollToIndex(i));
-    dotsWrap.appendChild(d);
-  });
+    // Create dots
+    dotsWrap.innerHTML = "";
+    slides.forEach((_, i) => {
+      const d = document.createElement("button");
+      d.type = "button";
+      d.className = "carousel-dot" + (i === 0 ? " active" : "");
+      d.setAttribute("aria-label", "Ir a imagen " + (i + 1));
+      d.addEventListener("click", () => scrollToIndex(i));
+      dotsWrap.appendChild(d);
+    });
 
-  function getIndexFromScroll(){
-    const w = track.clientWidth || 1;
-    return Math.round(track.scrollLeft / w);
-  }
+    function getIndexFromScroll(){
+      const w = track.clientWidth || 1;
+      return Math.round(track.scrollLeft / w);
+    }
 
-  function setActiveDot(i){
-    const dots = dotsWrap.querySelectorAll(".carousel-dot");
-    dots.forEach((dot, idx) => dot.classList.toggle("active", idx === i));
-  }
+    function setActiveDot(i){
+      const dots = dotsWrap.querySelectorAll(".carousel-dot");
+      dots.forEach((dot, idx) => dot.classList.toggle("active", idx === i));
+    }
 
-  function scrollToIndex(i){
-    const w = track.clientWidth || 1;
-    track.scrollTo({ left: i * w, behavior: "smooth" });
-    setActiveDot(i);
-  }
+    function scrollToIndex(i){
+      const w = track.clientWidth || 1;
+      track.scrollTo({ left: i * w, behavior: "smooth" });
+      setActiveDot(i);
+    }
 
-  prevBtn.addEventListener("click", () => {
-    const i = getIndexFromScroll();
-    scrollToIndex(Math.max(0, i - 1));
-  });
+    prevBtn.addEventListener("click", () => {
+      const i = getIndexFromScroll();
+      scrollToIndex(Math.max(0, i - 1));
+    });
 
-  nextBtn.addEventListener("click", () => {
-    const i = getIndexFromScroll();
-    scrollToIndex(Math.min(slides.length - 1, i + 1));
-  });
+    nextBtn.addEventListener("click", () => {
+      const i = getIndexFromScroll();
+      scrollToIndex(Math.min(slides.length - 1, i + 1));
+    });
 
-  // Update dots on swipe/scroll
-  let scrollTimer = null;
-  track.addEventListener("scroll", () => {
-    clearTimeout(scrollTimer);
-    scrollTimer = setTimeout(() => setActiveDot(getIndexFromScroll()), 80);
-  });
+    // Update dots on swipe/scroll
+    let scrollTimer = null;
+    track.addEventListener("scroll", () => {
+      clearTimeout(scrollTimer);
+      scrollTimer = setTimeout(() => setActiveDot(getIndexFromScroll()), 80);
+    });
 
-  // Keep correct index on resize (orientation changes)
-  window.addEventListener("resize", () => {
-    const i = getIndexFromScroll();
-    scrollToIndex(i);
-  });
-})();
-
-
+    // Keep correct index on resize (orientation changes)
+    window.addEventListener("resize", () => {
+      const i = getIndexFromScroll();
+      scrollToIndex(i);
+    });
+  })();
 </script>
 
 </body>
