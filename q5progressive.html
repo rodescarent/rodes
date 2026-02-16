@@ -9,9 +9,6 @@
 
 <body class="page-car">
 
-  <!-- =========================
-       HERO / HEADER (estilo index)
-       ========================= -->
   <header class="hero hero--car">
     <div class="hero__content container">
       <h1 class="hero__title">Audi Q5 Progressive Sline</h1>
@@ -28,7 +25,6 @@
   <main class="main">
     <section class="section container">
 
-      <!-- Card principal -->
       <div class="card card--form">
         <div class="card__head">
           <div>
@@ -50,14 +46,17 @@
             <input type="email" id="email" required placeholder="tucorreo@email.com">
           </div>
 
+          <!-- ✅ NUEVO: Teléfono -->
+          <div class="field">
+            <label for="telefono">Teléfono</label>
+            <input type="tel" id="telefono" required placeholder="Ej: 6471234567 o +16471234567" autocomplete="tel">
+            <small class="hint">Acepta 10 dígitos o +1...</small>
+          </div>
+
           <div class="field field--full">
             <label for="pickup_address">Dirección de recogida</label>
-            <input
-              type="text"
-              id="pickup_address"
-              required
-              placeholder="Ej: 123 Queen St W, Toronto, ON (o YYZ / YTZ)"
-            >
+            <input type="text" id="pickup_address" required
+              placeholder="Ej: 123 Queen St W, Toronto, ON (o YYZ / YTZ)">
           </div>
 
           <div class="field field--full">
@@ -66,7 +65,6 @@
             </button>
           </div>
 
-          <!-- Detalles aeropuerto pickup (auto) -->
           <div id="pickupAirportBox" class="airport-box">
             <div class="airport-box__title">Detalles aeropuerto (recogida)</div>
 
@@ -91,11 +89,8 @@
           <div id="dropoffBox" class="dropoff-box">
             <div class="field field--full">
               <label for="dropoff_address">Dirección de entrega</label>
-              <input
-                type="text"
-                id="dropoff_address"
-                placeholder="Ej: 200 Bay St, Toronto, ON (o YYZ / YTZ)"
-              >
+              <input type="text" id="dropoff_address"
+                placeholder="Ej: 200 Bay St, Toronto, ON (o YYZ / YTZ)">
             </div>
 
             <div class="field field--full">
@@ -104,7 +99,6 @@
               </button>
             </div>
 
-            <!-- Detalles aeropuerto dropoff (auto) -->
             <div id="dropoffAirportBox" class="airport-box">
               <div class="airport-box__title">Detalles aeropuerto (entrega)</div>
 
@@ -134,33 +128,19 @@
             </div>
           </div>
 
-          <!-- Mensaje de disponibilidad -->
           <p id="availabilityMsg" class="availability"></p>
 
-          <!-- Calendario: SOLO aparece si el rango está OCUPADO -->
           <div id="calendarBox" class="calendar">
-            <div class="calendar__hint">
-              Disponibilidad (días ocupados sombreados)
-            </div>
-
-            <iframe
-              id="calendarIframe"
+            <div class="calendar__hint">Disponibilidad (días ocupados sombreados)</div>
+            <iframe id="calendarIframe"
               src="https://calendar.google.com/calendar/embed?src=a131346a7e1a176d2af7567823a3ae415030eaf33d8947a154d88289a33d8150%40group.calendar.google.com&ctz=UTC"
-              frameborder="0"
-              scrolling="no">
-            </iframe>
+              frameborder="0" scrolling="no"></iframe>
           </div>
 
-          <!-- Cálculo: SOLO aparece si está DISPONIBLE -->
           <p id="resultadoPrecio" class="pricebox"></p>
 
-          <button
-            id="btnContinue"
-            type="submit"
-            class="btn btn-primary btn-block"
-            disabled
-            title="Selecciona fechas disponibles para continuar"
-          >
+          <button id="btnContinue" type="submit" class="btn btn-primary btn-block" disabled
+            title="Selecciona fechas disponibles para continuar">
             Continuar → elegir artículos
           </button>
 
@@ -171,14 +151,25 @@
   </main>
 
 <script>
-  const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzV23YkVjdXazRwqWP5qCoLmVj_ix7GoCGHXaiGE93zso0Fax4zsBUfIs8TBsf5Ej-W/exec";
+  const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbxGW4M9Ksjwsu_oBygcypdGlwDW8QYMAOsNxX2_hUHmCmkYlK7sCl5Ms2-hkfLbx_EY1Q/exec";
 
-  // Precios actuales (se quedan igual por ahora)
   const PRECIO_SEMANA = 100;
   const PRECIO_FINDE  = 135;
 
+  // ✅ Normaliza teléfono (acepta 10 dígitos o +1…)
+  function normalizePhone(raw) {
+    const s = (raw || "").trim();
+    if (!s) return "";
+    const digits = s.replace(/\D/g, "");
+    if (digits.length === 10) return "+1" + digits;
+    if (digits.length === 11 && digits.startsWith("1")) return "+" + digits;
+    if (s.startsWith("+") && digits.length >= 11) return "+" + digits;
+    return "";
+  }
+
   const nombreEl = document.getElementById("nombre");
   const emailEl  = document.getElementById("email");
+  const telefonoEl = document.getElementById("telefono"); // ✅ NUEVO
 
   const pickupEl = document.getElementById("pickup_address");
   const btnVerifyPickup = document.getElementById("btnVerifyPickupMap");
@@ -205,7 +196,6 @@
   const outEl = document.getElementById("resultadoPrecio");
   const btnContinue = document.getElementById("btnContinue");
 
-  // ===== Google Maps (sin API) =====
   btnVerifyPickup.addEventListener("click", () => {
     const addr = (pickupEl.value || "").trim();
     if (!addr) { alert("Escribe la dirección de recogida primero."); pickupEl.focus(); return; }
@@ -218,21 +208,10 @@
     window.open("https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(addr), "_blank");
   });
 
-  // ===== Detección automática de aeropuerto =====
-  const AIRPORT_TRIGGERS = [
-    "6301",
-    "pearson",
-    "2 eireann",
-    "airport",
-    "yyz",
-    "ytz"
-  ];
+  const AIRPORT_TRIGGERS = ["6301","pearson","2 eireann","airport","yyz","ytz"];
 
   function normalizeText(s) {
-    return (s || "")
-      .toLowerCase()
-      .replace(/\s+/g, " ")
-      .trim();
+    return (s || "").toLowerCase().replace(/\s+/g, " ").trim();
   }
 
   function isAirportAddress(addr) {
@@ -268,7 +247,6 @@
   pickupEl.addEventListener("input", updatePickupAirportUI);
   dropoffEl.addEventListener("input", updateDropoffAirportUI);
 
-  // Dropoff show/hide
   dropoffDifferentEl.addEventListener("change", () => {
     const on = dropoffDifferentEl.checked;
     dropoffBox.style.display = on ? "block" : "none";
@@ -282,8 +260,7 @@
     }
   });
 
-  // ===== RANGOS OCUPADOS desde Apps Script =====
-  let BUSY_RANGES = []; // [{start:"YYYY-MM-DD", end:"YYYY-MM-DD"}]
+  let BUSY_RANGES = [];
 
   async function loadBusyRanges() {
     try {
@@ -295,7 +272,6 @@
     }
   }
 
-  // ===== Solape INCLUSIVO (recogida y entrega cuentan ocupados) =====
   function rangesOverlapInclusive(start, end, busyStart, busyEnd) {
     const s  = new Date(start + "T00:00:00");
     const e  = new Date(end   + "T00:00:00");
@@ -323,7 +299,6 @@
     return { ready:true, occupied:false };
   }
 
-  // ===== Cálculo (SIN CAMBIOS) =====
   function calc() {
     if (!fiEl.value || !ffEl.value) return null;
 
@@ -407,7 +382,6 @@
     updateDropoffAirportUI();
   });
 
-  // ===== SUBMIT =====
   document.getElementById("reservaForm").addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -418,17 +392,23 @@
     const r = calc();
     if (!r || r.error) return alert("Revisa las fechas.");
 
+    // ✅ NUEVO: Teléfono obligatorio
+    const telNorm = normalizePhone(telefonoEl.value);
+    if (!telNorm) {
+      alert("Teléfono inválido. Usa 10 dígitos (Ej: 6471234567) o +1...");
+      telefonoEl.focus();
+      return;
+    }
+
     const pickupAddress = (pickupEl.value || "").trim();
     if (!pickupAddress) { alert("Escribe la dirección de recogida."); pickupEl.focus(); return; }
 
-    // Dropoff: solo se guarda si el checkbox está marcado
     let dropoffAddress = "";
     if (dropoffDifferentEl.checked) {
       dropoffAddress = (dropoffEl.value || "").trim();
       if (!dropoffAddress) { alert("Marcaste entrega diferente. Escribe la dirección de entrega."); dropoffEl.focus(); return; }
     }
 
-    // Aeropuerto: exigir terminal/gate SOLO si la dirección activa modo aeropuerto
     let pickup_terminal = "", pickup_gate = "";
     if (isAirportAddress(pickupAddress)) {
       pickup_terminal = (pickupTerminalEl.value || "").trim();
@@ -455,6 +435,7 @@
     payload.append("action", "save_reserva");
     payload.append("nombre", nombreEl.value);
     payload.append("email", emailEl.value);
+    payload.append("telefono", telNorm); // ✅ NUEVO
 
     payload.append("pickup_address", pickupAddress);
     payload.append("dropoff_address", dropoffAddress);
@@ -478,10 +459,10 @@
     const data = await resp.json();
     if (!data.ok) return alert(data.error || "Error guardando reserva");
 
-    // Guardar para articulos.html
     localStorage.setItem("row_index", String(data.row_index));
     localStorage.setItem("nombre", data.nombre);
     localStorage.setItem("email", data.email);
+    localStorage.setItem("telefono", data.telefono || telNorm); // ✅ NUEVO
 
     localStorage.setItem("pickup_address", pickupAddress);
     localStorage.setItem("dropoff_address", dropoffAddress);
@@ -498,71 +479,7 @@
 
     window.location.href = "articulos.html";
   });
-
-  // ===== Carousel logic (swipe + flechas + dots) =====
-  (function initCarousel(){
-    const track = document.getElementById("carouselTrack");
-    const dotsWrap = document.getElementById("carouselDots");
-    const prevBtn = document.querySelector(".carousel-btn.prev");
-    const nextBtn = document.querySelector(".carousel-btn.next");
-
-    if (!track || !dotsWrap || !prevBtn || !nextBtn) return;
-
-    const slides = Array.from(track.querySelectorAll(".carousel-slide"));
-    if (slides.length === 0) return;
-
-    // Create dots
-    dotsWrap.innerHTML = "";
-    slides.forEach((_, i) => {
-      const d = document.createElement("button");
-      d.type = "button";
-      d.className = "carousel-dot" + (i === 0 ? " active" : "");
-      d.setAttribute("aria-label", "Ir a imagen " + (i + 1));
-      d.addEventListener("click", () => scrollToIndex(i));
-      dotsWrap.appendChild(d);
-    });
-
-    function getIndexFromScroll(){
-      const w = track.clientWidth || 1;
-      return Math.round(track.scrollLeft / w);
-    }
-
-    function setActiveDot(i){
-      const dots = dotsWrap.querySelectorAll(".carousel-dot");
-      dots.forEach((dot, idx) => dot.classList.toggle("active", idx === i));
-    }
-
-    function scrollToIndex(i){
-      const w = track.clientWidth || 1;
-      track.scrollTo({ left: i * w, behavior: "smooth" });
-      setActiveDot(i);
-    }
-
-    prevBtn.addEventListener("click", () => {
-      const i = getIndexFromScroll();
-      scrollToIndex(Math.max(0, i - 1));
-    });
-
-    nextBtn.addEventListener("click", () => {
-      const i = getIndexFromScroll();
-      scrollToIndex(Math.min(slides.length - 1, i + 1));
-    });
-
-    // Update dots on swipe/scroll
-    let scrollTimer = null;
-    track.addEventListener("scroll", () => {
-      clearTimeout(scrollTimer);
-      scrollTimer = setTimeout(() => setActiveDot(getIndexFromScroll()), 80);
-    });
-
-    // Keep correct index on resize (orientation changes)
-    window.addEventListener("resize", () => {
-      const i = getIndexFromScroll();
-      scrollToIndex(i);
-    });
-  })();
 </script>
 
 </body>
 </html>
-
