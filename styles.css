@@ -921,8 +921,48 @@ a{ color:inherit; text-decoration:none; }
   .hero__content{transform: translateY(-35px);}
   .hero__subtitle{transform: translateY(73px);}
   .hero__quicklinks{transform: translateY(60px);}
+}
 
+/* FIX: checkbox + label en una sola línea (dropoffDifferent) */
+.page-car .field.checkline{
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 10px !important;
+  flex-wrap: nowrap !important;
+}
 
+.page-car .field.checkline input[type="checkbox"]{
+  margin: 0 !important;
+  width: auto !important;
+  flex: 0 0 auto !important;
+}
+
+.page-car .field.checkline label{
+  margin: 0 !important;
+  display: inline !important;
+  white-space: nowrap !important;
 }
 
 
+/* Hacer que el selector de calendario cubra todo el input (Chrome/Edge) */
+.page-car input[type="date"]{
+  position: relative;
+  cursor: pointer;
+}
+
+/* El ícono del calendario (webkit) ocupa todo el input pero invisible */
+.page-car input[type="date"]::-webkit-calendar-picker-indicator{
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Opcional: quitar “spinners” en algunos navegadores */
+.page-car input[type="date"]::-webkit-inner-spin-button{
+  display: none;
+}

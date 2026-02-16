@@ -12,10 +12,8 @@
   <header class="hero hero--items">
     <div class="hero__content container">
       <h1 class="hero__title">Selecciona tus extras</h1>
-      <p class="hero__subtitle">Los artículos seleccionados se guardan en una sola celda como IDs.</p>
 
       <nav class="hero__quicklinks" aria-label="Accesos rápidos">
-        <a class="glass-btn" href="index.html">Inicio</a>
         <a class="glass-btn" href="q5progressive.html">Volver</a>
       </nav>
     </div>
@@ -28,9 +26,9 @@
         <div class="card__head">
           <div>
             <h2 class="card__title">Extras</h2>
-            <p class="card__meta">Marca los artículos que quieras añadir.</p>
+            <!-- ✅ quitado: "Marca los artículos..." -->
           </div>
-          <span class="pill">Extras</span>
+          <!-- ✅ quitado: pill "Extras" -->
         </div>
 
         <form id="finalForm" class="items-form">
@@ -40,23 +38,16 @@
 
           <input type="hidden" name="items_ids" id="items_ids">
 
-          <!-- ✅ IMPORTANTE: items_total se usa para Stripe en tu WebApp.
-               Aquí enviamos EXTRAS TOTAL = artículos + seguro + depósito
-               (si ya te funciona así, lo dejamos igual). -->
           <input type="hidden" name="items_total" id="items_total">
 
           <div class="items-grid" id="grid"></div>
 
+          <!-- ✅ Barra inferior reorganizada -->
           <div class="items-bar">
-            <div class="items-bar__col">
-              <div class="small">IDs seleccionados (se guardan en 1 celda)</div>
-              <div id="idsText" class="value-strong">—</div>
-            </div>
-
+            <!-- ✅ Izquierda: desglose -->
             <div class="items-bar__col">
               <div class="small small--spaced">Desglose de pago</div>
 
-              <!-- ✅ UNA sola lista (sin repetir “Artículos”) -->
               <div class="pay-breakdown" aria-label="Desglose de pago">
                 <div class="pay-row"><span>Total artículos</span><strong id="itemsOnlyLine">CA$ 0.00</strong></div>
                 <div class="pay-row"><span>Renta del auto</span><strong id="autoLine">CA$ 0.00</strong></div>
@@ -66,7 +57,10 @@
               </div>
             </div>
 
-            <button class="btn btn-primary" id="payBtn" type="submit">Pagar con Stripe</button>
+            <!-- ✅ Derecha: botón abajo a la derecha -->
+            <div class="items-bar__col items-bar__col--right">
+              <button class="btn btn-primary" id="payBtn" type="submit">Pagar con Stripe</button>
+            </div>
           </div>
         </form>
       </div>
@@ -78,7 +72,6 @@
   // ✅ TU WEBAPP
   const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzNAOMuQdxhjkdh4Ff4pF_NeZgHYDmSKaTaXtpFd1PCLk_am0hQu4I2eVqJUjy8LwG6/exec";
 
-  // 👇 Tus items (deja los tuyos reales si ya los tienes)
   const ITEMS = [
     { id:"item01", name:"Artículo 1", price:15 },
     { id:"item02", name:"Artículo 2", price:25 },
@@ -96,15 +89,12 @@
   const diasNum    = Math.max(0, parseInt(diasTxt || "0", 10) || 0);
   const auto_total = Number(must("auto_total") || 0);
 
-  // 🔒 Reglas de pago
   const DEPOSIT = 300;
   const INSURANCE_PER_DAY = 15;
 
-  // Hidden inputs
   document.getElementById("row_index").value = row_index;
   document.getElementById("email").value = email;
 
-  // Render cards
   const grid = document.getElementById("grid");
   ITEMS.forEach(it => {
     const card = document.createElement("div");
@@ -128,23 +118,16 @@
 
     const ids = checks.filter(c => c.checked).map(c => c.dataset.id);
 
-    // ✅ Solo artículos (para mostrar “Total artículos”)
     const itemsOnly = checks
       .filter(c => c.checked)
       .reduce((a,c) => a + Number(c.dataset.price || 0), 0);
 
     const insuranceTotal = diasNum * INSURANCE_PER_DAY;
 
-    // ✅ Extras que tu WebApp suma con el auto:
-    // items_total = artículos + seguro + depósito
     const extrasTotalForStripe = itemsOnly + insuranceTotal + DEPOSIT;
 
-    // Form values
     document.getElementById("items_ids").value = ids.join(",");
     document.getElementById("items_total").value = extrasTotalForStripe.toFixed(2);
-
-    // UI
-    document.getElementById("idsText").textContent = ids.length ? ids.join(",") : "—";
 
     document.getElementById("itemsOnlyLine").textContent = "CA$ " + itemsOnly.toFixed(2);
     document.getElementById("autoLine").textContent      = "CA$ " + auto_total.toFixed(2);
@@ -154,7 +137,6 @@
     const grandTotal = auto_total + extrasTotalForStripe;
     document.getElementById("paySum").textContent        = "CA$ " + grandTotal.toFixed(2);
 
-    // (Opcional) guardar desglose si luego lo quieres usar en pago.html
     localStorage.setItem("items_ids", ids.join(","));
     localStorage.setItem("items_total_only", itemsOnly.toFixed(2));
     localStorage.setItem("insurance_total", insuranceTotal.toFixed(2));
@@ -165,7 +147,6 @@
   grid.addEventListener("change", recompute);
   recompute();
 
-  // Submit -> WebApp -> Stripe
   document.getElementById("finalForm").addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -200,6 +181,15 @@
     }
   });
 </script>
+
+<!-- ✅ CSS pequeño inline solo para alinear el botón abajo a la derecha sin tocar tu styles.css -->
+<style>
+  .items-bar__col--right{
+    display:flex;
+    align-items:flex-end;
+    justify-content:flex-end;
+  }
+</style>
 
 </body>
 </html>

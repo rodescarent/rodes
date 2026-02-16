@@ -4,12 +4,12 @@
   <link rel="stylesheet" href="styles.css">
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Pago exitoso</title>
+  <title>Confirmación de pago</title>
 </head>
 
 <body class="page-success">
 
-  <!-- HERO / HEADER (igual estilo que las otras páginas) -->
+  <!-- HERO / HEADER -->
   <header class="hero hero--success">
     <div class="hero__content container">
       <h1 class="hero__title">Confirmación de pago</h1>
@@ -30,29 +30,28 @@
         <div class="success-head">
           <div class="success-icon" id="statusIcon" aria-hidden="true">⏳</div>
           <div>
-            <h2 class="success-title" id="statusTitle">Confirmando tu pago…</h2>
-            <p class="success-subtitle" id="statusSub">
-              Esto puede tardar unos segundos. No cierres esta pestaña.
-            </p>
+            <h2 class="success-title" id="statusTitle">Validando pago…</h2>
+            <p class="success-subtitle" id="statusSub"></p>
           </div>
         </div>
 
-        <!-- Mensaje principal que actualiza el JS -->
+        <!-- Mensaje principal -->
         <div class="success-message" id="msgBox">
           <p id="msg" class="success-text">Validando sesión…</p>
+          <!-- ✅ Este div se mantiene para mostrar el detalle del error/estado -->
           <div class="success-meta" id="metaLine" style="display:none;"></div>
         </div>
 
         <div class="success-actions">
           <a class="btn btn-ghost" href="index.html">Volver al inicio</a>
-          <a class="btn btn-primary" href="q5progressive.html">Hacer otra reserva</a>
         </div>
 
-        <div class="success-help">
+        <!-- ✅ Mensaje de ayuda (solo aparece si NO se confirma) -->
+        <div class="success-help" id="helpBox" style="display:none;">
           <div class="success-help__title">¿Tienes un problema?</div>
           <div class="success-help__text">
             Si ya pagaste y aquí no aparece confirmado, espera 1 minuto y recarga la página.
-            Si sigue igual, contáctanos con tu email de reserva.
+            Si sigue igual, contáctanos utilizando tu email de reservación.
           </div>
         </div>
       </div>
@@ -73,31 +72,32 @@
     const title = document.getElementById("statusTitle");
     const sub = document.getElementById("statusSub");
     const msgBox = document.getElementById("msgBox");
+    const helpBox = document.getElementById("helpBox");
 
+    // kind: "loading" | "success" | "error"
     function setState(kind, mainText, metaText) {
-      // kind: "loading" | "success" | "warn" | "error"
       msgBox.classList.remove("is-success", "is-warn", "is-error", "is-loading");
       msgBox.classList.add("is-" + kind);
 
       if (kind === "loading") {
         icon.textContent = "⏳";
-        title.textContent = "Confirmando tu pago…";
-        sub.textContent = "Esto puede tardar unos segundos. No cierres esta pestaña.";
+        title.textContent = "Validando pago…";
+        sub.textContent = "";
+        helpBox.style.display = "none";
       }
+
       if (kind === "success") {
         icon.textContent = "✅";
         title.textContent = "Pago exitoso";
-        sub.textContent = "Tu reserva quedó confirmada. ¡Gracias!";
+        sub.textContent = "";
+        helpBox.style.display = "none";
       }
-      if (kind === "warn") {
-        icon.textContent = "🕒";
-        title.textContent = "Aún no aparece confirmado";
-        sub.textContent = "A veces Stripe tarda un poco en reportar el estado.";
-      }
+
       if (kind === "error") {
         icon.textContent = "⚠️";
-        title.textContent = "No pudimos confirmar el pago";
-        sub.textContent = "Revisa el mensaje y, si pagaste, contáctanos.";
+        title.textContent = "Pago no confirmado";
+        sub.textContent = "";
+        helpBox.style.display = "block";
       }
 
       elMsg.textContent = mainText;
@@ -112,14 +112,11 @@
     }
 
     async function run(){
-      setState("loading", "Validando sesión…");
+      setState("loading", "Validando pago…");
 
       if (!session_id) {
-        setState(
-          "error",
-          "No llegó session_id en la URL. Si pagaste, escríbenos para revisar.",
-          "Tip: vuelve a Stripe y confirma que el pago terminó correctamente."
-        );
+        // ✅ Mensaje simple para el cliente + detalle en meta
+        setState("error", "No pudimos validar su pago", "Detalle: No llegó session_id en la URL");
         return;
       }
 
@@ -131,29 +128,31 @@
         const r = await fetch(WEBAPP_URL, { method:"POST", body: fd });
         const data = await r.json();
 
+        // ✅ Caso OK
         if (data.ok && data.paid) {
           setState(
             "success",
-            `Listo ✅ Tu pago fue confirmado. Reserva #${data.row_index}.`,
-            `Estado: ${data.payment_status || "paid"}`
+            `Pago confirmado. Reserva #${data.row_index}.`,
+            "" // sin meta en éxito
           );
-        } else {
-          setState(
-            "warn",
-            `Aún no aparece como pagado (status: ${data.payment_status || "unknown"}).`,
-            "Espera 1 minuto y recarga esta página."
-          );
+          return;
         }
-      } catch (e) {
+
+        // ✅ Caso NO confirmado (puede ser delay o falló)
+        // Mantenemos el mensaje simple para el cliente, y dejamos el detalle en meta.
+        const status = (data && data.payment_status) ? String(data.payment_status) : "unknown";
         setState(
           "error",
-          "Error confirmando el pago: " + e,
-          "Si el error persiste, contáctanos."
+          "No pudimos validar su pago",
+          `Detalle: payment_status=${status}`
         );
+
+      } catch (e) {
+        setState("error", "No pudimos validar su pago", "Detalle: " + String(e));
       }
     }
+
     run();
   </script>
 </body>
 </html>
-
