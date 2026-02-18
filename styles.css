@@ -1,7 +1,27 @@
 /* =========================
    GLOBAL / UTILIDADES
    ========================= */
-*{ box-sizing:border-box; }
+/* HERO GLOBAL para todas las páginas */
+.hero{
+
+position: relative;
+  height: 220px;              /* ← altura del header */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+
+
+  background-image:
+    linear-gradient(to bottom, rgba(0,0,0,.25), rgba(0,0,0,.65)),
+    url("images/header.png");
+
+    background-size: cover;     /* llena el espacio */
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+   *{ box-sizing:border-box; }
 img{ max-width:100%; display:block; }
 a{ color:inherit; text-decoration:none; }
 
@@ -17,6 +37,12 @@ a{ color:inherit; text-decoration:none; }
 
   --shadow-dark: 0 20px 40px rgba(0,0,0,.40);
 }
+
+/* Fondo global del sitio */
+html, body {
+  background-color: #0c3d4b !important;
+}
+
 
 /* =========================
    COMPONENTES REUTILIZABLES
@@ -156,16 +182,10 @@ a{ color:inherit; text-decoration:none; }
   margin:0;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   color: var(--text-dark);
-  background:
-    radial-gradient(1200px 600px at 20% 0%, #162a6b 0%, transparent 60%),
-    radial-gradient(900px 500px at 80% 10%, #3a1a6b 0%, transparent 60%),
-    #0b1f26;
+  
 }
 .hero--car{
   min-height: 320px;
-  background-image:
-    linear-gradient(to bottom, rgba(0,0,0,.25), rgba(0,0,0,.65)),
-    url("images/audi-2.jpg");
 }
 
 /* Form specific (si ya los tenías en tu versión anterior, quedan compatibles) */
@@ -272,18 +292,13 @@ a{ color:inherit; text-decoration:none; }
   margin:0;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   color: var(--text-dark);
-  background:
-    radial-gradient(1200px 600px at 20% 0%, #162a6b 0%, transparent 60%),
-    radial-gradient(900px 500px at 80% 10%, #3a1a6b 0%, transparent 60%),
-    #0b1f26;
+  
 }
 
 /* HERO artículos */
 .hero--items{
   min-height: 280px;
-  background-image:
-    linear-gradient(to bottom, rgba(0,0,0,.25), rgba(0,0,0,.65)),
-    url("images/audi-q5.avif"); /* cambia si quieres */
+  
 }
 
 .page-items .card--items{ width: min(950px, 100%); margin: 0 auto; }
@@ -370,21 +385,17 @@ a{ color:inherit; text-decoration:none; }
   --card: rgba(255,255,255,.08);
   --shadow: 0 20px 40px rgba(0,0,0,.40);
   --radius: 18px;
-  --hero-image: url("images/header.png");
 
   margin: 0;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   color: var(--text);
-  background:radial-gradient(1200px 600px at 20% 0%, #162a6b 0%, transparent 60%),
-    radial-gradient(900px 500px at 80% 10%, #3a1a6b 0%, transparent 60%),
-    #0b1f26;
+  
 }
 
 /* Hero home */
 .page-home .hero{
   min-height: 520px;
-  background-image:
-    linear-gradient(to bottom, rgba(255,255,255,.25), rgba(255,255,255,.15)),
+  
     var(--hero-image);
   box-shadow: var(--shadow);
 }
@@ -489,17 +500,12 @@ a{ color:inherit; text-decoration:none; }
   margin:0;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   color: var(--text-dark);
-  background:
-    radial-gradient(1200px 600px at 20% 0%, #162a6b 0%, transparent 60%),
-    radial-gradient(900px 500px at 80% 10%, #3a1a6b 0%, transparent 60%),
-    #0b1f26;
+  
 }
 
 .hero--success{
   min-height: 260px;
-  background-image:
-    linear-gradient(to bottom, rgba(0,0,0,.25), rgba(0,0,0,.65)),
-    url("images/header.png"); /* si quieres otra imagen, cámbiala aquí */
+ 
 }
 
 .page-success .card--success{
@@ -600,17 +606,12 @@ a{ color:inherit; text-decoration:none; }
   margin:0;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   color: var(--text-dark);
-  background:
-    radial-gradient(1200px 600px at 20% 0%, #162a6b 0%, transparent 60%),
-    radial-gradient(900px 500px at 80% 10%, #3a1a6b 0%, transparent 60%),
-    #0b1f26;
+  
 }
 
 .hero--cancel{
   min-height: 260px;
-  background-image:
-    linear-gradient(to bottom, rgba(0,0,0,.25), rgba(0,0,0,.65)),
-    url("images/header.png"); /* si quieres otra imagen, cámbiala aquí */
+  
 }
 
 .page-cancel .card--cancel{
@@ -707,10 +708,7 @@ a{ color:inherit; text-decoration:none; }
   margin:0;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   color: var(--text-dark);
-  background:
-    radial-gradient(1200px 600px at 20% 0%, #162a6b 0%, transparent 60%),
-    radial-gradient(900px 500px at 80% 10%, #3a1a6b 0%, transparent 60%),
-    #0b1f26;
+ 
 }
 
 /* El hero ahora contiene el carrusel */
