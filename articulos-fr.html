@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
   <link rel="stylesheet" href="styles.css">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>RODES|Additional items</title>
+  <title>RODES|Articles supplémentaires</title>
 
   <style>
     .lang-switch{position:absolute;top:14px;right:14px;display:flex;gap:8px;z-index:20}
@@ -19,13 +19,13 @@
 
   <header class="hero hero--items">
     <div class="hero__content container">
-      <div class="lang-switch"><a class="is-active" href="articulos.html">EN</a><a href="articulos-fr.html">FR</a></div>
-      <h1 class="hero__title">Select your extras</h1>
-      <p class="hero__subtitle">Selected items are stored in a single cell as IDs.</p>
+      <div class="lang-switch"><a href="articulos.html">EN</a><a class="is-active" href="articulos-fr.html">FR</a></div>
+      <h1 class="hero__title">Choisissez vos extras</h1>
+      <p class="hero__subtitle">Les articles sélectionnés sont enregistrés dans une seule cellule sous forme d’IDs.</p>
 
-      <nav class="hero__quicklinks" aria-label="Quick access">
-        <a class="glass-btn" href="index.html">Home</a>
-        <a class="glass-btn" href="q5progressive.html">Back</a>
+      <nav class="hero__quicklinks" aria-label="Accès rapide">
+        <a class="glass-btn" href="index-fr.html">Accueil</a>
+        <a class="glass-btn" href="q5progressive-fr.html">Retour</a>
       </nav>
     </div>
   </header>
@@ -37,7 +37,7 @@
         <div class="card__head">
           <div>
             <h2 class="card__title">Extras</h2>
-            <p class="card__meta">Select the items you want to add.</p>
+            <p class="card__meta">Cochez les articles que vous souhaitez ajouter.</p>
           </div>
           <span class="pill">Extras</span>
         </div>
@@ -58,24 +58,24 @@
 
           <div class="items-bar">
             <div class="items-bar__col">
-              <div class="small">Selected IDs (saved in 1 cell)</div>
+              <div class="small">IDs sélectionnés (enregistrés dans 1 cellule)</div>
               <div id="idsText" class="value-strong">—</div>
             </div>
 
             <div class="items-bar__col">
-              <div class="small small--spaced">Payment breakdown</div>
+              <div class="small small--spaced">Détail du paiement</div>
 
               <!-- ✅ UNA sola lista (sin repetir “Artículos”) -->
-              <div class="pay-breakdown" aria-label="Payment breakdown">
-                <div class="pay-row"><span>Items total</span><strong id="itemsOnlyLine">CA$ 0.00</strong></div>
-                <div class="pay-row"><span>Car rental</span><strong id="autoLine">CA$ 0.00</strong></div>
-                <div class="pay-row"><span>Insurance (CA$ 15 × day)</span><strong id="insLine">CA$ 0.00</strong></div>
-                <div class="pay-row"><span>Deposit</span><strong id="depLine">CA$ 300.00</strong></div>
+              <div class="pay-breakdown" aria-label="Détail du paiement">
+                <div class="pay-row"><span>Total des articles</span><strong id="itemsOnlyLine">CA$ 0.00</strong></div>
+                <div class="pay-row"><span>Location du véhicule</span><strong id="autoLine">CA$ 0.00</strong></div>
+                <div class="pay-row"><span>Assurance (CA$ 15 × jour)</span><strong id="insLine">CA$ 0.00</strong></div>
+                <div class="pay-row"><span>Dépôt</span><strong id="depLine">CA$ 300.00</strong></div>
                 <div class="pay-row pay-row--total"><span>Total</span><strong id="paySum">CA$ 0.00</strong></div>
               </div>
             </div>
 
-            <button class="btn btn-primary" id="payBtn" type="submit">Pay with Stripe</button>
+            <button class="btn btn-primary" id="payBtn" type="submit">Payer avec Stripe</button>
           </div>
         </form>
       </div>
@@ -89,12 +89,12 @@
 
   // 👇 Tus items (deja los tuyos reales si ya los tienes)
   const ITEMS = [
-    { id:"item01", name:"Item 1", price:15 },
-    { id:"item02", name:"Item 2", price:25 },
-    { id:"item03", name:"Item 3", price:10 },
-    { id:"item04", name:"Item 4", price:30 },
-    { id:"item05", name:"Item 5", price:18 },
-    { id:"item06", name:"Item 6", price:12 },
+    { id:"item01", name:"Article 1", price:15 },
+    { id:"item02", name:"Article 2", price:25 },
+    { id:"item03", name:"Article 3", price:10 },
+    { id:"item04", name:"Article 4", price:30 },
+    { id:"item05", name:"Article 5", price:18 },
+    { id:"item06", name:"Article 6", price:12 },
   ];
 
   function must(key){ return (localStorage.getItem(key) || "").trim(); }
@@ -137,7 +137,7 @@
 
     const ids = checks.filter(c => c.checked).map(c => c.dataset.id);
 
-    // ✅ Solo artículos (para mostrar “Items total”)
+    // ✅ Solo artículos (para mostrar “Total des articles”)
     const itemsOnly = checks
       .filter(c => c.checked)
       .reduce((a,c) => a + Number(c.dataset.price || 0), 0);
@@ -179,14 +179,14 @@
     e.preventDefault();
 
     if (!row_index || !email) {
-      alert("Missing booking data. Return to the home page.");
+      alert("Données de réservation manquantes. Retournez à l’accueil.");
       return;
     }
 
     const btn = document.getElementById("payBtn");
     btn.disabled = true;
     const oldText = btn.textContent;
-    btn.textContent = "Opening Stripe…";
+    btn.textContent = "Ouverture de Stripe…";
 
     try {
       const fd = new FormData(e.target);

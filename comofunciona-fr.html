@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="en">
+<html lang="fr">
 <head>
   <link rel="stylesheet" href="styles.css">
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>RODES|History</title>
+  <title>RODES|Comment ça marche</title>
   <style>
     .lang-switch{position:absolute;top:14px;right:14px;display:flex;gap:8px;z-index:20}
     .lang-switch a{padding:8px 12px;border-radius:999px;text-decoration:none;
@@ -14,9 +14,9 @@
   </style>
 </head>
 <body style="font-family:Arial;padding:30px;max-width:700px;margin:auto;position:relative;">
-  <div class="lang-switch"><a class="is-active" href="historial.html">EN</a><a href="historial-fr.html">FR</a></div>
-  <h2>✅ Payment successful</h2>
-  <p id="msg">Confirming your payment…</p>
+  <div class="lang-switch"><a href="comofunciona.html">EN</a><a class="is-active" href="comofunciona-fr.html">FR</a></div>
+  <h2>✅ Paiement réussi</h2>
+  <p id="msg">Confirmation de votre paiement…</p>
 
   <script>
     const WEBAPP_URL = "https://script.google.com/macros/s/AKfycby7Doy3lP3tOlzXFuGofXCUYp54AoP_9MuWZ6yO0DPyUWQxNhy96C-7z_dKcBMcRK-G/exec";
@@ -26,7 +26,7 @@
 
     async function run(){
       if (!session_id) {
-        document.getElementById("msg").textContent = "session_id was not received. If you paid, contact us so we can review it.";
+        document.getElementById("msg").textContent = "session_id n’a pas été reçu. Si vous avez payé, contactez-nous pour vérification.";
         return;
       }
 
@@ -40,13 +40,13 @@
 
         if (data.ok && data.paid) {
           document.getElementById("msg").textContent =
-            `Done ✅ Your payment was confirmed. Booking #${data.row_index}. Thank you!`;
+            `C’est bon ✅ Votre paiement a été confirmé. Réservation #${data.row_index}. Merci !`;
         } else {
           document.getElementById("msg").textContent =
-            `It does not appear as paid yet (status: ${data.payment_status || "unknown"}). Check again in 1 minute or contact us.`;
+            `Il n’apparaît pas encore comme payé (statut : ${data.payment_status || "unknown"}). Vérifiez de nouveau dans 1 minute ou contactez-nous.`;
         }
       } catch (e) {
-        document.getElementById("msg").textContent = "Error confirming payment: " + e;
+        document.getElementById("msg").textContent = "Erreur lors de la confirmation du paiement : " + e;
       }
     }
     run();

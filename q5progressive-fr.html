@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -19,13 +19,13 @@
 
   <header class="hero hero--car">
     <div class="hero__content container">
-      <div class="lang-switch"><a class="is-active" href="q5progressive.html">EN</a><a href="q5progressive-fr.html">FR</a></div>
+      <div class="lang-switch"><a href="q5progressive.html">EN</a><a class="is-active" href="q5progressive-fr.html">FR</a></div>
       <h1 class="hero__title">Audi Q5 Progressive Sline</h1>
-      <p class="hero__subtitle">Quick booking · Real-time availability · Toronto</p>
+      <p class="hero__subtitle">Réservation rapide · Disponibilité en temps réel · Toronto</p>
 
-      <nav class="hero__quicklinks" aria-label="Quick access">
-        <a class="glass-btn" href="index.html">Home</a>
-        <a class="glass-btn" href="detallesq5progressive.html">Details</a>
+      <nav class="hero__quicklinks" aria-label="Accès rapide">
+        <a class="glass-btn" href="index-fr.html">Accueil</a>
+        <a class="glass-btn" href="detallesq5progressive-fr.html">Détails</a>
         <a class="glass-btn" href="contacto.html">Contact</a>
       </nav>
     </div>
@@ -37,8 +37,8 @@
       <div class="card card--form">
         <div class="card__head">
           <div>
-            <h2 class="card__title">Rental form</h2>
-            <p class="card__meta">Complete your details and choose available dates.</p>
+            <h2 class="card__title">Formulaire de location</h2>
+            <p class="card__meta">Remplissez vos informations et choisissez des dates disponibles.</p>
           </div>
           <span class="pill">Q5 Progressive</span>
         </div>
@@ -46,8 +46,8 @@
         <form id="reservaForm" class="form">
 
           <div class="field">
-            <label for="nombre">Name</label>
-            <input type="text" id="nombre" required placeholder="Your name">
+            <label for="nombre">Nom</label>
+            <input type="text" id="nombre" required placeholder="Votre nom">
           </div>
 
           <div class="field">
@@ -57,69 +57,69 @@
 
           <!-- ✅ NUEVO: Teléfono -->
           <div class="field">
-            <label for="telefono">Phone</label>
-            <input type="tel" id="telefono" required placeholder="Example: 6471234567 or +16471234567" autocomplete="tel">
-            <small class="hint">Accepts 10 digits or +1...</small>
+            <label for="telefono">Téléphone</label>
+            <input type="tel" id="telefono" required placeholder="Exemple : 6471234567 ou +16471234567" autocomplete="tel">
+            <small class="hint">Accepte 10 chiffres ou +1...</small>
           </div>
 
           <div class="field field--full">
-            <label for="pickup_address">Pickup address</label>
+            <label for="pickup_address">Adresse de prise en charge</label>
             <input type="text" id="pickup_address" required
-              placeholder="Example: 123 Queen St W, Toronto, ON (or YYZ / YTZ)">
+              placeholder="Exemple : 123 Queen St W, Toronto, ON (ou YYZ / YTZ)">
           </div>
 
           <div class="field field--full">
             <button type="button" id="btnVerifyPickupMap" class="btn btn-ghost btn-block">
-              Verify / correct pickup in Google Maps
+              Vérifier / corriger la prise en charge dans Google Maps
             </button>
           </div>
 
           <div id="pickupAirportBox" class="airport-box">
-            <div class="airport-box__title">Airport details (pickup)</div>
+            <div class="airport-box__title">Détails aéroport (prise en charge)</div>
 
             <div class="grid-2">
               <div class="field">
                 <label for="pickup_terminal">Terminal</label>
-                <input id="pickup_terminal" type="text" placeholder="Example: T1 / T3">
+                <input id="pickup_terminal" type="text" placeholder="Exemple : T1 / T3">
               </div>
 
               <div class="field">
-                <label for="pickup_gate">Gate / Door</label>
-                <input id="pickup_gate" type="text" placeholder="Example: D12 (or area/door)">
+                <label for="pickup_gate">Porte / Gate</label>
+                <input id="pickup_gate" type="text" placeholder="Exemple : D12 (ou zone/porte)">
               </div>
             </div>
           </div>
 
           <div class="field field--full checkline">
             <input type="checkbox" id="dropoffDifferent">
-            <label for="dropoffDifferent">Drop-off address is different</label>
+            <label for="dropoffDifferent">L’adresse de retour est différente</label>
           </div>
 
           <div id="dropoffBox" class="dropoff-box">
             <div class="field field--full">
-              <label for="dropoff_address">Drop-off address</label>
+              <label for="dropoff_address">Adresse de retour</label>
               <input type="text" id="dropoff_address"
-                placeholder="Example: 200 Bay St, Toronto, ON (or YYZ / YTZ)">
+                placeholder="Exemple : 200 Bay St, Toronto, ON (ou YYZ / YTZ)">
             </div>
 
             <div class="field field--full">
               <button type="button" id="btnVerifyDropoffMap" class="btn btn-ghost btn-block">
-                Verify / correct drop-off in Google Maps
+                Vérifier / corriger le retour dans Google Maps
               </button>
             </div>
 
             <div id="dropoffAirportBox" class="airport-box">
-              <div class="airport-box__title">Airport details (drop-off)</div>
+              <div class="airport-box__title">Détails aéroport (retour)</div>
 
               <div class="grid-2">
                 <div class="field">
                   <label for="dropoff_terminal">Terminal</label>
-                  <input id="dropoff_terminal" type="text" placeholder="Example: T1 / T3">
+                  <input id="dropoff_terminal" type="text" placeholder="Exemple : T1 / T3">
                 </div>
 
                 <div class="field">
-                  <label for="dropoff_gate">Gate / Door</label>
-                  <input id="dropoff_gate" type="text" placeholder="Example: D12 (or area/door)">
+                  <label for="dropoff_gate">Porte / Gate</label>
+                  <input id="dropoff_gate" type="text" placeholder="Exemple : D12 (ou zone/porte)">
                 </div>
               </div>
             </div>
@@ -127,12 +127,12 @@
 
           <div class="grid-2">
             <div class="field">
-              <label for="fechaInicio">Start date</label>
+              <label for="fechaInicio">Date de début</label>
               <input type="date" id="fechaInicio" required>
             </div>
 
             <div class="field">
-              <label for="fechaFin">End date</label>
+              <label for="fechaFin">Date de fin</label>
               <input type="date" id="fechaFin" required>
             </div>
           </div>
@@ -140,7 +140,7 @@
           <p id="availabilityMsg" class="availability"></p>
 
           <div id="calendarBox" class="calendar">
-            <div class="calendar__hint">Availability (busy days shaded)</div>
+            <div class="calendar__hint">Disponibilité (jours occupés ombrés)</div>
             <iframe id="calendarIframe"
               src="https://calendar.google.com/calendar/embed?src=a131346a7e1a176d2af7567823a3ae415030eaf33d8947a154d88289a33d8150%40group.calendar.google.com&ctz=UTC"
               frameborder="0" scrolling="no"></iframe>
@@ -149,8 +149,8 @@
           <p id="resultadoPrecio" class="pricebox"></p>
 
           <button id="btnContinue" type="submit" class="btn btn-primary btn-block" disabled
-            title="Select available dates to continue">
-            Continue → choose items
+            title="Sélectionnez des dates disponibles pour continuer">
+            Continuer → choisir les articles
           </button>
 
         </form>
@@ -207,13 +207,13 @@
 
   btnVerifyPickup.addEventListener("click", () => {
     const addr = (pickupEl.value || "").trim();
-    if (!addr) { alert("Enter the pickup address first."); pickupEl.focus(); return; }
+    if (!addr) { alert("Entrez d’abord l’adresse de prise en charge."); pickupEl.focus(); return; }
     window.open("https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(addr), "_blank");
   });
 
   btnVerifyDropoff.addEventListener("click", () => {
     const addr = (dropoffEl.value || "").trim();
-    if (!addr) { alert("Enter the drop-off address first."); dropoffEl.focus(); return; }
+    if (!addr) { alert("Entrez d’abord l’adresse de retour."); dropoffEl.focus(); return; }
     window.open("https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(addr), "_blank");
   });
 
@@ -297,7 +297,7 @@
 
     const inicio = new Date(start);
     const fin = new Date(end);
-    if (fin <= inicio) return { ready:true, occupied:true, error:"The end date must be later." };
+    if (fin <= inicio) return { ready:true, occupied:true, error:"La date de fin doit être ultérieure." };
 
     for (const r of BUSY_RANGES) {
       if (!r || !r.start || !r.end) continue;
@@ -314,7 +314,7 @@
     const inicio = new Date(fiEl.value);
     const fin = new Date(ffEl.value);
     const dias = Math.ceil((fin - inicio) / (1000*60*60*24));
-    if (dias <= 0) return { error: "The end date must be later." };
+    if (dias <= 0) return { error: "La date de fin doit être ultérieure." };
 
     let ds = 0, df = 0;
     const cur = new Date(inicio);
@@ -335,7 +335,7 @@
       outEl.style.display = "none";
       outEl.textContent = "";
       btnContinue.disabled = true;
-      btnContinue.title = "Select dates to continue";
+      btnContinue.title = "Sélectionnez des dates pour continuer";
       return;
     }
 
@@ -347,22 +347,22 @@
       calendarBox.style.display = "none";
       outEl.style.display = "none";
       btnContinue.disabled = true;
-      btnContinue.title = "Correct the dates to continue";
+      btnContinue.title = "Corrigez les dates pour continuer";
       return;
     }
 
     if (v.occupied) {
-      availabilityMsg.textContent = "Date range unavailable";
+      availabilityMsg.textContent = "Plage de dates indisponible";
       availabilityMsg.style.color = "crimson";
       calendarBox.style.display = "block";
       outEl.style.display = "none";
       outEl.textContent = "";
       btnContinue.disabled = true;
-      btnContinue.title = "Choose an available range to continue";
+      btnContinue.title = "Choisissez une plage disponible pour continuer";
       return;
     }
 
-    availabilityMsg.textContent = "Available";
+    availabilityMsg.textContent = "Disponible";
     availabilityMsg.style.color = "green";
     calendarBox.style.display = "none";
 
@@ -371,12 +371,12 @@
       outEl.style.display = "none";
       outEl.textContent = "";
       btnContinue.disabled = true;
-      btnContinue.title = "Check the dates";
+      btnContinue.title = "Vérifiez les dates";
       return;
     }
 
     outEl.style.display = "block";
-    outEl.innerHTML = `${r.dias} day(s) — <strong>Car total: CA$ ${r.auto_total}</strong>`;
+    outEl.innerHTML = `${r.dias} jour(s) — <strong>Total voiture : CA$ ${r.auto_total}</strong>`;
     btnContinue.disabled = false;
     btnContinue.title = "";
   }
@@ -395,27 +395,27 @@
     e.preventDefault();
 
     const v = validateAvailability();
-    if (!v.ready) return alert("Select the dates.");
-    if (v.occupied || v.error) return alert("The selected range is not available.");
+    if (!v.ready) return alert("Sélectionnez les dates.");
+    if (v.occupied || v.error) return alert("La plage sélectionnée n’est pas disponible.");
 
     const r = calc();
-    if (!r || r.error) return alert("Check the dates.");
+    if (!r || r.error) return alert("Vérifiez les dates.");
 
     // ✅ NUEVO: Teléfono obligatorio
     const telNorm = normalizePhone(telefonoEl.value);
     if (!telNorm) {
-      alert("Invalid phone. Use 10 digits (Example: 6471234567) or +1...");
+      alert("Téléphone invalide. Utilisez 10 chiffres (Exemple : 6471234567) ou +1...");
       telefonoEl.focus();
       return;
     }
 
     const pickupAddress = (pickupEl.value || "").trim();
-    if (!pickupAddress) { alert("Enter the pickup address."); pickupEl.focus(); return; }
+    if (!pickupAddress) { alert("Entrez l’adresse de prise en charge."); pickupEl.focus(); return; }
 
     let dropoffAddress = "";
     if (dropoffDifferentEl.checked) {
       dropoffAddress = (dropoffEl.value || "").trim();
-      if (!dropoffAddress) { alert("You selected a different drop-off. Enter the drop-off address."); dropoffEl.focus(); return; }
+      if (!dropoffAddress) { alert("Vous avez choisi un retour différent. Entrez l’adresse de retour."); dropoffEl.focus(); return; }
     }
 
     let pickup_terminal = "", pickup_gate = "";
@@ -423,7 +423,7 @@
       pickup_terminal = (pickupTerminalEl.value || "").trim();
       pickup_gate = (pickupGateEl.value || "").trim();
       if (!pickup_terminal || !pickup_gate) {
-        alert("For airport pickup, enter Terminal and Gate.");
+        alert("Pour l’aéroport, entrez Terminal et Gate (prise en charge).");
         if (!pickup_terminal) pickupTerminalEl.focus(); else pickupGateEl.focus();
         return;
       }
@@ -434,7 +434,7 @@
       dropoff_terminal = (dropoffTerminalEl.value || "").trim();
       dropoff_gate = (dropoffGateEl.value || "").trim();
       if (!dropoff_terminal || !dropoff_gate) {
-        alert("For airport drop-off, enter Terminal and Gate.");
+        alert("Pour l’aéroport, entrez Terminal et Gate (retour).");
         if (!dropoff_terminal) dropoffTerminalEl.focus(); else dropoffGateEl.focus();
         return;
       }
@@ -466,7 +466,7 @@
     });
 
     const data = await resp.json();
-    if (!data.ok) return alert(data.error || "Error saving booking");
+    if (!data.ok) return alert(data.error || "Erreur lors de l’enregistrement de la réservation");
 
     localStorage.setItem("row_index", String(data.row_index));
     localStorage.setItem("nombre", data.nombre);
