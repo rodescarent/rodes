@@ -80,32 +80,43 @@ html, body {
 }
 
 /* ===== Language switch ===== */
+/* FIXED para que no dependa del header ni de overflow:hidden */
 .lang-switch{
-  position: absolute;
-  top: 12px;
-  right: 14px;
-  z-index: 9999;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 10px;
-  border-radius: 8px;
-  background: rgba(0,0,0,.28);
-  border: 1px solid rgba(255,255,255,.18);
-  backdrop-filter: blur(8px);
-  box-shadow: 0 8px 20px rgba(0,0,0,.22);
-  white-space: nowrap;
+  position: fixed !important;
+  top: 12px !important;
+  right: 12px !important;
+  z-index: 2147483647 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  padding: 8px 10px !important;
+  border-radius: 10px !important;
+  background: rgba(0,0,0,.55) !important;
+  border: 1px solid rgba(255,255,255,.22) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,.35) !important;
+  white-space: nowrap !important;
+  transform: none !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
 }
 
 .lang-switch a{
-  color: rgba(255,255,255,.96);
-  font-weight: 800;
-  text-decoration: none;
-  line-height: 1;
+  color: #ffffff !important;
+  text-decoration: none !important;
+  font-weight: 800 !important;
+  font-size: 14px !important;
+  line-height: 1 !important;
+  display: inline-block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
 }
 
 .lang-switch a:hover{
-  opacity: .9;
+  opacity: .9 !important;
 }
 
 /* Glass buttons */
@@ -948,12 +959,20 @@ html, body {
   .hero__content{transform: translateY(-35px);}
   .hero__subtitle{transform: translateY(73px);}
   .hero__quicklinks{transform: translateY(60px);}
+
   .lang-switch{
-    top: 8px;
-    right: 8px;
-    padding: 5px 8px;
-    font-size: 12px;
-    gap: 6px;
+    top: 10px !important;
+    right: 10px !important;
+    left: auto !important;
+    bottom: auto !important;
+    padding: 7px 9px !important;
+    font-size: 12px !important;
+    gap: 6px !important;
+    max-width: calc(100vw - 20px) !important;
+  }
+
+  .lang-switch a{
+    font-size: 12px !important;
   }
 }
 
