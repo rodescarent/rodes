@@ -79,6 +79,35 @@ html, body {
   margin-top: 10px;
 }
 
+/* ===== Language switch ===== */
+.lang-switch{
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  z-index: 9999;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: rgba(0,0,0,.28);
+  border: 1px solid rgba(255,255,255,.18);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 8px 20px rgba(0,0,0,.22);
+  white-space: nowrap;
+}
+
+.lang-switch a{
+  color: rgba(255,255,255,.96);
+  font-weight: 800;
+  text-decoration: none;
+  line-height: 1;
+}
+
+.lang-switch a:hover{
+  opacity: .9;
+}
+
 /* Glass buttons */
 .glass-btn{
   display: inline-flex;
@@ -919,6 +948,13 @@ html, body {
   .hero__content{transform: translateY(-35px);}
   .hero__subtitle{transform: translateY(73px);}
   .hero__quicklinks{transform: translateY(60px);}
+  .lang-switch{
+    top: 8px;
+    right: 8px;
+    padding: 5px 8px;
+    font-size: 12px;
+    gap: 6px;
+  }
 }
 
 /* FIX: checkbox + label en una sola línea (dropoffDifferent) */
