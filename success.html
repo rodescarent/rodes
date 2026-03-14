@@ -1,18 +1,10 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
 <head>
   <link rel="stylesheet" href="styles.css">
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Payment successful</title>
-
-  <style>
-    .lang-switch{position:absolute;top:14px;right:14px;display:flex;gap:8px;z-index:20}
-    .lang-switch a{padding:8px 12px;border-radius:999px;text-decoration:none;
-      background:rgba(255,255,255,.18);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
-      color:#fff;border:1px solid rgba(255,255,255,.28);font-size:.9rem;line-height:1}
-    .lang-switch a.is-active{background:rgba(255,255,255,.32);font-weight:700}
-  </style>
+  <title>Pago exitoso</title>
 </head>
 
 <body class="page-success">
@@ -20,14 +12,13 @@
   <!-- HERO / HEADER (igual estilo que las otras páginas) -->
   <header class="hero hero--success">
     <div class="hero__content container">
-      <div class="lang-switch"><a class="is-active" href="success.html">EN</a><a href="success-fr.html">FR</a></div>
-      <h1 class="hero__title">Payment confirmation</h1>
-      <p class="hero__subtitle">We are validating your payment with Stripe and recording it in the system.</p>
+      <h1 class="hero__title">Confirmación de pago</h1>
+      <p class="hero__subtitle">Estamos validando tu pago con Stripe y registrándolo en el sistema.</p>
 
-      <nav class="hero__quicklinks" aria-label="Quick access">
-        <a class="glass-btn" href="index.html">Home</a>
-        <a class="glass-btn" href="q5progressive.html">Book</a>
-        <a class="glass-btn" href="contacto.html">Contact</a>
+      <nav class="hero__quicklinks" aria-label="Accesos rápidos">
+        <a class="glass-btn" href="index.html">Inicio</a>
+        <a class="glass-btn" href="q5progressive.html">Reservar</a>
+        <a class="glass-btn" href="contacto.html">Contacto</a>
       </nav>
     </div>
   </header>
@@ -39,29 +30,29 @@
         <div class="success-head">
           <div class="success-icon" id="statusIcon" aria-hidden="true">⏳</div>
           <div>
-            <h2 class="success-title" id="statusTitle">Confirming your payment…</h2>
+            <h2 class="success-title" id="statusTitle">Confirmando tu pago…</h2>
             <p class="success-subtitle" id="statusSub">
-              This may take a few seconds. Do not close this tab.
+              Esto puede tardar unos segundos. No cierres esta pestaña.
             </p>
           </div>
         </div>
 
         <!-- Mensaje principal que actualiza el JS -->
         <div class="success-message" id="msgBox">
-          <p id="msg" class="success-text">Validating session…</p>
+          <p id="msg" class="success-text">Validando sesión…</p>
           <div class="success-meta" id="metaLine" style="display:none;"></div>
         </div>
 
         <div class="success-actions">
-          <a class="btn btn-ghost" href="index.html">Back to home</a>
-          <a class="btn btn-primary" href="q5progressive.html">Make another booking</a>
+          <a class="btn btn-ghost" href="index.html">Volver al inicio</a>
+          <a class="btn btn-primary" href="q5progressive.html">Hacer otra reserva</a>
         </div>
 
         <div class="success-help">
-          <div class="success-help__title">Having an issue?</div>
+          <div class="success-help__title">¿Tienes un problema?</div>
           <div class="success-help__text">
-            If you already paid and it does not appear confirmed here, wait 1 minute and reload the page.
-            If it still looks the same, contact us with your booking email.
+            Si ya pagaste y aquí no aparece confirmado, espera 1 minuto y recarga la página.
+            Si sigue igual, contáctanos con tu email de reserva.
           </div>
         </div>
       </div>
@@ -90,23 +81,23 @@
 
       if (kind === "loading") {
         icon.textContent = "⏳";
-        title.textContent = "Confirming your payment…";
-        sub.textContent = "This may take a few seconds. Do not close this tab.";
+        title.textContent = "Confirmando tu pago…";
+        sub.textContent = "Esto puede tardar unos segundos. No cierres esta pestaña.";
       }
       if (kind === "success") {
         icon.textContent = "✅";
-        title.textContent = "Payment successful";
-        sub.textContent = "Your booking has been confirmed. Thank you!";
+        title.textContent = "Pago exitoso";
+        sub.textContent = "Tu reserva quedó confirmada. ¡Gracias!";
       }
       if (kind === "warn") {
         icon.textContent = "🕒";
-        title.textContent = "Not confirmed yet";
-        sub.textContent = "Sometimes Stripe takes a little time to report the status.";
+        title.textContent = "Aún no aparece confirmado";
+        sub.textContent = "A veces Stripe tarda un poco en reportar el estado.";
       }
       if (kind === "error") {
         icon.textContent = "⚠️";
-        title.textContent = "We could not confirm the payment";
-        sub.textContent = "Check the message and, if you paid, contact us.";
+        title.textContent = "No pudimos confirmar el pago";
+        sub.textContent = "Revisa el mensaje y, si pagaste, contáctanos.";
       }
 
       elMsg.textContent = mainText;
@@ -121,13 +112,13 @@
     }
 
     async function run(){
-      setState("loading", "Validating session…");
+      setState("loading", "Validando sesión…");
 
       if (!session_id) {
         setState(
           "error",
-          "session_id was not received in the URL. If you paid, contact us so we can review it.",
-          "Tip: return to Stripe and confirm that the payment finished correctly."
+          "No llegó session_id en la URL. Si pagaste, escríbenos para revisar.",
+          "Tip: vuelve a Stripe y confirma que el pago terminó correctamente."
         );
         return;
       }
@@ -143,21 +134,21 @@
         if (data.ok && data.paid) {
           setState(
             "success",
-            `Done ✅ Your payment was confirmed. Booking #${data.row_index}.`,
-            `Status: ${data.payment_status || "paid"}`
+            `Listo ✅ Tu pago fue confirmado. Reserva #${data.row_index}.`,
+            `Estado: ${data.payment_status || "paid"}`
           );
         } else {
           setState(
             "warn",
-            `It does not appear as paid yet (status: ${data.payment_status || "unknown"}).`,
-            "Wait 1 minute and reload this page."
+            `Aún no aparece como pagado (status: ${data.payment_status || "unknown"}).`,
+            "Espera 1 minuto y recarga esta página."
           );
         }
       } catch (e) {
         setState(
           "error",
-          "Error confirming payment: " + e,
-          "If the error persists, contact us."
+          "Error confirmando el pago: " + e,
+          "Si el error persiste, contáctanos."
         );
       }
     }

@@ -1,31 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <link rel="stylesheet" href="styles.css">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>RODES|Additional items</title>
-
-  <style>
-    .lang-switch{position:absolute;top:14px;right:14px;display:flex;gap:8px;z-index:20}
-    .lang-switch a{padding:8px 12px;border-radius:999px;text-decoration:none;
-      background:rgba(255,255,255,.18);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
-      color:#fff;border:1px solid rgba(255,255,255,.28);font-size:.9rem;line-height:1}
-    .lang-switch a.is-active{background:rgba(255,255,255,.32);font-weight:700}
-  </style>
+  <title>RODES|Artículos adicionales</title>
 </head>
 
 <body class="page-items">
 
   <header class="hero hero--items">
     <div class="hero__content container">
-      <div class="lang-switch"><a class="is-active" href="articulos.html">EN</a><a href="articulos-fr.html">FR</a></div>
-      <h1 class="hero__title">Select your extras</h1>
-      <p class="hero__subtitle">Selected items are stored in a single cell as IDs.</p>
+      <h1 class="hero__title">Selecciona tus extras</h1>
+      <p class="hero__subtitle">Los artículos seleccionados se guardan en una sola celda como IDs.</p>
 
-      <nav class="hero__quicklinks" aria-label="Quick access">
-        <a class="glass-btn" href="index.html">Home</a>
-        <a class="glass-btn" href="q5progressive.html">Back</a>
+      <nav class="hero__quicklinks" aria-label="Accesos rápidos">
+        <a class="glass-btn" href="index.html">Inicio</a>
+        <a class="glass-btn" href="q5progressive.html">Volver</a>
       </nav>
     </div>
   </header>
@@ -37,7 +28,7 @@
         <div class="card__head">
           <div>
             <h2 class="card__title">Extras</h2>
-            <p class="card__meta">Select the items you want to add.</p>
+            <p class="card__meta">Marca los artículos que quieras añadir.</p>
           </div>
           <span class="pill">Extras</span>
         </div>
@@ -58,24 +49,24 @@
 
           <div class="items-bar">
             <div class="items-bar__col">
-              <div class="small">Selected IDs (saved in 1 cell)</div>
+              <div class="small">IDs seleccionados (se guardan en 1 celda)</div>
               <div id="idsText" class="value-strong">—</div>
             </div>
 
             <div class="items-bar__col">
-              <div class="small small--spaced">Payment breakdown</div>
+              <div class="small small--spaced">Desglose de pago</div>
 
               <!-- ✅ UNA sola lista (sin repetir “Artículos”) -->
-              <div class="pay-breakdown" aria-label="Payment breakdown">
-                <div class="pay-row"><span>Items total</span><strong id="itemsOnlyLine">CA$ 0.00</strong></div>
-                <div class="pay-row"><span>Car rental</span><strong id="autoLine">CA$ 0.00</strong></div>
-                <div class="pay-row"><span>Insurance (CA$ 15 × day)</span><strong id="insLine">CA$ 0.00</strong></div>
-                <div class="pay-row"><span>Deposit</span><strong id="depLine">CA$ 300.00</strong></div>
+              <div class="pay-breakdown" aria-label="Desglose de pago">
+                <div class="pay-row"><span>Total artículos</span><strong id="itemsOnlyLine">CA$ 0.00</strong></div>
+                <div class="pay-row"><span>Renta del auto</span><strong id="autoLine">CA$ 0.00</strong></div>
+                <div class="pay-row"><span>Seguro (CA$ 15 × día)</span><strong id="insLine">CA$ 0.00</strong></div>
+                <div class="pay-row"><span>Depósito</span><strong id="depLine">CA$ 300.00</strong></div>
                 <div class="pay-row pay-row--total"><span>Total</span><strong id="paySum">CA$ 0.00</strong></div>
               </div>
             </div>
 
-            <button class="btn btn-primary" id="payBtn" type="submit">Pay with Stripe</button>
+            <button class="btn btn-primary" id="payBtn" type="submit">Pagar con Stripe</button>
           </div>
         </form>
       </div>
@@ -89,12 +80,12 @@
 
   // 👇 Tus items (deja los tuyos reales si ya los tienes)
   const ITEMS = [
-    { id:"item01", name:"Item 1", price:15 },
-    { id:"item02", name:"Item 2", price:25 },
-    { id:"item03", name:"Item 3", price:10 },
-    { id:"item04", name:"Item 4", price:30 },
-    { id:"item05", name:"Item 5", price:18 },
-    { id:"item06", name:"Item 6", price:12 },
+    { id:"item01", name:"Artículo 1", price:15 },
+    { id:"item02", name:"Artículo 2", price:25 },
+    { id:"item03", name:"Artículo 3", price:10 },
+    { id:"item04", name:"Artículo 4", price:30 },
+    { id:"item05", name:"Artículo 5", price:18 },
+    { id:"item06", name:"Artículo 6", price:12 },
   ];
 
   function must(key){ return (localStorage.getItem(key) || "").trim(); }
@@ -137,7 +128,7 @@
 
     const ids = checks.filter(c => c.checked).map(c => c.dataset.id);
 
-    // ✅ Solo artículos (para mostrar “Items total”)
+    // ✅ Solo artículos (para mostrar “Total artículos”)
     const itemsOnly = checks
       .filter(c => c.checked)
       .reduce((a,c) => a + Number(c.dataset.price || 0), 0);
@@ -179,14 +170,14 @@
     e.preventDefault();
 
     if (!row_index || !email) {
-      alert("Missing booking data. Return to the home page.");
+      alert("Faltan datos de reserva. Vuelve al inicio.");
       return;
     }
 
     const btn = document.getElementById("payBtn");
     btn.disabled = true;
     const oldText = btn.textContent;
-    btn.textContent = "Opening Stripe…";
+    btn.textContent = "Abriendo Stripe…";
 
     try {
       const fd = new FormData(e.target);

@@ -1,18 +1,10 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
 <head>
   <link rel="stylesheet" href="styles.css">
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Payment canceled</title>
-
-  <style>
-    .lang-switch{position:absolute;top:14px;right:14px;display:flex;gap:8px;z-index:20}
-    .lang-switch a{padding:8px 12px;border-radius:999px;text-decoration:none;
-      background:rgba(255,255,255,.18);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
-      color:#fff;border:1px solid rgba(255,255,255,.28);font-size:.9rem;line-height:1}
-    .lang-switch a.is-active{background:rgba(255,255,255,.32);font-weight:700}
-  </style>
+  <title>Pago cancelado</title>
 </head>
 
 <body class="page-cancel">
@@ -20,14 +12,13 @@
   <!-- HERO / HEADER (igual a success) -->
   <header class="hero hero--cancel">
     <div class="hero__content container">
-      <div class="lang-switch"><a class="is-active" href="cancel.html">EN</a><a href="cancel-fr.html">FR</a></div>
-      <h1 class="hero__title">Payment canceled</h1>
-      <p class="hero__subtitle">No charge was made. You can return and complete your booking anytime.</p>
+      <h1 class="hero__title">Pago cancelado</h1>
+      <p class="hero__subtitle">No se realizó ningún cobro. Puedes volver y finalizar tu reserva cuando quieras.</p>
 
-      <nav class="hero__quicklinks" aria-label="Quick access">
-        <a class="glass-btn" href="index.html">Home</a>
-        <a class="glass-btn" href="q5progressive.html">Book again</a>
-        <a class="glass-btn" href="contacto.html">Contact</a>
+      <nav class="hero__quicklinks" aria-label="Accesos rápidos">
+        <a class="glass-btn" href="index.html">Inicio</a>
+        <a class="glass-btn" href="q5progressive.html">Volver a reservar</a>
+        <a class="glass-btn" href="contacto.html">Contacto</a>
       </nav>
     </div>
   </header>
@@ -39,31 +30,31 @@
         <div class="cancel-head">
           <div class="cancel-icon" aria-hidden="true">❌</div>
           <div>
-            <h2 class="cancel-title">Payment canceled</h2>
+            <h2 class="cancel-title">Pago cancelado</h2>
             <p class="cancel-subtitle">
-              Don't worry: nothing happened. Stripe did not complete the process and no charge was created.
+              Tranquilo: no pasó nada. Stripe no completó el proceso y no se generó cobro.
             </p>
           </div>
         </div>
 
         <div class="cancel-message">
           <p class="cancel-text">
-            If you canceled by mistake, you can go back right now and finish your booking.
+            Si cancelaste por error, puedes volver ahora mismo y terminar tu reserva.
           </p>
           <div class="cancel-meta">
-            Tip: if you were testing, check that your dates are available and that the total is correct.
+            Tip: si estabas probando, revisa que tus fechas estén disponibles y que el total esté correcto.
           </div>
         </div>
 
         <div class="cancel-actions">
-          <a class="btn btn-ghost" href="index.html">Back to home</a>
-          <a class="btn btn-primary" href="q5progressive.html">Continue booking</a>
+          <a class="btn btn-ghost" href="index.html">Volver al inicio</a>
+          <a class="btn btn-primary" href="q5progressive.html">Continuar con la reserva</a>
         </div>
 
         <div class="cancel-help">
-          <div class="cancel-help__title">Need help?</div>
+          <div class="cancel-help__title">¿Necesitas ayuda?</div>
           <div class="cancel-help__text">
-            If you saw an error before canceling, write to us and tell us what appeared on screen.
+            Si viste algún error antes de cancelar, escríbenos y cuéntanos qué te apareció en pantalla.
           </div>
         </div>
       </div>
