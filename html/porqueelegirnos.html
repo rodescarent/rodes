@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <link rel="stylesheet" href="styles.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>RODES|Por que elegirnos</title>
+</head>
+<body style="font-family:Arial;padding:30px;max-width:700px;margin:auto;">
+  <h2>✅ Pago exitoso</h2>
+  <p id="msg">Confirmando tu pago…</p>
+
+  <script>
+    const WEBAPP_URL = "https://script.google.com/macros/s/AKfycby7Doy3lP3tOlzXFuGofXCUYp54AoP_9MuWZ6yO0DPyUWQxNhy96C-7z_dKcBMcRK-G/exec";
+
+    const params = new URLSearchParams(location.search);
+    const session_id = params.get("session_id");
+
+    async function run(){
+      if (!session_id) {
+        document.getElementById("msg").textContent = "No llegó session_id. Si pagaste, escríbeme para revisar.";
+        return;
+      }
+
+      const fd = new FormData();
+      fd.append("action", "confirm_paid");
+      fd.append("session_id", session_id);
+
+      try {
+        const r = await fetch(WEBAPP_URL, { method:"POST", body: fd });
+        const data = await r.json();
+
+        if (data.ok && data.paid) {
+          document.getElementById("msg").textContent =
+            `Listo ✅ Tu pago fue confirmado. Reserva #${data.row_index}. ¡Gracias!`;
+        } else {
+          document.getElementById("msg").textContent =
+            `Aún no aparece como pagado (status: ${data.payment_status || "unknown"}). Revisa en 1 minuto o contáctame.`;
+        }
+      } catch (e) {
+        document.getElementById("msg").textContent = "Error confirmando el pago: " + e;
+      }
+    }
+    run();
+  </script>
+</body>
+</html>
