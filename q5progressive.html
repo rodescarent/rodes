@@ -294,23 +294,41 @@
     return { ready:true, occupied:false };
   }
 
-  function calc() {
-    if (!fiEl.value || !ffEl.value) return null;
+  function parseLocalDate(value) {
+  const [y, m, d] = value.split("-").map(Number);
+  return new Date(y, m - 1, d);
+}
 
-    const inicio = new Date(fiEl.value);
-    const fin = new Date(ffEl.value);
-    const dias = Math.ceil((fin - inicio) / (1000*60*60*24));
-    if (dias <= 0) return { error: "The end date must be later." };
+function calc() {
+  if (!fiEl.value || !ffEl.value) return null;
 
-    let ds = 0, df = 0;
-    const cur = new Date(inicio);
-    while (cur < fin) {
-      const d = cur.getDay();
-      (d === 5 || d === 6 || d === 0) ? df++ : ds++;
-      cur.setDate(cur.getDate() + 1);
+  const inicio = parseLocalDate(fiEl.value);
+  const fin = parseLocalDate(ffEl.value);
+
+  const dias = Math.ceil((fin - inicio) / (1000 * 60 * 60 * 24));
+  if (dias <= 0) return { error: "The end date must be later." };
+
+  let ds = 0, df = 0;
+  const cur = new Date(inicio);
+
+  while (cur < fin) {
+    const d = cur.getDay();
+
+    // Viernes, sábado y domingo = precio alto
+    if (d === 5 || d === 6 || d === 0) {
+      df++;
+    } else {
+      ds++;
     }
-    return { dias, auto_total: ds * PRECIO_SEMANA + df * PRECIO_FINDE };
+
+    cur.setDate(cur.getDate() + 1);
   }
+
+  return {
+    dias,
+    auto_total: ds * PRECIO_SEMANA + df * PRECIO_FINDE
+  };
+}
 
   function showAvailabilityUI() {
     const v = validateAvailability();
