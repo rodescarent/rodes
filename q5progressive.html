@@ -306,7 +306,7 @@
     const cur = new Date(inicio);
     while (cur < fin) {
       const d = cur.getDay();
-      (d === 0 || d === 6) ? df++ : ds++;
+      (d === 5 || d === 6 || d === 0) ? df++ : ds++;
       cur.setDate(cur.getDate() + 1);
     }
     return { dias, auto_total: ds * PRECIO_SEMANA + df * PRECIO_FINDE };
