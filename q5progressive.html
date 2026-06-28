@@ -185,6 +185,20 @@
   const fiEl = document.getElementById("fechaInicio");
   const ffEl = document.getElementById("fechaFin");
 
+  [fiEl, ffEl].forEach((el) => {
+  el.addEventListener("click", () => {
+    if (typeof el.showPicker === "function") {
+      el.showPicker();
+    }
+  });
+
+  el.addEventListener("focus", () => {
+    if (typeof el.showPicker === "function") {
+      el.showPicker();
+    }
+  });
+});
+  
   const availabilityMsg = document.getElementById("availabilityMsg");
   const calendarBox = document.getElementById("calendarBox");
 
