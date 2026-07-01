@@ -259,30 +259,21 @@
       payload.append("observaciones", document.getElementById("observaciones").value || "");
 
       try {
-        const resp = await fetch(WEBAPP_URL, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
-          },
-          body: payload.toString()
-        });
+  await fetch(WEBAPP_URL, {
+    method: "POST",
+    mode: "no-cors",
+    body: payload
+  });
 
-        const data = await resp.json();
+  msg.style.color = "lightgreen";
+  msg.textContent = "Inspección enviada. Revisa el Sheet ✅";
+  document.getElementById("inspectionForm").reset();
+  setFechaActual();
 
-        if (data.ok) {
-          msg.style.color = "lightgreen";
-          msg.textContent = "Inspección guardada correctamente ✅";
-          document.getElementById("inspectionForm").reset();
-          setFechaActual();
-        } else {
-          throw new Error(data.error || "Error desconocido");
-        }
-
-      } catch (err) {
-        msg.style.color = "salmon";
-        msg.textContent = "Error guardando inspección: " + err.message;
-      }
-
+} catch (err) {
+  msg.style.color = "salmon";
+  msg.textContent = "Error enviando inspección: " + err.message;
+}
       btnGuardar.disabled = false;
     });
 
