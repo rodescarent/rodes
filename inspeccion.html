@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RODES | Inspección del vehículo</title>
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(rgba(0,0,0,.65), rgba(0,0,0,.75)), #111;
+      color: white;
+    }
+
+    .container { max-width: 850px; margin: auto; padding: 24px; }
+
+    .card {
+      background: rgba(255,255,255,.12);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.35);
+    }
+
+    h1 { margin-top: 0; text-align: center; font-size: 28px; }
+
+    .field { margin-bottom: 18px; }
+
+    label { display: block; margin-bottom: 7px; font-weight: bold; }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 13px;
+      border-radius: 10px;
+      border: none;
+      font-size: 16px;
+    }
+
+    textarea { min-height: 90px; resize: vertical; }
+
+    .check-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    .item {
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.20);
+      padding: 14px;
+      border-radius: 14px;
+    }
+
+    .item-title {
+      font-weight: bold;
+      margin-bottom: 10px;
+      text-transform: capitalize;
+    }
+
+    .options {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .option {
+      flex: 1;
+      min-width: 110px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0,0,0,.25);
+      padding: 10px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .option input { width: auto; }
+
+    .btn {
+      width: 100%;
+      padding: 15px;
+      border: none;
+      border-radius: 12px;
+      background: #ffffff;
+      color: #111;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 18px;
+    }
+
+    .btn:disabled { opacity: .6; cursor: not-allowed; }
+
+    .msg { text-align: center; margin-top: 15px; font-weight: bold; }
+
+    .top-links { text-align: center; margin-bottom: 18px; }
+
+    .top-links a {
+      color: white;
+      text-decoration: none;
+      background: rgba(255,255,255,.15);
+      padding: 10px 18px;
+      border-radius: 999px;
+      display: inline-block;
+    }
+
+    .hint {
+      font-size: 13px;
+      opacity: .85;
+      margin-top: 6px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="top-links">
+      <a href="index.html">← Volver</a>
+    </div>
+
+    <div class="card">
+      <h1>Inspección del vehículo</h1>
+
+      <form id="inspectionForm">
+        <div class="field">
+          <label for="fecha">Fecha de inspección</label>
+          <input type="datetime-local" id="fecha" name="fecha" required>
+        </div>
+
+        <div class="field">
+          <label for="tipo">Tipo de inspección</label>
+          <select id="tipo" name="tipo" required>
+            <option value="">Seleccionar</option>
+            <option value="Salida">Salida</option>
+            <option value="Entrada">Entrada</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="kilometraje">Kilometraje</label>
+          <input type="number" id="kilometraje" name="kilometraje" placeholder="Ej: 82500" required>
+        </div>
+
+        <div class="field">
+          <label for="combustible">Nivel de gasolina</label>
+          <select id="combustible" name="combustible" required>
+            <option value="">Seleccionar</option>
+            <option value="Vacio">Vacío</option>
+            <option value="1/4">1/4</option>
+            <option value="1/2">1/2</option>
+            <option value="3/4">3/4</option>
+            <option value="Lleno">Lleno</option>
+          </select>
+        </div>
+
+        <div class="check-grid" id="checkGrid"></div>
+
+        <div class="field">
+          <label for="fotos">Fotos del vehículo</label>
+          <input type="file" id="fotos" accept="image/*" multiple>
+          <div class="hint">Puedes seleccionar varias fotos. Recomendado: frente, atrás, lados, interior y tablero.</div>
+        </div>
+
+        <div class="field">
+          <label for="observaciones">Observaciones</label>
+          <textarea id="observaciones" name="observaciones" placeholder="Escribe aquí cualquier detalle adicional..."></textarea>
+        </div>
+
+        <button class="btn" id="btnGuardar" type="submit">Guardar inspección</button>
+        <div class="msg" id="msg"></div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzO4y7-dWdN-x3Z-bpjKeSYU7rCW5lxr0aPVh_Usn4XuVJkXOppOeGHRzF712E_Va2o/exec";
+
+    const CAMPOS = [
+      "carroceria",
+      "cristales/espejos",
+      "luces ABFRI",
+      "limp parabrisas",
+      "neumaticos",
+      "aceite",
+      "refrigerante",
+      "liquido frenos",
+      "liquid parabrisas",
+      "derrames",
+      "climatizacion",
+      "cinturones",
+      "vent sub/bajan",
+      "cargadores",
+      "kit ponches",
+      "kit botiquin",
+      "doc del auto",
+      "gps"
+    ];
+
+    const grid = document.getElementById("checkGrid");
+    const fechaEl = document.getElementById("fecha");
+    const msg = document.getElementById("msg");
+    const btnGuardar = document.getElementById("btnGuardar");
+
+    function setFechaActual() {
+      const now = new Date();
+      now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+      fechaEl.value = now.toISOString().slice(0, 16);
+    }
+
+    function crearCampos() {
+      CAMPOS.forEach(campo => {
+        const safeName = campo.replace(/\s+/g, "_").replace(/\//g, "_");
+
+        const div = document.createElement("div");
+        div.className = "item";
+
+        div.innerHTML = `
+          <div class="item-title">${campo}</div>
+          <div class="options">
+            <label class="option">
+              <input type="radio" name="${safeName}" value="OK" required>
+              OK
+            </label>
+            <label class="option">
+              <input type="radio" name="${safeName}" value="Revisar" required>
+              Revisar
+            </label>
+            <label class="option">
+              <input type="radio" name="${safeName}" value="N/A" required>
+              N/A
+            </label>
+          </div>
+        `;
+
+        grid.appendChild(div);
+      });
+    }
+
+    function fileToCompressedDataUrl(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+
+        reader.onload = () => {
+          const img = new Image();
+
+          img.onload = () => {
+            const maxSize = 1200;
+            let width = img.width;
+            let height = img.height;
+
+            if (width > height && width > maxSize) {
+              height = Math.round(height * maxSize / width);
+              width = maxSize;
+            } else if (height > maxSize) {
+              width = Math.round(width * maxSize / height);
+              height = maxSize;
+            }
+
+            const canvas = document.createElement("canvas");
+            canvas.width = width;
+            canvas.height = height;
+
+            const ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0, width, height);
+
+            resolve(canvas.toDataURL("image/jpeg", 0.72));
+          };
+
+          img.onerror = reject;
+          img.src = reader.result;
+        };
+
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    document.getElementById("inspectionForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      btnGuardar.disabled = true;
+      msg.style.color = "white";
+      msg.textContent = "Preparando inspección...";
+
+      const payload = new URLSearchParams();
+
+      payload.append("fecha", fechaEl.value);
+      payload.append("tipo", document.getElementById("tipo").value);
+      payload.append("kilometraje", document.getElementById("kilometraje").value);
+      payload.append("combustible", document.getElementById("combustible").value);
+
+      CAMPOS.forEach(campo => {
+        const safeName = campo.replace(/\s+/g, "_").replace(/\//g, "_");
+        const selected = document.querySelector(`input[name="${safeName}"]:checked`);
+        payload.append(campo, selected ? selected.value : "");
+      });
+
+      payload.append("observaciones", document.getElementById("observaciones").value || "");
+
+      const files = Array.from(document.getElementById("fotos").files || []);
+
+      if (files.length > 0) {
+        msg.textContent = "Procesando fotos...";
+
+        const photoNames = [];
+        const photoData = [];
+
+        for (let i = 0; i < files.length; i++) {
+          photoNames.push(files[i].name || `foto_${i + 1}.jpg`);
+          const dataUrl = await fileToCompressedDataUrl(files[i]);
+          photoData.push(dataUrl);
+        }
+
+        payload.append("photo_names", JSON.stringify(photoNames));
+        payload.append("photo_data", JSON.stringify(photoData));
+      }
+
+      try {
+        msg.textContent = "Enviando inspección...";
+
+        await fetch(WEBAPP_URL, {
+          method: "POST",
+          mode: "no-cors",
+          body: payload
+        });
+
+        msg.style.color = "lightgreen";
+        msg.textContent = "Inspección enviada. Revisa el Sheet ✅";
+        document.getElementById("inspectionForm").reset();
+        setFechaActual();
+
+      } catch (err) {
+        msg.style.color = "salmon";
+        msg.textContent = "Error enviando inspección: " + err.message;
+      }
+
+      btnGuardar.disabled = false;
+    });
+
+    setFechaActual();
+    crearCampos();
+  </script>
+</body>
+</html>
