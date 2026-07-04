@@ -1,47 +1,283 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <link rel="stylesheet" href="styles.css">
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>RODES|detallesq5comfort</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Audi Q5 Komfort 2018 | RODES Car Rental</title>
+
+<style>
+
+*{
+box-sizing:border-box;
+}
+
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:#111;
+color:white;
+min-height:100vh;
+}
+
+.container{
+max-width:950px;
+margin:auto;
+padding:30px 20px;
+}
+
+.card{
+background:#1c1c1c;
+padding:30px;
+border-radius:16px;
+box-shadow:0 10px 30px rgba(0,0,0,.35);
+}
+
+h1{
+text-align:center;
+margin-top:0;
+color:#d4af37;
+}
+
+h2{
+color:#d4af37;
+margin-top:35px;
+border-bottom:1px solid #444;
+padding-bottom:8px;
+}
+
+p{
+line-height:1.7;
+color:#ddd;
+font-size:17px;
+}
+
+.intro{
+text-align:center;
+margin-bottom:30px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:15px;
+margin-top:20px;
+}
+
+.item{
+background:#252525;
+padding:18px;
+border-left:4px solid #d4af37;
+border-radius:10px;
+}
+
+.item strong{
+display:block;
+margin-bottom:6px;
+color:#d4af37;
+font-size:17px;
+}
+
+ul{
+padding-left:22px;
+line-height:1.8;
+color:#ddd;
+}
+
+.note{
+margin-top:25px;
+background:#232323;
+padding:18px;
+border-left:4px solid #777;
+border-radius:10px;
+color:#ccc;
+}
+
+.buttons{
+display:flex;
+justify-content:center;
+gap:15px;
+flex-wrap:wrap;
+margin-top:35px;
+}
+
+.btn{
+padding:14px 24px;
+background:#d4af37;
+color:#111;
+text-decoration:none;
+font-weight:bold;
+border-radius:10px;
+}
+
+.btn.secondary{
+background:#333;
+color:white;
+}
+
+.btn:hover{
+opacity:.9;
+}
+
+@media(max-width:600px){
+
+.card{
+padding:22px;
+}
+
+.btn{
+width:100%;
+text-align:center;
+}
+
+}
+
+</style>
+
 </head>
-<body style="font-family:Arial;padding:30px;max-width:700px;margin:auto;">
-  <h2>✅ Pago exitoso</h2>
-  <p id="msg">Confirmando tu pago…</p>
 
-  <script>
-    const WEBAPP_URL = "https://script.google.com/macros/s/AKfycby7Doy3lP3tOlzXFuGofXCUYp54AoP_9MuWZ6yO0DPyUWQxNhy96C-7z_dKcBMcRK-G/exec";
+<body>
 
-    const params = new URLSearchParams(location.search);
-    const session_id = params.get("session_id");
+<div class="container">
 
-    async function run(){
-      if (!session_id) {
-        document.getElementById("msg").textContent = "No llegó session_id. Si pagaste, escríbeme para revisar.";
-        return;
-      }
+<div class="card">
 
-      const fd = new FormData();
-      fd.append("action", "confirm_paid");
-      fd.append("session_id", session_id);
+<h1>Audi Q5 Komfort 2018</h1>
 
-      try {
-        const r = await fetch(WEBAPP_URL, { method:"POST", body: fd });
-        const data = await r.json();
+<p class="intro">
+El Audi Q5 Komfort 2018 combina elegancia, comodidad y la reconocida
+tracción quattro de Audi. Es un SUV premium diseñado para ofrecer una
+conducción suave, segura y confortable tanto en la ciudad como en carretera.
+</p>
 
-        if (data.ok && data.paid) {
-          document.getElementById("msg").textContent =
-            `Listo ✅ Tu pago fue confirmado. Reserva #${data.row_index}. ¡Gracias!`;
-        } else {
-          document.getElementById("msg").textContent =
-            `Aún no aparece como pagado (status: ${data.payment_status || "unknown"}). Revisa en 1 minuto o contáctame.`;
-        }
-      } catch (e) {
-        document.getElementById("msg").textContent = "Error confirmando el pago: " + e;
-      }
-    }
-    run();
-  </script>
+<h2>Características principales</h2>
+
+<div class="grid">
+
+<div class="item">
+<strong>Motor</strong>
+2.0 litros TFSI Turbo de 4 cilindros.
+</div>
+
+<div class="item">
+<strong>Potencia</strong>
+252 HP y 273 lb-ft de torque.
+</div>
+
+<div class="item">
+<strong>Transmisión</strong>
+Automática S tronic de 7 velocidades.
+</div>
+
+<div class="item">
+<strong>Tracción</strong>
+Audi quattro AWD permanente.
+</div>
+
+<div class="item">
+<strong>Combustible</strong>
+Gasolina Premium recomendada.
+</div>
+
+<div class="item">
+<strong>Consumo aproximado</strong>
+10.4 L/100 km ciudad<br>
+8.6 L/100 km carretera.
+</div>
+
+<div class="item">
+<strong>Capacidad</strong>
+5 pasajeros.
+</div>
+
+<div class="item">
+<strong>Maletero</strong>
+Amplio espacio para equipaje y artículos de viaje.
+</div>
+
+</div>
+
+<h2>Equipamiento</h2>
+
+<ul>
+
+<li>Asientos delanteros eléctricos.</li>
+
+<li>Asientos delanteros calefaccionados.</li>
+
+<li>Climatizador automático.</li>
+
+<li>Sistema Audi Drive Select.</li>
+
+<li>Pantalla multimedia central.</li>
+
+<li>Bluetooth para llamadas y audio.</li>
+
+<li>Cámara de reversa.</li>
+
+<li>Sensores de estacionamiento.</li>
+
+<li>Volante multifunción.</li>
+
+<li>Portón trasero eléctrico.</li>
+
+<li>Faros LED.</li>
+
+<li>Llantas de aleación Audi.</li>
+
+</ul>
+
+<h2>Ideal para</h2>
+
+<ul>
+
+<li>Viajes familiares.</li>
+
+<li>Turismo por Ontario.</li>
+
+<li>Viajes de negocios.</li>
+
+<li>Recogidas en el aeropuerto.</li>
+
+<li>Conducción cómoda durante todo el año.</li>
+
+</ul>
+
+<h2>¿Por qué elegir este vehículo?</h2>
+
+<p>
+
+El Audi Q5 Komfort ofrece la calidad característica de Audi,
+una conducción silenciosa, excelente estabilidad gracias al sistema
+quattro y un interior cómodo para todos los ocupantes.
+Es una excelente opción para quienes desean disfrutar
+de un SUV premium con espacio suficiente para el día a día
+o para viajes largos.
+
+</p>
+
+<div class="note">
+
+Las características pueden variar ligeramente según la configuración
+específica del vehículo y el equipamiento instalado.
+
+</div>
+
+<div class="buttons">
+
+<a href="index.html" class="btn secondary">
+Volver al inicio
+</a>
+
+<a href="q5comfort.html" class="btn">
+Reservar este vehículo
+</a>
+
+</div>
+
+</div>
+
+</div>
+
 </body>
 </html>

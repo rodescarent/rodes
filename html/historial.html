@@ -1,47 +1,171 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <link rel="stylesheet" href="styles.css">
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>RODES|Historial</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Historial | RODES Car Rental</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:#111;
+  color:#fff;
+  line-height:1.7;
+}
+
+.container{
+  max-width:900px;
+  margin:auto;
+  padding:30px 20px;
+}
+
+.card{
+  background:#1c1c1c;
+  border-radius:16px;
+  padding:30px;
+  box-shadow:0 10px 30px rgba(0,0,0,.35);
+}
+
+h1{
+  margin-top:0;
+  text-align:center;
+  color:#d4af37;
+}
+
+h2{
+  color:#d4af37;
+  margin-top:30px;
+  border-bottom:1px solid #444;
+  padding-bottom:8px;
+}
+
+p{
+  color:#ddd;
+  font-size:17px;
+}
+
+.timeline{
+  margin-top:25px;
+}
+
+.item{
+  background:#262626;
+  border-left:4px solid #d4af37;
+  padding:18px;
+  border-radius:10px;
+  margin-bottom:15px;
+}
+
+.item strong{
+  color:#d4af37;
+  display:block;
+  margin-bottom:6px;
+  font-size:18px;
+}
+
+.highlight{
+  background:#222;
+  padding:18px;
+  border-radius:10px;
+  margin-top:25px;
+  border-left:4px solid #777;
+  color:#ccc;
+}
+
+.btn{
+  display:block;
+  width:220px;
+  margin:35px auto 0;
+  text-align:center;
+  text-decoration:none;
+  background:#d4af37;
+  color:#111;
+  padding:14px;
+  border-radius:10px;
+  font-weight:bold;
+}
+
+.btn:hover{
+  background:#e7c550;
+}
+
+@media(max-width:600px){
+  .card{padding:22px}
+  .btn{width:100%}
+}
+</style>
 </head>
-<body style="font-family:Arial;padding:30px;max-width:700px;margin:auto;">
-  <h2>✅ Pago exitoso</h2>
-  <p id="msg">Confirmando tu pago…</p>
 
-  <script>
-    const WEBAPP_URL = "https://script.google.com/macros/s/AKfycby7Doy3lP3tOlzXFuGofXCUYp54AoP_9MuWZ6yO0DPyUWQxNhy96C-7z_dKcBMcRK-G/exec";
+<body>
 
-    const params = new URLSearchParams(location.search);
-    const session_id = params.get("session_id");
+<main class="container">
+  <section class="card">
 
-    async function run(){
-      if (!session_id) {
-        document.getElementById("msg").textContent = "No llegó session_id. Si pagaste, escríbeme para revisar.";
-        return;
-      }
+    <h1>Nuestro historial</h1>
 
-      const fd = new FormData();
-      fd.append("action", "confirm_paid");
-      fd.append("session_id", session_id);
+    <p>
+      RODES Car Rental es una marca en crecimiento. Nuestro historial apenas comienza,
+      pero nace con una visión clara: construir una empresa confiable, transparente y enfocada
+      en ofrecer una experiencia de alquiler sencilla y profesional.
+    </p>
 
-      try {
-        const r = await fetch(WEBAPP_URL, { method:"POST", body: fd });
-        const data = await r.json();
+    <h2>Un proyecto en desarrollo</h2>
 
-        if (data.ok && data.paid) {
-          document.getElementById("msg").textContent =
-            `Listo ✅ Tu pago fue confirmado. Reserva #${data.row_index}. ¡Gracias!`;
-        } else {
-          document.getElementById("msg").textContent =
-            `Aún no aparece como pagado (status: ${data.payment_status || "unknown"}). Revisa en 1 minuto o contáctame.`;
-        }
-      } catch (e) {
-        document.getElementById("msg").textContent = "Error confirmando el pago: " + e;
-      }
-    }
-    run();
-  </script>
+    <p>
+      Estamos trabajando paso a paso para crear un servicio sólido, comenzando por una plataforma
+      de reserva clara, vehículos bien cuidados, inspecciones responsables y atención cercana
+      para cada cliente.
+    </p>
+
+    <div class="timeline">
+
+      <div class="item">
+        <strong>Inicio de la marca</strong>
+        RODES Car Rental nace con el propósito de ofrecer una alternativa más personalizada
+        para el alquiler de vehículos en el área de Toronto.
+      </div>
+
+      <div class="item">
+        <strong>Construcción del sistema de reservas</strong>
+        Desarrollamos una página web propia para facilitar el proceso de reserva,
+        mostrar precios de forma clara y organizar la información de cada solicitud.
+      </div>
+
+      <div class="item">
+        <strong>Compromiso con la calidad</strong>
+        Nuestro enfoque está en entregar vehículos limpios, inspeccionados y listos
+        para que cada cliente pueda conducir con tranquilidad.
+      </div>
+
+      <div class="item">
+        <strong>Camino hacia el crecimiento</strong>
+        A medida que atendamos más clientes, seguiremos fortaleciendo nuestro historial
+        con opiniones reales, mejoras constantes y nuevas opciones de servicio.
+      </div>
+
+    </div>
+
+    <h2>Nuestra meta</h2>
+
+    <p>
+      Queremos que cada reserva contribuya a construir una reputación basada en confianza,
+      responsabilidad y satisfacción del cliente. Sabemos que un buen historial no se inventa:
+      se gana con cada experiencia positiva.
+    </p>
+
+    <div class="highlight">
+      En RODES Car Rental preferimos crecer con honestidad. Por eso, nuestro historial se irá
+      formando con clientes reales, opiniones verificadas y un servicio cada vez mejor.
+    </div>
+
+    <a href="index.html" class="btn">Volver al inicio</a>
+
+  </section>
+</main>
+
 </body>
 </html>
