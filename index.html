@@ -83,22 +83,45 @@
     <!-- =========================
          OPINIONES
          ========================= -->
-    <section class="section section--light">
-      <div class="container">
-        <h2 class="section__title">Customer Opinions</h2>
+    <section id="opiniones" style="padding: 40px 20px; background:#111; color:white;">
+  <h2 style="text-align:center;">Opiniones de clientes</h2>
+  <div id="listaOpiniones" style="max-width:900px; margin:auto;"></div>
+</section>
 
-        <figure class="review">
-          <blockquote class="review__text">
-            “Excellent service, the car was spotless. I'll definitely rent again!”
-          </blockquote>
-          <div class="review__stars" aria-label="5 estrellas">
-            ★★★★★
+<script>
+  const OPINIONES_URL = "AQUI_PEGA_TU_URL_DEL_APPS_SCRIPT";
+
+  async function cargarOpiniones() {
+    const contenedor = document.getElementById("listaOpiniones");
+
+    try {
+      const res = await fetch(OPINIONES_URL);
+      const data = await res.json();
+
+      if (!data.ok || data.opiniones.length === 0) {
+        contenedor.innerHTML = "<p style='text-align:center;'>Próximamente mostraremos opiniones de nuestros clientes.</p>";
+        return;
+      }
+
+      contenedor.innerHTML = data.opiniones.map(op => {
+        const estrellas = "★".repeat(Number(op.estrellas)) + "☆".repeat(5 - Number(op.estrellas));
+
+        return `
+          <div style="background:#1c1c1c; padding:20px; border-radius:12px; margin-bottom:15px;">
+            <div style="color:#d4af37; font-size:22px;">${estrellas}</div>
+            <p style="font-style:italic;">"${op.comentario}"</p>
+            <strong>- ${op.nombre}</strong>
           </div>
-          <figcaption class="review__author">— Estephania G.</figcaption>
-        </figure>
-      </div>
-    </section>
-  </main>
+        `;
+      }).join("");
+
+    } catch (error) {
+      contenedor.innerHTML = "<p style='text-align:center;'>No se pudieron cargar las opiniones.</p>";
+    }
+  }
+
+  cargarOpiniones();
+</script>
 
 
   <!-- =========================

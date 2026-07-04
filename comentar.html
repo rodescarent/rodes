@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RODES | Opinión del cliente</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: white;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: auto;
+      padding: 30px 20px;
+    }
+
+    .card {
+      background: #1c1c1c;
+      padding: 25px;
+      border-radius: 14px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    p {
+      text-align: center;
+      color: #ccc;
+    }
+
+    label {
+      display: block;
+      margin-top: 18px;
+      font-weight: bold;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 12px;
+      margin-top: 6px;
+      border-radius: 8px;
+      border: none;
+      font-size: 16px;
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 24px;
+      padding: 14px;
+      border: none;
+      border-radius: 10px;
+      background: #d4af37;
+      color: #111;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .mensaje {
+      margin-top: 18px;
+      text-align: center;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="card">
+      <h1>Déjanos tu opinión</h1>
+      <p>Gracias por confiar en RODES Car Rental.</p>
+
+      <form id="opinionForm">
+        <label for="nombre">Nombre</label>
+        <input type="text" id="nombre" name="nombre" required>
+
+        <label for="estrellas">Clasificación</label>
+        <select id="estrellas" name="estrellas" required>
+          <option value="">Selecciona una opción</option>
+          <option value="5">★★★★★ - Excelente</option>
+          <option value="4">★★★★☆ - Muy bueno</option>
+          <option value="3">★★★☆☆ - Bueno</option>
+          <option value="2">★★☆☆☆ - Regular</option>
+          <option value="1">★☆☆☆☆ - Malo</option>
+        </select>
+
+        <label for="comentario">Comentario</label>
+        <textarea id="comentario" name="comentario" required></textarea>
+
+        <button type="submit">Enviar opinión</button>
+
+        <div id="mensaje" class="mensaje"></div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzaRWrQtfdDe8-V--rGcAY565760tZkUVtWDtcL3EGOJmen3dLfiKLiTdIXqz7pVLxruQ/exec";
+
+    document.getElementById("opinionForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+
+      const mensaje = document.getElementById("mensaje");
+      mensaje.textContent = "Enviando opinión...";
+
+      const datos = {
+        nombre: document.getElementById("nombre").value.trim(),
+        estrellas: document.getElementById("estrellas").value,
+        comentario: document.getElementById("comentario").value.trim()
+      };
+
+      try {
+        const respuesta = await fetch(WEBAPP_URL, {
+          method: "POST",
+          body: JSON.stringify(datos)
+        });
+
+        const resultado = await respuesta.json();
+
+        if (resultado.ok) {
+          mensaje.textContent = "Gracias. Tu opinión fue enviada correctamente.";
+          document.getElementById("opinionForm").reset();
+        } else {
+          mensaje.textContent = "No se pudo enviar la opinión.";
+        }
+      } catch (error) {
+        mensaje.textContent = "Error de conexión. Intenta nuevamente.";
+      }
+    });
+  </script>
+</body>
+</html>
