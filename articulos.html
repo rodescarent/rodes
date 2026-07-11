@@ -5,6 +5,67 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>RODES|articles</title>
+
+  <style>
+    .item-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.85);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+    }
+
+    .item-modal[aria-hidden="false"] {
+      display: flex;
+    }
+
+    .item-modal__box {
+      position: relative;
+      background: #fff;
+      color: #111;
+      max-width: 980px;
+      width: 100%;
+      max-height: 92vh;
+      overflow: auto;
+      border-radius: 16px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .item-modal__img {
+      width: 100%;
+      max-height: 75vh;
+      object-fit: contain;
+      border-radius: 12px;
+      display: block;
+    }
+
+    .item-modal__close {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      width: 42px;
+      height: 42px;
+      border: none;
+      border-radius: 50%;
+      background: #fff;
+      color: #111;
+      font-size: 34px;
+      line-height: 38px;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(0,0,0,.25);
+      z-index: 2;
+    }
+
+    .item-modal__price {
+      font-weight: bold;
+      font-size: 20px;
+      margin-top: 8px;
+    }
+  </style>
 </head>
 
 <body class="page-items">
@@ -13,14 +74,12 @@
     <div class="hero__content container">
       <h1 class="hero__title">Travel equipment</h1>
       <p class="hero__subtitle"></p>
-
       <nav class="hero__quicklinks" aria-label="Accesos rápidos"></nav>
     </div>
   </header>
 
   <main class="main">
     <section class="section container">
-
       <div class="card card--items">
         <div class="card__head">
           <div>
@@ -61,11 +120,9 @@
           </div>
         </form>
       </div>
-
     </section>
   </main>
 
-  <!-- Modal visual de detalles -->
   <div class="item-modal" id="itemModal" aria-hidden="true">
     <div class="item-modal__box">
       <button class="item-modal__close" type="button" id="closeModal">×</button>
@@ -82,18 +139,18 @@
   const ITEMS = [
     {
       id:"item01",
-      name:"Stroller + baby carrier",
+      name:"",
       price:15,
-      img:"img/articulos/cocheacientobebe.jpg",
-      detailImg:"img/articulos/cocheacientobebe2.jpg",
-      desc:"2 in 1 travel system. Comfortable, safe and ideal for family trips."
+      img:"images/articulos/cocheacientobebe.jpg",
+      detailImg:"images/articulos/cocheacientobebe2.png",
+      desc:""
     },
     {
       id:"item02",
       name:"Bike rack",
       price:25,
-      img:"img/cocheacientobebe.jpg",
-      detailImg:"img/bike-rack-promo.jpg",
+      img:"images/articulos/2en1portaequipaje.jpg",
+      detailImg:"images/articulos/2en1portaequipaje2.png",
       desc:"Perfect for carrying bikes safely during your trip."
     },
     {
@@ -174,6 +231,23 @@
   const modalDesc = document.getElementById("modalDesc");
   const modalPrice = document.getElementById("modalPrice");
 
+  function openModal(item) {
+    modalImg.src = item.detailImg;
+    modalImg.alt = item.name || "Item details";
+    modalTitle.textContent = item.name || "";
+    modalDesc.textContent = item.desc || "";
+    modalPrice.textContent = "CA$ " + Number(item.price).toFixed(2);
+
+    modal.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeModal() {
+    modal.setAttribute("aria-hidden", "true");
+    modalImg.src = "";
+    document.body.style.overflow = "";
+  }
+
   grid.addEventListener("click", (e) => {
     const btn = e.target.closest(".item-details-btn");
     if (!btn) return;
@@ -183,22 +257,18 @@
     const item = ITEMS.find(x => x.id === btn.dataset.id);
     if (!item) return;
 
-    modalImg.src = item.detailImg;
-    modalImg.alt = item.name;
-    modalTitle.textContent = item.name;
-    modalDesc.textContent = item.desc;
-    modalPrice.textContent = "CA$ " + Number(item.price).toFixed(2);
-
-    modal.setAttribute("aria-hidden", "false");
+    openModal(item);
   });
 
-  document.getElementById("closeModal").addEventListener("click", () => {
-    modal.setAttribute("aria-hidden", "true");
-  });
+  document.getElementById("closeModal").addEventListener("click", closeModal);
 
   modal.addEventListener("click", (e) => {
-    if (e.target === modal) {
-      modal.setAttribute("aria-hidden", "true");
+    if (e.target === modal) closeModal();
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && modal.getAttribute("aria-hidden") === "false") {
+      closeModal();
     }
   });
 
@@ -212,7 +282,6 @@
       .reduce((a,c) => a + Number(c.dataset.price || 0), 0);
 
     const insuranceTotal = diasNum * INSURANCE_PER_DAY;
-
     const extrasTotalForStripe = itemsOnly + insuranceTotal + DEPOSIT;
 
     document.getElementById("items_ids").value = ids.join(",");
@@ -226,7 +295,7 @@
     document.getElementById("depLine").textContent       = "CA$ " + Number(DEPOSIT).toFixed(2);
 
     const grandTotal = auto_total + extrasTotalForStripe;
-    document.getElementById("paySum").textContent        = "CA$ " + grandTotal.toFixed(2);
+    document.getElementById("paySum").textContent = "CA$ " + grandTotal.toFixed(2);
 
     localStorage.setItem("items_ids", ids.join(","));
     localStorage.setItem("items_total_only", itemsOnly.toFixed(2));
