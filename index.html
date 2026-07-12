@@ -1,711 +1,283 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>RODES | Rent a Car in Toronto</title>
-
+  <title>RODES Car Rental | Toronto</title>
   <meta
     name="description"
-    content="Premium car rental and travel equipment in Toronto. Rent an Audi Q5 and prepare everything you need for your next adventure."
-  />
+    content="Renta de autos en Toronto con comodidad, estilo y libertad."
+  >
 
-  <link rel="icon" href="images/favicon.png" sizes="64x64" />
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="images/favicon.png" sizes="64x64">
+  <link rel="stylesheet" href="styles.css">
 </head>
 
 <body class="page-home">
 
-  <!-- =====================================================
-       HERO PRINCIPAL
-       ===================================================== -->
-  <header class="hero hero--home">
+  <div class="site-shell">
 
-    <div class="hero__overlay"></div>
+    <!-- =====================================================
+         HERO PRINCIPAL
+         Cambia la imagen desde styles.css:
+         background-image: url("images/rodes-toronto.jpg");
+         ===================================================== -->
+    <header class="hero" id="inicio">
 
-    <div class="hero__content container">
+      <div class="hero__overlay"></div>
 
-      <div class="hero__topbar">
+      <!-- =========================
+           MENÚ SUPERIOR
+           ========================= -->
+      <div class="topbar-wrap">
+        <nav class="topbar container" aria-label="Navegación principal">
 
-        <a class="hero__brand" href="index.html" aria-label="RODES Home">
-          <span class="hero__brand-main">RODES</span>
-          <span class="hero__brand-small">Car Rental</span>
+          <a class="brand" href="#inicio" aria-label="RODES Car Rental - Inicio">
+            <span class="brand__name">RODES</span>
+            <span class="brand__tag">CAR RENTAL</span>
+          </a>
+
+          <button
+            class="menu-toggle"
+            type="button"
+            aria-label="Abrir menú"
+            aria-expanded="false"
+            aria-controls="main-menu"
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+
+          <div class="topbar__links" id="main-menu">
+            <a class="nav-link is-active" href="#inicio">Inicio</a>
+            <a class="nav-link" href="autos.html">Nuestros autos</a>
+            <a class="nav-link" href="articulos.html">Extras</a>
+            <a class="nav-link" href="#como-funciona">Cómo funciona</a>
+            <a class="nav-link" href="contacto.html">Contacto</a>
+          </div>
+
+          <a class="reserve-button" href="q5progressive.html">
+            <span class="reserve-button__icon" aria-hidden="true">▣</span>
+            Reservar ahora
+          </a>
+
+        </nav>
+      </div>
+
+      <!-- =========================
+           CONTENIDO PRINCIPAL
+           ========================= -->
+      <div class="hero__content container">
+
+        <section class="hero-copy" aria-labelledby="hero-title">
+
+          <div class="hero-copy__backdrop">
+
+            <p class="hero-copy__eyebrow">Renta de autos en Toronto</p>
+
+            <h1 class="hero-copy__title" id="hero-title">
+              Viaja a tu manera,
+              <span>vive cada kilómetro.</span>
+            </h1>
+
+            <p class="hero-copy__subtitle">
+              Comodidad, estilo y libertad<br>
+              en cada trayecto.
+            </p>
+
+            <div class="features" aria-label="Ventajas principales">
+
+              <article class="feature">
+                <div class="feature__icon" aria-hidden="true">
+                  <svg viewBox="0 0 64 64" role="img">
+                    <path d="M12 37h40l-4-13a7 7 0 0 0-7-5H23a7 7 0 0 0-7 5l-4 13Z"/>
+                    <path d="M10 37v10h5m39-10v10h-5M20 47h24"/>
+                    <circle cx="20" cy="40" r="3"/>
+                    <circle cx="44" cy="40" r="3"/>
+                  </svg>
+                </div>
+                <p>Manejo cómodo<br>y seguro</p>
+              </article>
+
+              <span class="feature-divider" aria-hidden="true"></span>
+
+              <article class="feature">
+                <div class="feature__icon" aria-hidden="true">
+                  <svg viewBox="0 0 64 64" role="img">
+                    <path d="M21 12v20c0 5 4 9 9 9h12"/>
+                    <path d="M18 43h28l-2 9H16l2-9Z"/>
+                    <path d="M42 18v17"/>
+                    <circle cx="42" cy="13" r="4"/>
+                  </svg>
+                </div>
+                <p>Espacio ideal<br>para tus acompañantes</p>
+              </article>
+
+              <span class="feature-divider" aria-hidden="true"></span>
+
+              <article class="feature">
+                <div class="feature__icon" aria-hidden="true">
+                  <svg viewBox="0 0 64 64" role="img">
+                    <path d="M32 55S14 39 14 24a18 18 0 1 1 36 0c0 15-18 31-18 31Z"/>
+                    <circle cx="32" cy="24" r="6"/>
+                  </svg>
+                </div>
+                <p>Perfecta para<br>ciudad o carretera</p>
+              </article>
+
+            </div>
+
+          </div>
+
+        </section>
+
+      </div>
+
+      <!-- =========================
+           OPINIONES
+           ========================= -->
+      <section class="reviews-wrap" aria-labelledby="reviews-title">
+        <div class="reviews container">
+
+          <div class="reviews__heading">
+            <p id="reviews-title">
+              Lo que dicen
+              <strong>nuestros clientes</strong>
+            </p>
+          </div>
+
+          <article class="review">
+            <div class="review__stars" aria-label="5 estrellas">★★★★★</div>
+            <p>
+              Excelente servicio, el auto impecable y muy cómodo.
+              100% recomendado.
+            </p>
+            <span>— Carlos M.</span>
+          </article>
+
+          <article class="review">
+            <div class="review__stars" aria-label="5 estrellas">★★★★★</div>
+            <p>
+              Proceso fácil y rápido. Volveré a rentar sin duda.
+            </p>
+            <span>— Laura G.</span>
+          </article>
+
+          <article class="review">
+            <div class="review__stars" aria-label="5 estrellas">★★★★★</div>
+            <p>
+              El mejor servicio de renta en Toronto. Atención de primera.
+            </p>
+            <span>— Andrés P.</span>
+          </article>
+
+          <a class="reviews__link" href="opiniones.html">
+            Ver todas las opiniones
+            <span aria-hidden="true">→</span>
+          </a>
+
+        </div>
+      </section>
+
+    </header>
+
+    <!-- =========================
+         CÓMO FUNCIONA
+         Esta sección queda debajo del primer vistazo.
+         ========================= -->
+    <main>
+      <section class="how-it-works" id="como-funciona">
+        <div class="container">
+          <div class="section-heading">
+            <p class="section-heading__eyebrow">Simple y rápido</p>
+            <h2>Reserva tu auto en pocos pasos</h2>
+          </div>
+
+          <div class="steps">
+            <article class="step">
+              <span>01</span>
+              <h3>Elige las fechas</h3>
+              <p>Selecciona cuándo deseas recoger y entregar el vehículo.</p>
+            </article>
+
+            <article class="step">
+              <span>02</span>
+              <h3>Agrega tus extras</h3>
+              <p>Completa tu viaje con accesorios y equipos opcionales.</p>
+            </article>
+
+            <article class="step">
+              <span>03</span>
+              <h3>Confirma la reserva</h3>
+              <p>Realiza el pago y recibe la confirmación por correo.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- =========================
+         PIE DE PÁGINA TIPO MENÚ
+         ========================= -->
+    <footer class="footer">
+      <div class="footer__menu container">
+
+        <a class="brand brand--footer" href="#inicio">
+          <span class="brand__name">RODES</span>
+          <span class="brand__tag">CAR RENTAL</span>
         </a>
 
-        <nav class="hero__quicklinks" aria-label="Main navigation">
-          <a class="glass-btn" href="/rodes/html/identidad.html">
-            Identity
-          </a>
-
-          <a class="glass-btn" href="/html/historial.html">
-            History
-          </a>
-
-          <a class="glass-btn" href="html/eventos.html">
-            Events
-          </a>
+        <nav class="footer__links" aria-label="Navegación del pie de página">
+          <a href="#inicio">Inicio</a>
+          <a href="autos.html">Nuestros autos</a>
+          <a href="articulos.html">Extras</a>
+          <a href="#como-funciona">Cómo funciona</a>
+          <a href="contacto.html">Contacto</a>
+          <a href="privacidad.html">Privacidad</a>
         </nav>
 
-      </div>
-
-      <div class="hero__main">
-
-        <div class="hero__text">
-
-          <p class="hero__eyebrow">
-            Premium car rental in Toronto
-          </p>
-
-          <h1 class="hero__title">
-            The complete
-            <span>adventure package</span>
-          </h1>
-
-          <p class="hero__subtitle">
-            Car rental and travel equipment for your trip from Toronto.
-            Comfort, style and everything you need for the road.
-          </p>
-
-          <div class="hero__actions">
-
-            <a class="btn btn-cta btn-hero" href="q5progressive.html">
-              Book now
-            </a>
-
-            <a class="btn btn-glass" href="#vehicles">
-              View vehicles
-            </a>
-
-          </div>
-
-          <div class="hero__benefits">
-
-            <div class="hero__benefit">
-              <span class="hero__benefit-icon" aria-hidden="true">✓</span>
-
-              <div>
-                <strong>Premium vehicles</strong>
-                <span>Comfort and excellent presentation</span>
-              </div>
-            </div>
-
-            <div class="hero__benefit">
-              <span class="hero__benefit-icon" aria-hidden="true">✓</span>
-
-              <div>
-                <strong>Travel equipment</strong>
-                <span>Accessories available for your trip</span>
-              </div>
-            </div>
-
-            <div class="hero__benefit">
-              <span class="hero__benefit-icon" aria-hidden="true">✓</span>
-
-              <div>
-                <strong>Toronto service</strong>
-                <span>Airport and local delivery options</span>
-              </div>
-            </div>
-
-          </div>
-
-        </div>
-
-      </div>
-
-      <a class="hero__scroll" href="#vehicles" aria-label="Go to vehicles">
-        <span>Explore</span>
-        <span class="hero__scroll-arrow" aria-hidden="true">↓</span>
-      </a>
-
-    </div>
-
-  </header>
-
-
-  <!-- =====================================================
-       CONTENIDO PRINCIPAL
-       ===================================================== -->
-  <main class="main">
-
-    <!-- =====================================================
-         VEHÍCULOS
-         ===================================================== -->
-    <section id="vehicles" class="section section--vehicles">
-
-      <div class="container">
-
-        <div class="section__heading">
-
-          <p class="section__eyebrow">
-            Choose your vehicle
-          </p>
-
-          <h2 class="section__title">
-            Our Vehicles
-          </h2>
-
-          <p class="section__description">
-            Premium SUVs prepared to offer comfort, safety and space
-            throughout your journey.
-          </p>
-
-        </div>
-
-
-        <div class="cards">
-
-          <!-- =================================================
-               VEHÍCULO 1
-               ================================================= -->
-          <article class="card vehicle-card">
-
-            <div class="card__media">
-
-              <img
-                src="images/audi-2.jpg"
-                alt="White Audi Q5 Progressive S line"
-                loading="lazy"
-              />
-
-              <div class="card__media-overlay"></div>
-
-              <span class="vehicle-card__status">
-                Available
-              </span>
-
-              <div class="vehicle-card__name">
-                <span>Premium SUV</span>
-                <strong>Audi Q5</strong>
-              </div>
-
-            </div>
-
-
-            <div class="card__body">
-
-              <div class="vehicle-card__information">
-
-                <p class="vehicle-card__category">
-                  Audi Q5
-                </p>
-
-                <h3 class="card__title">
-                  Progressive S line
-                </h3>
-
-                <div class="vehicle-card__features">
-
-                  <span>
-                    <span aria-hidden="true">●</span>
-                    5 passengers
-                  </span>
-
-                  <span>
-                    <span aria-hidden="true">●</span>
-                    Automatic
-                  </span>
-
-                  <span>
-                    <span aria-hidden="true">●</span>
-                    AWD
-                  </span>
-
-                </div>
-
-              </div>
-
-
-              <div class="vehicle-card__actions">
-
-                <a
-                  class="btn btn-primary"
-                  href="detallesq5progressive.html"
-                >
-                  Details
-                  <span aria-hidden="true">›</span>
-                </a>
-
-                <a
-                  class="btn btn-cta"
-                  href="q5progressive.html"
-                >
-                  Book now
-                </a>
-
-              </div>
-
-            </div>
-
-          </article>
-
-
-          <!-- =================================================
-               VEHÍCULO 2
-               ================================================= -->
-          <article class="card vehicle-card vehicle-card--soon">
-
-            <div class="card__media">
-
-              <img
-                src="images/audi-q5.avif"
-                alt="Audi Q5 Comfort coming soon"
-                loading="lazy"
-              />
-
-              <div class="card__media-overlay"></div>
-
-              <span class="vehicle-card__status vehicle-card__status--soon">
-                Coming soon
-              </span>
-
-              <div class="vehicle-card__name">
-                <span>Premium SUV</span>
-                <strong>Audi Q5</strong>
-              </div>
-
-            </div>
-
-
-            <div class="card__body">
-
-              <div class="vehicle-card__information">
-
-                <p class="vehicle-card__category">
-                  Audi Q5
-                </p>
-
-                <h3 class="card__title">
-                  Comfort
-                </h3>
-
-                <div class="vehicle-card__features">
-
-                  <span>
-                    <span aria-hidden="true">●</span>
-                    5 passengers
-                  </span>
-
-                  <span>
-                    <span aria-hidden="true">●</span>
-                    Automatic
-                  </span>
-
-                  <span>
-                    <span aria-hidden="true">●</span>
-                    AWD
-                  </span>
-
-                </div>
-
-              </div>
-
-
-              <div class="vehicle-card__actions">
-
-                <a
-                  class="btn btn-primary"
-                  href="detallesq5comfort.html"
-                >
-                  Details
-                  <span aria-hidden="true">›</span>
-                </a>
-
-                <span
-                  class="btn btn-disabled"
-                  aria-disabled="true"
-                >
-                  Soon
-                </span>
-
-              </div>
-
-            </div>
-
-          </article>
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- =====================================================
-         EXPERIENCIA / SERVICIOS
-         ===================================================== -->
-    <section class="section section--experience">
-
-      <div class="container experience">
-
-        <div class="experience__content">
-
-          <p class="section__eyebrow">
-            More than a car
-          </p>
-
-          <h2 class="experience__title">
-            Everything for your adventure
-          </h2>
-
-          <p class="experience__text">
-            Prepare your trip with useful equipment for families,
-            outdoor activities and long-distance travel.
-          </p>
-
-          <a class="btn btn-primary" href="html/articulos.html">
-            View travel equipment
-            <span aria-hidden="true">›</span>
-          </a>
-
-        </div>
-
-
-        <div class="experience__features">
-
-          <article class="experience__item">
-            <span class="experience__icon" aria-hidden="true">01</span>
-
-            <div>
-              <h3>Family equipment</h3>
-              <p>
-                Baby seats, strollers and useful accessories for travelling
-                comfortably with children.
-              </p>
-            </div>
-          </article>
-
-
-          <article class="experience__item">
-            <span class="experience__icon" aria-hidden="true">02</span>
-
-            <div>
-              <h3>Outdoor accessories</h3>
-              <p>
-                Bike racks, camping equipment, coolers and cargo solutions.
-              </p>
-            </div>
-          </article>
-
-
-          <article class="experience__item">
-            <span class="experience__icon" aria-hidden="true">03</span>
-
-            <div>
-              <h3>Personal service</h3>
-              <p>
-                Direct communication and assistance before and during
-                your reservation.
-              </p>
-            </div>
-          </article>
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- =====================================================
-         OPINIONES
-         ===================================================== -->
-    <section id="opiniones" class="section section--reviews">
-
-      <div class="container">
-
-        <div class="section__heading">
-
-          <p class="section__eyebrow">
-            Customer experiences
-          </p>
-
-          <h2 class="section__title">
-            What our customers say
-          </h2>
-
-          <p class="section__description">
-            Real experiences from customers who trusted RODES
-            for their journey.
-          </p>
-
-        </div>
-
-
-        <div id="listaOpiniones" class="reviews-grid">
-
-          <div class="reviews-loading">
-            Loading customer reviews...
-          </div>
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- =====================================================
-         CTA FINAL
-         ===================================================== -->
-    <section class="section section--final-cta">
-
-      <div class="container">
-
-        <div class="final-cta">
-
-          <div class="final-cta__content">
-
-            <p class="section__eyebrow">
-              Ready for the road?
-            </p>
-
-            <h2>
-              Start your next adventure with RODES
-            </h2>
-
-            <p>
-              Select your dates, reserve your Audi Q5 and prepare
-              everything you need for your trip.
-            </p>
-
-          </div>
-
-          <a class="btn btn-cta btn-final" href="q5progressive.html">
-            Book your vehicle
-          </a>
-
-        </div>
-
-      </div>
-
-    </section>
-
-  </main>
-
-
-  <!-- =====================================================
-       FOOTER
-       ===================================================== -->
-  <footer class="footer">
-
-    <div class="container footer__main">
-
-      <div class="footer__brand">
-
-        <a class="footer__logo" href="index.html">
-          RODES
+        <a class="footer__reserve" href="q5progressive.html">
+          Reservar ahora
         </a>
 
-        <p>
-          Premium car rental and travel equipment in Toronto.
-        </p>
-
       </div>
 
+      <div class="footer__bottom container">
+        <p>© 2026 RODES Car Rental. Todos los derechos reservados.</p>
 
-      <div class="footer__columns">
-
-        <div class="footer__column">
-
-          <h3>Company</h3>
-
-          <a href="html/quienessomos.html">
-            Who we are
-          </a>
-
-          <a href="html/porqueelegirnos.html">
-            Why choose us
-          </a>
-
-          <a href="html/comofunciona.html">
-            How it works
-          </a>
-
+        <div class="footer__contact">
+          <a href="tel:+16471234567">+1 (647) 123-4567</a>
+          <a href="mailto:info@rodescarrental.com">info@rodescarrental.com</a>
+          <span>Toronto, Ontario, Canadá</span>
         </div>
-
-
-        <div class="footer__column">
-
-          <h3>Information</h3>
-
-          <a href="/terminos.html">
-            Terms
-          </a>
-
-          <a href="html/privacidad.html">
-            Privacy
-          </a>
-
-          <a href="html/contacto.html">
-            Contact
-          </a>
-
-        </div>
-
-
-        <div class="footer__column">
-
-          <h3>Connect</h3>
-
-          <a
-            href="https://wa.me/14168995854"
-            target="_blank"
-            rel="noopener"
-          >
-            WhatsApp
-          </a>
-
-          <a
-            href="https://facebook.com/"
-            target="_blank"
-            rel="noopener"
-          >
-            Facebook
-          </a>
-
-          <a
-            href="https://instagram.com/"
-            target="_blank"
-            rel="noopener"
-          >
-            Instagram
-          </a>
-
-        </div>
-
       </div>
+    </footer>
 
-    </div>
+  </div>
 
-
-    <div class="container footer__bottom">
-
-      <small>
-        © <span id="year"></span> RODES · Toronto, Ontario
-      </small>
-
-      <small>
-        Premium car rental and travel experiences
-      </small>
-
-    </div>
-
-  </footer>
-
-
-  <!-- =====================================================
-       JAVASCRIPT DE OPINIONES
-       ===================================================== -->
   <script>
-    const OPINIONES_URL =
-      "https://script.google.com/macros/s/AKfycbzaRWrQtfdDe8-V--rGcAY565760tZkUVtWDtcL3EGOJmen3dLfiKLiTdIXqz7pVLxruQ/exec";
+    const menuToggle = document.querySelector(".menu-toggle");
+    const mainMenu = document.querySelector("#main-menu");
 
-    async function cargarOpiniones() {
-      const contenedor = document.getElementById("listaOpiniones");
+    if (menuToggle && mainMenu) {
+      menuToggle.addEventListener("click", () => {
+        const isOpen = menuToggle.getAttribute("aria-expanded") === "true";
 
-      try {
-        const respuesta = await fetch(OPINIONES_URL);
+        menuToggle.setAttribute("aria-expanded", String(!isOpen));
+        mainMenu.classList.toggle("is-open");
+        document.body.classList.toggle("menu-open");
+      });
 
-        if (!respuesta.ok) {
-          throw new Error("No se pudo conectar con el servicio de opiniones.");
-        }
-
-        const data = await respuesta.json();
-
-        if (
-          !data.ok ||
-          !Array.isArray(data.opiniones) ||
-          data.opiniones.length === 0
-        ) {
-          contenedor.innerHTML = `
-            <div class="reviews-empty">
-              <span class="reviews-empty__stars">★★★★★</span>
-
-              <p>
-                Customer reviews will be available soon.
-              </p>
-            </div>
-          `;
-
-          return;
-        }
-
-        contenedor.innerHTML = data.opiniones.map((opinion) => {
-          const cantidadEstrellas = Math.max(
-            0,
-            Math.min(5, Number(opinion.estrellas) || 0)
-          );
-
-          const estrellas =
-            "★".repeat(cantidadEstrellas) +
-            "☆".repeat(5 - cantidadEstrellas);
-
-          const nombreSeguro = escaparHTML(
-            opinion.nombre || "RODES customer"
-          );
-
-          const comentarioSeguro = escaparHTML(
-            opinion.comentario || ""
-          );
-
-          return `
-            <article class="review-card">
-
-              <div class="review-card__stars" aria-label="${cantidadEstrellas} out of 5 stars">
-                ${estrellas}
-              </div>
-
-              <blockquote class="review-card__comment">
-                “${comentarioSeguro}”
-              </blockquote>
-
-              <div class="review-card__customer">
-
-                <span class="review-card__avatar" aria-hidden="true">
-                  ${nombreSeguro.charAt(0).toUpperCase()}
-                </span>
-
-                <div>
-                  <strong>${nombreSeguro}</strong>
-                  <span>Verified customer</span>
-                </div>
-
-              </div>
-
-            </article>
-          `;
-        }).join("");
-
-      } catch (error) {
-        console.error("Error loading reviews:", error);
-
-        contenedor.innerHTML = `
-          <div class="reviews-empty">
-            <p>
-              Customer reviews could not be loaded at this time.
-            </p>
-          </div>
-        `;
-      }
+      mainMenu.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+          menuToggle.setAttribute("aria-expanded", "false");
+          mainMenu.classList.remove("is-open");
+          document.body.classList.remove("menu-open");
+        });
+      });
     }
-
-
-    function escaparHTML(valor) {
-      return String(valor)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-    }
-
-
-    document.getElementById("year").textContent =
-      new Date().getFullYear();
-
-    cargarOpiniones();
   </script>
 
 </body>
