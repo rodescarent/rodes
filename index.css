@@ -898,3 +898,47 @@ textarea {
     transition-duration: 0.01ms !important;
   }
 }
+
+
+/* =========================================================
+   OPINIONES FUNCIONALES DEL INDEX
+   ========================================================= */
+
+.page-home .reviews__dynamic {
+  display: contents;
+}
+
+.page-home .review--status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.page-home .reviews-full {
+  padding: 84px 0;
+  color: #ffffff;
+  background: #111315;
+}
+
+.page-home .reviews-full__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.page-home .reviews-full__grid .review {
+  padding: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.page-home .reviews-full__status {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+@media (max-width: 860px) {
+  .page-home .reviews-full__grid {
+    grid-template-columns: 1fr;
+  }
+}
