@@ -2012,3 +2012,194 @@ main,
     height: 17px;
   }
 }
+
+
+
+/* ==================================================
+   BARRA INFERIOR / REVIEWS - FORMATO MÓVIL
+   ================================================== */
+
+@media (max-width: 768px) {
+
+  /* Barra completa dividida en 2 */
+  .reviews {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 10px;
+
+    width: 100%;
+    padding: 9px 10px;
+
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  /* Ocultar el título:
+     "Lo que dicen nuestros clientes" */
+  .reviews__intro,
+  .reviews__title,
+  .reviews-title {
+    display: none !important;
+  }
+
+  /* Área donde aparecen las opiniones */
+  .reviews__list,
+  .reviews__cards,
+  .reviews-list {
+    min-width: 0;
+
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 7px;
+  }
+
+  /* Mostrar solamente las primeras 2 opiniones */
+  .review-card:nth-child(n + 3),
+  .review:nth-child(n + 3),
+  .reviews__item:nth-child(n + 3) {
+    display: none !important;
+  }
+
+  /* Opinión pequeña */
+  .review-card,
+  .review,
+  .reviews__item {
+    min-width: 0;
+    padding: 7px 8px;
+    border-radius: 10px;
+  }
+
+  /* Ocultar elementos secundarios para ahorrar espacio */
+  .review-card__stars,
+  .review__stars,
+  .review-stars {
+    font-size: 9px;
+    margin-bottom: 2px;
+  }
+
+  .review-card__name,
+  .review__name,
+  .review-name {
+    font-size: 10px;
+    line-height: 1.1;
+    margin-bottom: 2px;
+  }
+
+  /* Mostrar solamente una introducción del comentario */
+  .review-card__text,
+  .review__text,
+  .review-text {
+    display: -webkit-box;
+    overflow: hidden;
+
+    font-size: 9px;
+    line-height: 1.25;
+
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+  }
+
+  /* Ocultar fecha si aparece */
+  .review-card__date,
+  .review__date,
+  .review-date {
+    display: none !important;
+  }
+
+  /* Ocultar temporalmente "Ver opiniones" */
+  .reviews__more,
+  .reviews__button,
+  .reviews-more,
+  .reviews-view-all {
+    display: none !important;
+  }
+
+  /* Columna de redes sociales, a la derecha */
+  .reviews__socials,
+  .social-links,
+  .footer-socials {
+    display: grid;
+    grid-template-columns: repeat(2, 32px);
+    justify-content: end;
+    align-content: center;
+    gap: 6px;
+
+    padding-left: 9px;
+    border-left: 1px solid rgba(255, 255, 255, 0.16);
+  }
+
+  /* Iconos sociales */
+  .reviews__socials a,
+  .social-links a,
+  .footer-socials a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 32px;
+    height: 32px;
+
+    padding: 0;
+    border-radius: 9px;
+
+    font-size: 15px;
+    text-decoration: none;
+  }
+
+  .reviews__socials img,
+  .social-links img,
+  .footer-socials img,
+  .reviews__socials svg,
+  .social-links svg,
+  .footer-socials svg {
+    width: 17px;
+    height: 17px;
+    object-fit: contain;
+  }
+}
+
+
+/* Para teléfonos especialmente estrechos */
+@media (max-width: 400px) {
+
+  .reviews {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 7px;
+    padding: 7px;
+  }
+
+  .reviews__list,
+  .reviews__cards,
+  .reviews-list {
+    gap: 5px;
+  }
+
+  .review-card,
+  .review,
+  .reviews__item {
+    padding: 6px;
+  }
+
+  .review-card__text,
+  .review__text,
+  .review-text {
+    font-size: 8px;
+  }
+
+  .reviews__socials,
+  .social-links,
+  .footer-socials {
+    grid-template-columns: 29px;
+    gap: 5px;
+    padding-left: 7px;
+  }
+
+  .reviews__socials a,
+  .social-links a,
+  .footer-socials a {
+    width: 29px;
+    height: 29px;
+  }
+}
