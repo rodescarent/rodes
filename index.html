@@ -45,18 +45,13 @@
       <div class="hero__content container">
         <section class="hero-copy" aria-labelledby="hero-title">
           <div class="hero-copy__backdrop">
-            <p class="hero-copy__eyebrow">Renta de autos en Toronto</p>
 
             <h1 class="hero-copy__title" id="hero-title">
               Viaja a tu manera,
               <span>vive cada kilómetro.</span>
             </h1>
 
-            <p class="hero-copy__subtitle">
-              Comodidad, estilo y libertad<br>
-              en cada trayecto.
-            </p>
-
+            
             <div class="features" aria-label="Ventajas principales">
               <article class="feature">
                 <div class="feature__icon" aria-hidden="true">
@@ -99,30 +94,84 @@
           </div>
         </section>
       </div>
-      <section class="reviews-wrap" id="opiniones" aria-labelledby="reviews-title">
-        <div class="reviews container">
-          <div class="reviews__heading">
-            <p id="reviews-title">Lo que dicen <strong>nuestros clientes</strong></p>
-          </div>
+      <!-- =========================
+     BARRA INFERIOR:
+     OPINIONES + CONTACTO
+     ========================= -->
+<section class="reviews-wrap" aria-labelledby="reviews-title">
+  <div class="reviews container">
 
-          <div id="listaOpiniones" class="reviews__dynamic">
-            <article class="review review--status">
-              <p>Cargando opiniones…</p>
-            </article>
-          </div>
-        </div>
-      </section>
+    <div class="reviews__content">
 
-      <footer class="footer">
-        <div class="footer__bottom container">
-          <p>© 2026 RODES Car Rental. Todos los derechos reservados.</p>
-          <div class="footer__contact">
-            <a href="tel:+16471234567">+1 (647) 123-4567</a>
-            <a href="mailto:info@rodescarrental.com">info@rodescarrental.com</a>
-            <span>Toronto, Ontario, Canadá</span>
-          </div>
-        </div>
-      </footer>
+      <div class="reviews__heading">
+        <p id="reviews-title">
+          Lo que dicen
+          <strong>nuestros clientes</strong>
+        </p>
+      </div>
+
+      <div id="listaOpiniones" class="reviews__dynamic">
+        <article class="review review--status">
+          <p>Cargando opiniones…</p>
+        </article>
+      </div>
+
+      <a class="reviews__link" href="#opiniones">
+        Ver opiniones
+        <span aria-hidden="true">→</span>
+      </a>
+
+    </div>
+
+    <nav class="reviews__contact" aria-label="Contactar con RODES">
+
+      <a
+        class="contact-shortcut"
+        href="mailto:info@rodescarrental.com"
+        aria-label="Enviar correo a RODES"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+          <path d="m4 7 8 6 8-6"></path>
+        </svg>
+        <span>Mail</span>
+      </a>
+
+      <a
+        class="contact-shortcut"
+        href="https://wa.me/16471234567"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Contactar con RODES por WhatsApp"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M20.5 11.6a8.5 8.5 0 0 1-12.6 7.5L3 20.5l1.4-4.7A8.5 8.5 0 1 1 20.5 11.6Z"></path>
+          <path d="M8.1 7.8c.2-.4.4-.4.7-.4h.5c.2 0 .4.1.5.4l.8 1.9c.1.3.1.5-.1.7l-.6.8c-.2.2-.1.4 0 .6.7 1.2 1.7 2.1 3 2.7.2.1.4.1.6-.1l.8-1c.2-.2.4-.3.7-.2l1.8.9c.3.1.4.3.4.5 0 .5-.2 1.4-.8 1.9-.6.6-1.5.8-2.4.6-1.2-.2-2.9-.9-4.6-2.4-1.4-1.2-2.5-2.8-3-4.2-.5-1.4-.1-2.3.3-2.7.4-.5.9-.7 1.4-.7Z"></path>
+        </svg>
+        <span>WhatsApp</span>
+      </a>
+
+      <a
+        class="contact-shortcut"
+        href="https://www.instagram.com/rodescarrental/"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Abrir Instagram de RODES"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="3" y="3" width="18" height="18" rx="5"></rect>
+          <circle cx="12" cy="12" r="4"></circle>
+          <circle cx="17.4" cy="6.6" r="1"></circle>
+        </svg>
+        <span>Instagram</span>
+      </a>
+
+    </nav>
+
+  </div>
+</section>
+
+      
     </header>
   </div>
 
