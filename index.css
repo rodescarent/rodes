@@ -1497,3 +1497,518 @@ main,
     height: 22px;
   }
 }
+/* =========================================================
+   MÓVIL COMPACTO — PARECIDO A ESCRITORIO
+   Pegar al FINAL del archivo CSS
+   ========================================================= */
+
+@media (max-width: 620px) {
+
+  /* -------------------------
+     CONTENEDORES
+     ------------------------- */
+
+  html,
+  body {
+    width: 100%;
+    min-width: 0;
+    overflow-x: hidden;
+  }
+
+  .container,
+  .topbar,
+  .hero__content,
+  .reviews {
+    width: calc(100% - 18px);
+    max-width: calc(100% - 18px);
+  }
+
+  /* -------------------------
+     HERO / IMAGEN
+     ------------------------- */
+
+  .hero {
+    min-height: 100svh;
+    background-position: 62% center;
+    background-size: cover;
+  }
+
+  /*
+    Mantiene el efecto oscuro a la izquierda
+    y más claro hacia la derecha.
+  */
+
+  .hero__overlay {
+    background:
+      linear-gradient(
+        90deg,
+        rgba(0, 0, 0, 0.86) 0%,
+        rgba(0, 0, 0, 0.72) 26%,
+        rgba(0, 0, 0, 0.34) 52%,
+        rgba(0, 0, 0, 0.05) 78%,
+        rgba(0, 0, 0, 0.02) 100%
+      ),
+      linear-gradient(
+        180deg,
+        rgba(0, 0, 0, 0.22) 0%,
+        rgba(0, 0, 0, 0.04) 45%,
+        rgba(0, 0, 0, 0.20) 100%
+      );
+  }
+
+  /* Reduce la sombra inferior */
+  .hero::after {
+    height: 28%;
+    background:
+      linear-gradient(
+        180deg,
+        rgba(0, 0, 0, 0) 0%,
+        rgba(0, 0, 0, 0.08) 45%,
+        rgba(0, 0, 0, 0.30) 100%
+      );
+  }
+
+  /* -------------------------
+     BARRA SUPERIOR
+     ------------------------- */
+
+  .topbar-wrap {
+    padding-top: 7px;
+  }
+
+  .topbar {
+    min-height: 52px;
+    grid-template-columns: auto 1fr auto;
+    gap: 7px;
+    padding: 5px 8px;
+
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+
+    border-radius: 12px;
+  }
+
+  /* Logo parecido al escritorio */
+
+  .brand {
+    gap: 0;
+    align-items: center;
+  }
+
+  .brand__name {
+    font-size: 1.08rem;
+    letter-spacing: 0.07em;
+  }
+
+  .brand__tag {
+    display: block;
+    margin-top: 2px;
+    font-size: 0.34rem;
+    letter-spacing: 0.49em;
+    white-space: nowrap;
+  }
+
+  /* Botón hamburguesa */
+
+  .menu-toggle {
+    display: block;
+    width: 36px;
+    height: 36px;
+    border-radius: 9px;
+    padding: 0;
+  }
+
+  .menu-toggle span {
+    width: 17px;
+    margin: 3px auto;
+  }
+
+  /* Botón reservar */
+
+  .reserve-button {
+    min-height: 36px;
+    padding: 0 8px;
+    gap: 4px;
+    border-radius: 9px;
+    font-size: 0.64rem;
+    white-space: nowrap;
+  }
+
+  .reserve-button__icon {
+    display: none;
+  }
+
+  /* Menú desplegable */
+
+  .topbar__links {
+    inset: 68px 9px auto;
+    width: auto;
+    max-width: calc(100vw - 18px);
+    padding: 8px;
+
+    border-radius: 12px;
+    background: rgba(5, 6, 7, 0.94);
+
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  .nav-link {
+    padding: 10px 12px;
+    font-size: 0.78rem;
+  }
+
+  /* -------------------------
+     CONTENIDO PRINCIPAL
+     ------------------------- */
+
+  .hero__content {
+    flex: 1;
+    min-height: auto;
+    align-items: center;
+
+    padding-top: 18px;
+    padding-bottom: 12px;
+  }
+
+  .hero-copy {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .hero-copy__backdrop {
+    padding: 14px 12px;
+
+    /*
+      Fondo más ligero para conservar
+      el estilo de escritorio.
+    */
+
+    background: rgba(0, 0, 0, 0.16);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+
+    border-radius: 14px;
+  }
+
+  /*
+    En las reglas anteriores se ocultaba.
+    Aquí se mantiene apagado porque el fondo
+    móvil del propio bloque ya da contraste.
+  */
+
+  .hero-copy__backdrop::before {
+    display: none;
+  }
+
+  .hero-copy__eyebrow {
+    margin-bottom: 7px;
+    font-size: 0.56rem;
+    letter-spacing: 0.13em;
+  }
+
+  .hero-copy__title {
+    max-width: 92%;
+    font-size: clamp(1.75rem, 8.8vw, 2.45rem);
+    line-height: 0.98;
+    letter-spacing: -0.04em;
+  }
+
+  .hero-copy__title span {
+    margin-top: 4px;
+  }
+
+  .hero-copy__subtitle {
+    margin-top: 10px;
+    font-size: 0.78rem;
+    line-height: 1.35;
+  }
+
+  /* -------------------------
+     LOS 3 ANUNCIOS EN UNA FILA
+     ------------------------- */
+
+  .features {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: start;
+
+    gap: 5px;
+    margin-top: 14px;
+  }
+
+  .feature {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    gap: 4px;
+    text-align: center;
+  }
+
+  .feature__icon {
+    flex: 0 0 auto;
+  }
+
+  .feature__icon svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .feature p {
+    font-size: 0.56rem;
+    line-height: 1.18;
+    overflow-wrap: normal;
+  }
+
+  .feature-divider {
+    display: none;
+  }
+
+  /* -------------------------
+     BARRA INFERIOR
+     ------------------------- */
+
+  .reviews-wrap {
+    padding-bottom: 8px;
+  }
+
+  .reviews {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    border-radius: 13px;
+
+    background: rgba(0, 0, 0, 0.38);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+  }
+
+  /*
+    Comentarios compactos.
+  */
+
+  .reviews__content {
+    display: grid;
+    grid-template-columns:
+      minmax(85px, 0.65fr)
+      minmax(0, 1.35fr)
+      minmax(70px, 0.55fr);
+
+    align-items: stretch;
+  }
+
+  .reviews__content > * {
+    min-width: 0;
+    width: auto;
+    padding: 10px 8px;
+  }
+
+  .reviews__heading {
+    grid-column: auto;
+    border: 0;
+  }
+
+  .reviews__heading p {
+    font-size: 0.66rem;
+    line-height: 1.2;
+  }
+
+  .review {
+    grid-column: auto;
+  }
+
+  /*
+    En móvil muestra solo la primera opinión
+    en esta barra compacta.
+  */
+
+  .reviews__dynamic .review:not(:first-child) {
+    display: none;
+  }
+
+  .review__stars {
+    margin-bottom: 4px;
+    font-size: 0.64rem;
+  }
+
+  .review p {
+    font-size: 0.61rem;
+    line-height: 1.25;
+
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+
+  .review span {
+    margin-top: 4px;
+    font-size: 0.56rem;
+  }
+
+  .reviews__link {
+    grid-column: auto;
+    min-height: auto;
+    padding: 10px 6px;
+
+    border: 0;
+    font-size: 0.62rem;
+    line-height: 1.2;
+  }
+
+  /* -------------------------
+     CONTACTOS
+     ------------------------- */
+
+  .reviews__contact {
+    position: relative;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+
+    gap: 5px;
+    padding: 10px 8px 8px;
+  }
+
+  /*
+    Separador horizontal corto,
+    sin tocar los bordes.
+  */
+
+  .reviews__contact::before {
+    content: "";
+    position: absolute;
+
+    top: 0;
+    left: 14px;
+    right: 14px;
+
+    width: auto;
+    height: 1px;
+
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  .contact-shortcut {
+    width: auto;
+    flex-direction: column;
+    justify-content: center;
+
+    gap: 4px;
+    font-size: 0.57rem;
+    text-align: center;
+  }
+
+  .contact-shortcut svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* -------------------------
+     FOOTER
+     Si todavía existe, se oculta.
+     La barra inferior será el footer.
+     ------------------------- */
+
+  .footer {
+    display: none;
+  }
+}
+
+/* =========================================================
+   TELÉFONOS MUY PEQUEÑOS
+   ========================================================= */
+
+@media (max-width: 390px) {
+
+  .container,
+  .topbar,
+  .hero__content,
+  .reviews {
+    width: calc(100% - 12px);
+    max-width: calc(100% - 12px);
+  }
+
+  .topbar {
+    gap: 5px;
+    padding: 4px 6px;
+  }
+
+  .brand__name {
+    font-size: 0.98rem;
+  }
+
+  .brand__tag {
+    font-size: 0.30rem;
+    letter-spacing: 0.43em;
+  }
+
+  .reserve-button {
+    min-height: 34px;
+    padding-inline: 6px;
+    font-size: 0.59rem;
+  }
+
+  .menu-toggle {
+    width: 34px;
+    height: 34px;
+  }
+
+  .hero-copy__backdrop {
+    padding: 12px 10px;
+  }
+
+  .hero-copy__title {
+    font-size: clamp(1.55rem, 8.5vw, 2.05rem);
+  }
+
+  .hero-copy__subtitle {
+    font-size: 0.72rem;
+  }
+
+  .feature__icon svg {
+    width: 21px;
+    height: 21px;
+  }
+
+  .feature p {
+    font-size: 0.51rem;
+  }
+
+  .reviews__content {
+    grid-template-columns:
+      minmax(75px, 0.65fr)
+      minmax(0, 1.25fr)
+      minmax(62px, 0.52fr);
+  }
+
+  .reviews__content > * {
+    padding: 8px 6px;
+  }
+
+  .reviews__heading p,
+  .reviews__link {
+    font-size: 0.56rem;
+  }
+
+  .review p {
+    font-size: 0.56rem;
+  }
+
+  .review span {
+    font-size: 0.51rem;
+  }
+
+  .contact-shortcut {
+    font-size: 0.53rem;
+  }
+
+  .contact-shortcut svg {
+    width: 17px;
+    height: 17px;
+  }
+}
