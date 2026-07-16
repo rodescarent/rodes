@@ -3,59 +3,36 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>RODES Car Rental | Toronto</title>
-  <meta
-    name="description"
-    content="Renta de autos en Toronto con comodidad, estilo y libertad."
-  >
+  <meta name="description" content="Renta de autos en Toronto con comodidad, estilo y libertad.">
 
   <link rel="icon" href="images/favicon.png" sizes="64x64">
   <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="index.css?v=20260715-3">
+  <link rel="stylesheet" href="index.css?v=20260716-5">
 </head>
 
 <body class="page-home">
-
   <div class="site-shell">
 
-    <!-- =====================================================
-         HERO PRINCIPAL
-         Cambia la imagen desde styles.css:
-         background-image: url("images/rodes-toronto.jpg");
-         ===================================================== -->
     <header class="hero" id="inicio">
-
       <div class="hero__overlay"></div>
 
-      <!-- =========================
-           MENÚ SUPERIOR
-           ========================= -->
       <div class="topbar-wrap">
         <nav class="topbar container" aria-label="Navegación principal">
-
           <a class="brand" href="#inicio" aria-label="RODES Car Rental - Inicio">
             <span class="brand__name">RODES</span>
             <span class="brand__tag">CAR RENTAL</span>
           </a>
 
-          <button
-            class="menu-toggle"
-            type="button"
-            aria-label="Abrir menú"
-            aria-expanded="false"
-            aria-controls="main-menu"
-          >
-            <span></span>
-            <span></span>
-            <span></span>
+          <button class="menu-toggle" type="button" aria-label="Abrir menú"
+            aria-expanded="false" aria-controls="main-menu">
+            <span></span><span></span><span></span>
           </button>
 
           <div class="topbar__links" id="main-menu">
             <a class="nav-link is-active" href="#inicio">Inicio</a>
             <a class="nav-link" href="autos.html">Nuestros autos</a>
             <a class="nav-link" href="articulos.html">Extras</a>
-            <a class="nav-link" href="#como-funciona">Cómo funciona</a>
             <a class="nav-link" href="contacto.html">Contacto</a>
           </div>
 
@@ -63,19 +40,12 @@
             <span class="reserve-button__icon" aria-hidden="true">▣</span>
             Reservar ahora
           </a>
-
         </nav>
       </div>
 
-      <!-- =========================
-           CONTENIDO PRINCIPAL
-           ========================= -->
       <div class="hero__content container">
-
         <section class="hero-copy" aria-labelledby="hero-title">
-
           <div class="hero-copy__backdrop">
-
             <p class="hero-copy__eyebrow">Renta de autos en Toronto</p>
 
             <h1 class="hero-copy__title" id="hero-title">
@@ -89,7 +59,6 @@
             </p>
 
             <div class="features" aria-label="Ventajas principales">
-
               <article class="feature">
                 <div class="feature__icon" aria-hidden="true">
                   <svg viewBox="0 0 64 64" role="img">
@@ -127,99 +96,31 @@
                 </div>
                 <p>Perfecta para<br>ciudad o carretera</p>
               </article>
-
             </div>
-
           </div>
-
         </section>
-
       </div>
-
-      <!-- =========================
-           OPINIONES
-           ========================= -->
-      <section class="reviews-wrap" aria-labelledby="reviews-title">
-        <div class="reviews container">
-
-          <div class="reviews__heading">
-            <p id="reviews-title">
-              Lo que dicen
-              <strong>nuestros clientes</strong>
-            </p>
-          </div>
-
-          <div id="listaOpiniones" class="reviews__dynamic">
-            <article class="review review--status">
-              <p>Cargando opiniones…</p>
-            </article>
-          </div>
-
-          <a class="reviews__link" href="#opiniones">
-            Ver opiniones
-            <span aria-hidden="true">→</span>
-          </a>
-
-        </div>
-      </section>
-
     </header>
 
-    <!-- =========================
-         CÓMO FUNCIONA
-         Esta sección queda debajo del primer vistazo.
-         ========================= -->
-    <main>
-      <section class="how-it-works" id="como-funciona">
-        <div class="container">
-          <div class="section-heading">
-            <p class="section-heading__eyebrow">Simple y rápido</p>
-            <h2>Reserva tu auto en pocos pasos</h2>
-          </div>
-
-          <div class="steps">
-            <article class="step">
-              <span>01</span>
-              <h3>Elige las fechas</h3>
-              <p>Selecciona cuándo deseas recoger y entregar el vehículo.</p>
-            </article>
-
-            <article class="step">
-              <span>02</span>
-              <h3>Agrega tus extras</h3>
-              <p>Completa tu viaje con accesorios y equipos opcionales.</p>
-            </article>
-
-            <article class="step">
-              <span>03</span>
-              <h3>Confirma la reserva</h3>
-              <p>Realiza el pago y recibe la confirmación por correo.</p>
-            </article>
-          </div>
+    <section class="reviews-wrap" id="opiniones" aria-labelledby="reviews-title">
+      <div class="reviews container">
+        <div class="reviews__heading">
+          <p id="reviews-title">
+            Lo que dicen
+            <strong>nuestros clientes</strong>
+          </p>
         </div>
-      </section>
 
-      <section class="reviews-full" id="opiniones">
-        <div class="container">
-          <div class="section-heading">
-            <p class="section-heading__eyebrow">Experiencias reales</p>
-            <h2>Opiniones de nuestros clientes</h2>
-          </div>
-
-          <div id="listaOpinionesCompleta" class="reviews-full__grid">
+        <div id="listaOpiniones" class="reviews__dynamic">
+          <article class="review review--status">
             <p>Cargando opiniones…</p>
-          </div>
+          </article>
         </div>
-      </section>
+      </div>
+    </section>
 
-    </main>
-
-    <!-- =========================
-         PIE DE PÁGINA TIPO MENÚ
-         ========================= -->
     <footer class="footer">
       <div class="footer__menu container">
-
         <a class="brand brand--footer" href="#inicio">
           <span class="brand__name">RODES</span>
           <span class="brand__tag">CAR RENTAL</span>
@@ -229,20 +130,15 @@
           <a href="#inicio">Inicio</a>
           <a href="autos.html">Nuestros autos</a>
           <a href="articulos.html">Extras</a>
-          <a href="#como-funciona">Cómo funciona</a>
           <a href="contacto.html">Contacto</a>
           <a href="privacidad.html">Privacidad</a>
         </nav>
 
-        <a class="footer__reserve" href="q5progressive.html">
-          Reservar ahora
-        </a>
-
+        <a class="footer__reserve" href="q5progressive.html">Reservar ahora</a>
       </div>
 
       <div class="footer__bottom container">
         <p>© 2026 RODES Car Rental. Todos los derechos reservados.</p>
-
         <div class="footer__contact">
           <a href="tel:+16471234567">+1 (647) 123-4567</a>
           <a href="mailto:info@rodescarrental.com">info@rodescarrental.com</a>
@@ -250,9 +146,7 @@
         </div>
       </div>
     </footer>
-
   </div>
-
 
   <script>
     const OPINIONES_URL =
@@ -268,20 +162,12 @@
     }
 
     function crearOpinion(opinion, claseExtra = "") {
-      const cantidad = Math.max(
-        0,
-        Math.min(5, Number(opinion.estrellas) || 0)
-      );
-
-      const estrellas =
-        "★".repeat(cantidad) + "☆".repeat(5 - cantidad);
+      const cantidad = Math.max(0, Math.min(5, Number(opinion.estrellas) || 0));
+      const estrellas = "★".repeat(cantidad) + "☆".repeat(5 - cantidad);
 
       return `
         <article class="review ${claseExtra}">
-          <div
-            class="review__stars"
-            aria-label="${cantidad} de 5 estrellas"
-          >
+          <div class="review__stars" aria-label="${cantidad} de 5 estrellas">
             ${estrellas}
           </div>
           <p>“${escaparHTML(opinion.comentario)}”</p>
@@ -292,8 +178,6 @@
 
     async function cargarOpiniones() {
       const resumen = document.getElementById("listaOpiniones");
-      const listaCompleta =
-        document.getElementById("listaOpinionesCompleta");
 
       try {
         const respuesta = await fetch(OPINIONES_URL, {
@@ -301,26 +185,16 @@
           cache: "no-store"
         });
 
-        if (!respuesta.ok) {
-          throw new Error(`HTTP ${respuesta.status}`);
-        }
+        if (!respuesta.ok) throw new Error(`HTTP ${respuesta.status}`);
 
         const data = await respuesta.json();
-        const opiniones = Array.isArray(data.opiniones)
-          ? data.opiniones
-          : [];
+        const opiniones = Array.isArray(data.opiniones) ? data.opiniones : [];
 
         if (!data.ok || opiniones.length === 0) {
           resumen.innerHTML = `
             <article class="review review--status">
               <p>Próximamente mostraremos opiniones de nuestros clientes.</p>
             </article>
-          `;
-
-          listaCompleta.innerHTML = `
-            <p class="reviews-full__status">
-              Próximamente mostraremos opiniones de nuestros clientes.
-            </p>
           `;
           return;
         }
@@ -329,24 +203,12 @@
           .slice(0, 3)
           .map((opinion) => crearOpinion(opinion))
           .join("");
-
-        listaCompleta.innerHTML = opiniones
-          .map((opinion) => crearOpinion(opinion, "review--full"))
-          .join("");
-
       } catch (error) {
         console.error("No se pudieron cargar las opiniones:", error);
-
         resumen.innerHTML = `
           <article class="review review--status">
             <p>No se pudieron cargar las opiniones.</p>
           </article>
-        `;
-
-        listaCompleta.innerHTML = `
-          <p class="reviews-full__status">
-            No se pudieron cargar las opiniones.
-          </p>
         `;
       }
     }
@@ -361,7 +223,6 @@
     if (menuToggle && mainMenu) {
       menuToggle.addEventListener("click", () => {
         const isOpen = menuToggle.getAttribute("aria-expanded") === "true";
-
         menuToggle.setAttribute("aria-expanded", String(!isOpen));
         mainMenu.classList.toggle("is-open");
         document.body.classList.toggle("menu-open");
@@ -376,6 +237,5 @@
       });
     }
   </script>
-
 </body>
 </html>
