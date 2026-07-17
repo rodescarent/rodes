@@ -1,19 +1,17 @@
+
 /* =========================================================
-   RODES CAR RENTAL — HOME
-   Diseño inspirado en la opción 1 seleccionada
+   RODES CAR RENTAL — INDEX LIMPIO
+   Escritorio + móvil, sin reglas duplicadas
    ========================================================= */
 
 :root {
   --gold: #e6ad5d;
   --gold-light: #f3c987;
   --white: #ffffff;
-  --text-soft: rgba(255, 255, 255, 0.78);
   --dark: #090a0b;
-  --dark-soft: #151719;
-  --line: rgba(255, 255, 255, 0.18);
+  --line: rgba(255, 255, 255, 0.16);
   --container: 1240px;
-  --radius: 22px;
-  --shadow: 0 18px 45px rgba(0, 0, 0, 0.3);
+  --shadow: 0 18px 45px rgba(0, 0, 0, 0.30);
 }
 
 /* =========================
@@ -25,12 +23,16 @@
 }
 
 html {
+  width: 100%;
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
-  margin: 0;
+  width: 100%;
   min-width: 320px;
+  margin: 0;
+  overflow-x: hidden;
   color: var(--white);
   background: var(--dark);
   font-family:
@@ -70,8 +72,13 @@ textarea {
   margin-inline: auto;
 }
 
-.site-shell {
-  min-height: 100vh;
+.site-shell,
+.hero,
+.topbar-wrap,
+.hero__content,
+.reviews-wrap {
+  width: 100%;
+  min-width: 0;
 }
 
 /* =========================
@@ -84,65 +91,36 @@ textarea {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  isolation: isolate;
 
-  /*
-    CAMBIA ESTE NOMBRE POR EL NOMBRE REAL DE TU IMAGEN.
-    Ejemplo:
-    background-image: url("images/rodes-toronto.jpg");
-  */
   background-image: url("images/header.png");
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
-  isolation: isolate;
 }
 
 .hero__overlay {
   position: absolute;
   inset: 0;
   z-index: -2;
+  pointer-events: none;
 
   background:
-
-    /* Sombra lateral uniforme */
     linear-gradient(
       90deg,
-      rgba(0,0,0,.86) 0%,
-      rgba(0,0,0,.78) 18%,
-      rgba(0,0,0,.62) 36%,
-      rgba(0,0,0,.02) 56%,
-      rgba(0,0,0,.02) 76%,
-      rgba(0,0,0,.02) 100%
+      rgba(0, 0, 0, 0.86) 0%,
+      rgba(0, 0, 0, 0.78) 18%,
+      rgba(0, 0, 0, 0.62) 36%,
+      rgba(0, 0, 0, 0.02) 56%,
+      rgba(0, 0, 0, 0.02) 100%
     ),
-
-    /* Oscurecimiento vertical MUY suave */
     linear-gradient(
       180deg,
-      rgba(0,0,0,.28) 0%,
-  rgba(0,0,0,.08) 22%,
-  rgba(0,0,0,.03) 58%,
-  rgba(0,0,0,.15) 100%
+      rgba(0, 0, 0, 0.28) 0%,
+      rgba(0, 0, 0, 0.08) 22%,
+      rgba(0, 0, 0, 0.03) 58%,
+      rgba(0, 0, 0, 0.15) 100%
     );
-}
-
-.hero::after {
-  content: "";
-  position: absolute;
-  inset: auto 0 0;
-  height: 34%;
-  z-index: -1;
-
-  background:
-
-    linear-gradient(
-      180deg,
-      rgba(0,0,0,0) 0%,
-      rgba(0,0,0,.10) 25%,
-      rgba(0,0,0,.26) 55%,
-      rgba(0,0,0,.46) 100%
-    );
-
-  pointer-events: none;
 }
 
 .hero::after {
@@ -151,6 +129,8 @@ textarea {
   inset: auto 0 0;
   height: 42%;
   z-index: -1;
+  pointer-events: none;
+
   background:
     linear-gradient(
       180deg,
@@ -158,7 +138,6 @@ textarea {
       rgba(4, 5, 6, 0.36) 25%,
       rgba(4, 5, 6, 0.96) 100%
     );
-  pointer-events: none;
 }
 
 /* =========================
@@ -171,27 +150,21 @@ textarea {
   padding-top: 12px;
 }
 
-.topbar { min-height: 66px;
-
+.topbar {
+  min-height: 66px;
   display: grid;
   grid-template-columns: auto 1fr auto;
   align-items: center;
   gap: 28px;
-
   padding: 8px 18px;
 
-  /* Fondo oscuro transparente */
-  background: gba(0,0,0,0.45);
-
-  /* Efecto de cristal */
+  background: rgba(0, 0, 0, 0.45);
   backdrop-filter: blur(2px);
   -webkit-backdrop-filter: blur(2px);
 
-  /* Bordes de la barra */
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  border: 1px solid var(--line);
   border-radius: 16px;
 
-  /* Sombra suave */
   box-shadow:
     0 10px 28px rgba(0, 0, 0, 0.26),
     inset 0 1px 0 rgba(255, 255, 255, 0.06);
@@ -212,16 +185,14 @@ textarea {
 }
 
 .brand__tag {
-  margin-top: 2px;
   width: 100%;
-  text-align: center;
-
+  margin-top: 2px;
+  color: var(--gold-light);
   font-size: 0.58rem;
   font-weight: 600;
-
   letter-spacing: 0.63em;
+  text-align: center;
   text-transform: uppercase;
-  color:var(--gold-light);
 }
 
 .topbar__links {
@@ -272,13 +243,18 @@ textarea {
   gap: 10px;
   min-height: 44px;
   padding: 0 20px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 12px;
+
   color: #21170b;
   background: linear-gradient(135deg, var(--gold-light), var(--gold));
+
+  border: 1px solid rgba(255, 255, 255, 0.20);
+  border-radius: 12px;
+
   box-shadow: 0 12px 28px rgba(230, 173, 93, 0.25);
+
   font-size: 0.88rem;
   font-weight: 700;
+
   transition:
     transform 180ms ease,
     box-shadow 180ms ease;
@@ -298,10 +274,12 @@ textarea {
   display: none;
   width: 46px;
   height: 42px;
+  padding: 0;
+  cursor: pointer;
+
+  background: rgba(0, 0, 0, 0.45);
   border: 1px solid var(--line);
   border-radius: 12px;
-  background: rgba(0, 0, 0, 0.45);
-  cursor: pointer;
 }
 
 .menu-toggle span {
@@ -326,73 +304,60 @@ textarea {
 
 .hero-copy {
   width: min(670px, 58vw);
+  min-width: 0;
 }
 
 .hero-copy__backdrop {
   position: relative;
-  padding: 28px 34px 30px 20px;
-}
-
-.hero-copy__backdrop {
-  position: relative;
-  padding: 28px 34px 30px 20px;
   isolation: isolate;
+  padding: 28px 34px 30px 20px;
 }
 
 .hero-copy__backdrop::before {
   content: "";
   position: absolute;
-
-  /* La sombra sobresale del cuadro para que no se vean sus bordes */
   top: -45px;
   right: -30px;
   bottom: -45px;
   left: -160px;
-
   z-index: -1;
   pointer-events: none;
 
-  background: linear-gradient(
-    90deg,
-    rgba(0, 0, 0, 0.82) 0%,
-    rgba(0, 0, 0, 0.76) 28%,
-    rgba(0, 0, 0, 0.50) 58%,
-    rgba(0, 0, 0, 0.18) 82%,
-    rgba(0, 0, 0, 0) 100%
-  );
+  background:
+    linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.82) 0%,
+      rgba(0, 0, 0, 0.76) 28%,
+      rgba(0, 0, 0, 0.50) 58%,
+      rgba(0, 0, 0, 0.18) 82%,
+      rgba(0, 0, 0, 0) 100%
+    );
 
-  /* Desvanece también la parte superior e inferior */
-  -webkit-mask-image: linear-gradient(
-    180deg,
-    transparent 0%,
-    black 18%,
-    black 82%,
-    transparent 100%
-  );
+  -webkit-mask-image:
+    linear-gradient(
+      180deg,
+      transparent 0%,
+      black 18%,
+      black 82%,
+      transparent 100%
+    );
 
-  mask-image: linear-gradient(
-    180deg,
-    transparent 0%,
-    black 18%,
-    black 82%,
-    transparent 100%
-  );
+  mask-image:
+    linear-gradient(
+      180deg,
+      transparent 0%,
+      black 18%,
+      black 82%,
+      transparent 100%
+    );
 
   filter: blur(8px);
-}
-
-.hero-copy__eyebrow {
-  margin: 0 0 12px;
-  color: var(--gold-light);
-  font-size: 0.76rem;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
 }
 
 .hero-copy__title {
   max-width: 640px;
   margin: 0;
+
   font-size: clamp(2.6rem, 5.3vw, 5rem);
   line-height: 0.97;
   letter-spacing: -0.05em;
@@ -403,13 +368,6 @@ textarea {
   display: block;
   margin-top: 8px;
   color: var(--gold-light);
-}
-
-.hero-copy__subtitle {
-  margin: 22px 0 0;
-  color: rgba(255, 255, 255, 0.91);
-  font-size: clamp(1rem, 1.5vw, 1.3rem);
-  line-height: 1.5;
 }
 
 /* =========================
@@ -424,10 +382,10 @@ textarea {
 }
 
 .feature {
+  min-width: 0;
   display: flex;
   align-items: center;
   gap: 12px;
-  min-width: 0;
 }
 
 .feature__icon {
@@ -460,38 +418,48 @@ textarea {
 }
 
 /* =========================
-   REVIEWS
+   REVIEWS + CONTACT
    ========================= */
 
 .reviews-wrap {
   position: relative;
   z-index: 5;
-  padding: 0 0 14px;
+  padding-bottom: 14px;
 }
 
 .reviews {
   display: grid;
-  grid-template-columns:
-    minmax(155px, 0.8fr)
-    repeat(3, minmax(175px, 1fr))
-    minmax(170px, 0.72fr);
+  grid-template-columns: minmax(0, 3.2fr) minmax(210px, 1fr);
   align-items: stretch;
+  overflow: hidden;
+
+  background: rgba(0, 0, 0, 0.45);
   border: 1px solid rgba(255, 255, 255, 0.13);
   border-radius: 18px;
-  background:gba(0,0,0,0.45);
+
   box-shadow: var(--shadow);
+
   backdrop-filter: blur(2px);
   -webkit-backdrop-filter: blur(2px);
-  overflow: hidden;
 }
 
-.reviews > * {
+.reviews__content {
   min-width: 0;
-  padding: 18px 22px;
+  display: grid;
+  grid-template-columns:
+    minmax(145px, 0.8fr)
+    repeat(3, minmax(0, 1fr))
+    minmax(130px, 0.68fr);
+  align-items: stretch;
 }
 
-.reviews > * + * {
-  border-left: 0;
+.reviews__content > * {
+  min-width: 0;
+  padding: 18px 20px;
+}
+
+.reviews__content > * + * {
+  border-left: 1px solid rgba(255, 255, 255, 0.10);
 }
 
 .reviews__heading {
@@ -501,13 +469,21 @@ textarea {
 
 .reviews__heading p {
   margin: 0;
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(255, 255, 255, 0.90);
   line-height: 1.3;
 }
 
 .reviews__heading strong {
   display: block;
   color: var(--gold-light);
+}
+
+.page-home .reviews__dynamic {
+  display: contents;
+}
+
+.review {
+  min-width: 0;
 }
 
 .review__stars {
@@ -521,6 +497,7 @@ textarea {
   color: rgba(255, 255, 255, 0.85);
   font-size: 0.78rem;
   line-height: 1.45;
+  overflow-wrap: anywhere;
 }
 
 .review span {
@@ -530,14 +507,22 @@ textarea {
   font-size: 0.72rem;
 }
 
+.review--status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .reviews__link {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
+
   color: var(--gold-light);
   font-size: 0.82rem;
   text-align: center;
+
   transition: gap 180ms ease;
 }
 
@@ -546,195 +531,72 @@ textarea {
   gap: 16px;
 }
 
-/* =========================
-   CÓMO FUNCIONA
-   ========================= */
-
-.how-it-works {
-  padding: 90px 0;
-  color: #1a1b1d;
-  background: #f5f1ea;
-}
-
-.section-heading {
-  max-width: 700px;
-  margin-bottom: 42px;
-}
-
-.section-heading__eyebrow {
-  margin: 0 0 8px;
-  color: #a66b21;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.section-heading h2 {
-  margin: 0;
-  font-size: clamp(2rem, 4vw, 3.5rem);
-  line-height: 1.05;
-  letter-spacing: -0.04em;
-}
-
-.steps {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 22px;
-}
-
-.step {
-  padding: 30px;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  border-radius: 18px;
-  background: #fff;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
-}
-
-.step > span {
-  color: #b77a2c;
-  font-size: 0.8rem;
-  font-weight: 800;
-  letter-spacing: 0.15em;
-}
-
-.step h3 {
-  margin: 18px 0 10px;
-  font-size: 1.25rem;
-}
-
-.step p {
-  margin: 0;
-  color: #62656a;
-  line-height: 1.6;
-}
-
-/* =========================
-   FOOTER
-   ========================= */
-
-/* =========================
-   FOOTER
-   ========================= */
-
-.footer {
-  color: rgba(255, 255, 255, 0.84);
-  background: rgba(0, 0, 0, 0.18);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-}
-
-/* -------- Menú superior del footer -------- */
-
-.footer__menu {
-  min-height: 46px;
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: center;
-  gap: 18px;
-  padding: 6px 0;
-  border-top: 1px solid rgba(255,255,255,.10);
-  border-bottom: 1px solid rgba(255,255,255,.10);
-}
-
-.brand--footer .brand__name {
-  font-size: 1.2rem;
-}
-
-.brand--footer .brand__tag {
-  font-size: 0.65rem;
-}
-
-.footer__links {
+.reviews__contact {
+  position: relative;
+  min-width: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 18px;
-  flex-wrap: wrap;
+  gap: 22px;
+  padding: 16px 20px 16px 28px;
 }
 
-.footer__links a {
-  font-size: 0.76rem;
-  transition: color .2s ease;
+.reviews__contact::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 18px;
+  bottom: 18px;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.14);
 }
 
-.footer__links a:hover,
-.footer__links a:focus-visible {
-  color: var(--gold-light);
-}
-
-.footer__reserve {
-  padding: 4px 12px;
-  border: 1px solid rgba(230,173,93,.55);
-  border-radius: 8px;
-  color: var(--gold-light);
-  font-size: .74rem;
-  font-weight: 700;
-}
-
-/* -------- Parte inferior -------- */
-
-.footer__bottom {
-  min-height: 34px;
-  display: flex;
+.contact-shortcut {
+  min-width: 0;
+  display: inline-flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 6px 0;
-  color: rgba(255,255,255,.60);
-  font-size: .68rem;
+  justify-content: center;
+  gap: 7px;
+
+  color: rgba(255, 255, 255, 0.80);
+  font-size: 0.72rem;
+  line-height: 1;
+  text-align: center;
+
+  transition:
+    color 180ms ease,
+    transform 180ms ease;
 }
 
-.footer__bottom p {
-  margin: 0;
+.contact-shortcut svg {
+  width: 23px;
+  height: 23px;
+  fill: none;
+  stroke: var(--gold-light);
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+
+  transition:
+    stroke 180ms ease,
+    transform 180ms ease;
 }
 
-.footer__contact {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  flex-wrap: wrap;
-}
-
-.footer__contact a {
-  transition: color .2s ease;
-}
-
-.footer__contact a:hover,
-.footer__contact a:focus-visible {
+.contact-shortcut:hover,
+.contact-shortcut:focus-visible {
   color: var(--gold-light);
+  transform: translateY(-2px);
 }
 
-/* -------- Responsive -------- */
-
-@media (max-width:860px){
-
-  .footer__menu{
-    grid-template-columns:1fr;
-    gap:10px;
-    text-align:center;
-    padding:10px 0;
-  }
-
-  .brand--footer,
-  .footer__reserve{
-    justify-self:center;
-  }
-
-  .footer__bottom{
-    flex-direction:column;
-    justify-content:center;
-    gap:8px;
-    text-align:center;
-    padding:10px 0;
-  }
-
-  .footer__contact{
-    justify-content:center;
-  }
+.contact-shortcut:hover svg,
+.contact-shortcut:focus-visible svg {
+  stroke: var(--gold);
+  transform: scale(1.06);
 }
 
 /* =========================
-   RESPONSIVE — LAPTOP
+   LAPTOP / TABLET
    ========================= */
 
 @media (max-width: 1120px) {
@@ -755,34 +617,33 @@ textarea {
   }
 
   .reviews {
-    grid-template-columns: 0.8fr repeat(3, 1fr);
+    grid-template-columns: minmax(0, 2.7fr) minmax(200px, 1fr);
   }
 
-  .reviews__link {
+  .reviews__content {
+    grid-template-columns:
+      minmax(135px, 0.8fr)
+      repeat(3, minmax(0, 1fr));
+  }
+
+  .reviews__content .reviews__link {
     grid-column: 1 / -1;
-    min-height: 48px;
-    border-top: 1px solid rgba(255, 255, 255, 0.14);
-    border-left: 0 !important;
+    min-height: 44px;
+    border-top: 1px solid rgba(255, 255, 255, 0.10);
+    border-left: 0;
   }
 
-  .footer__menu {
-    grid-template-columns: 1fr;
-    gap: 18px;
-    padding: 25px 0;
-    text-align: center;
-  }
-
-  .brand--footer,
-  .footer__reserve {
-    justify-self: center;
+  .reviews__contact {
+    gap: 17px;
+    padding-inline: 24px 16px;
   }
 }
 
-/* =========================
-   RESPONSIVE — TABLET / MÓVIL
-   ========================= */
-
 @media (max-width: 860px) {
+  .container {
+    width: min(calc(100% - 32px), var(--container));
+  }
+
   .hero {
     min-height: auto;
     background-position: 62% center;
@@ -811,11 +672,15 @@ textarea {
     align-items: stretch;
     gap: 0;
     padding: 14px;
+
+    background: rgba(8, 9, 10, 0.97);
     border: 1px solid var(--line);
     border-radius: 18px;
-    background: rgba(8, 9, 10, 0.97);
+
     box-shadow: var(--shadow);
+
     backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
   }
 
   .topbar__links.is-open {
@@ -849,9 +714,11 @@ textarea {
 
   .hero-copy__backdrop {
     padding: 26px 24px;
+    background: rgba(0, 0, 0, 0.28);
     border-radius: 24px;
-    background: rgba(0, 0, 0, 0.58);
-    backdrop-filter: blur(8px);
+
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
   }
 
   .hero-copy__backdrop::before {
@@ -866,542 +733,6 @@ textarea {
     gap: 16px;
   }
 
-  .reviews-wrap {
-    padding-bottom: 20px;
-  }
-
-  .reviews {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .reviews > * {
-    border-left: 0;
-    border-top: 1px solid rgba(255, 255, 255, 0.14);
-  }
-
-  .reviews__heading {
-    grid-column: 1 / -1;
-    border-top: 0;
-  }
-
-  .review:nth-of-type(3) {
-    grid-column: 1 / -1;
-  }
-
-  .steps {
-    grid-template-columns: 1fr;
-  }
-
-  .footer__bottom {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 24px 0;
-  }
-}
-
-/* =========================
-   RESPONSIVE — TELÉFONO
-   ========================= */
-
-@media (max-width: 620px) {
-  .container {
-    width: min(calc(100% - 24px), var(--container));
-  }
-
-  .topbar-wrap {
-    padding-top: 8px;
-  }
-
-  .topbar {
-    min-height: 58px;
-    gap: 10px;
-  }
-
-  .brand {
-    gap: 6px;
-  }
-
-  .brand__name {
-    font-size: 1.28rem;
-  }
-
-  .brand__tag {
-    display: none;
-  }
-
-  .reserve-button {
-    padding: 0 11px;
-    font-size: 0.75rem;
-  }
-
-  .reserve-button__icon {
-    display: none;
-  }
-
-  .menu-toggle {
-    width: 42px;
-  }
-
-  .hero {
-    background-position: 66% center;
-  }
-
-  .hero__content {
-    min-height: 630px;
-    padding-bottom: 18px;
-  }
-
-  .hero-copy__backdrop {
-    padding: 22px 18px;
-  }
-
-  .hero-copy__eyebrow {
-    font-size: 0.67rem;
-  }
-
-  .hero-copy__title {
-    font-size: clamp(2.2rem, 12vw, 3.2rem);
-  }
-
-  .hero-copy__subtitle {
-    font-size: 0.95rem;
-  }
-
-  .features {
-    align-items: stretch;
-    flex-direction: column;
-    gap: 14px;
-    margin-top: 24px;
-  }
-
-  .feature-divider {
-    width: 100%;
-    height: 1px;
-  }
-
-  .feature__icon {
-    flex-basis: 34px;
-  }
-
-  .feature__icon svg {
-    width: 34px;
-    height: 34px;
-  }
-
-  .reviews {
-    grid-template-columns: 1fr;
-  }
-
-  .reviews > *,
-  .reviews__heading,
-  .review:nth-of-type(3),
-  .reviews__link {
-    grid-column: auto;
-  }
-
-  .reviews > * + * {
-    border-left: 0;
-    border-top: 1px solid rgba(255, 255, 255, 0.14);
-  }
-
-  .footer__links {
-    flex-direction: column;
-    gap: 14px;
-  }
-
-  .footer__contact {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-  }
-}
-
-/* =========================
-   ACCESIBILIDAD
-   ========================= */
-
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-
-
-/* =========================================================
-   OPINIONES FUNCIONALES DEL INDEX
-   ========================================================= */
-
-.page-home .reviews__dynamic {
-  display: contents;
-}
-
-.page-home .review--status {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.page-home .reviews-full {
-  padding: 84px 0;
-  color: #ffffff;
-  background: #111315;
-}
-
-.page-home .reviews-full__grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 18px;
-}
-
-.page-home .reviews-full__grid .review {
-  padding: 22px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.06);
-}
-
-.page-home .reviews-full__status {
-  color: rgba(255, 255, 255, 0.75);
-}
-
-@media (max-width: 860px) {
-  .page-home .reviews-full__grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* =========================================================
-   AJUSTE FINAL DE ENCUADRE Y RESPONSIVE
-   No modifica funciones, estructura ni posición de secciones.
-   ========================================================= */
-
-html,
-body {
-  width: 100%;
-  max-width: 100%;
-  overflow-x: hidden;
-}
-
-.site-shell,
-.hero,
-.topbar-wrap,
-.hero__content,
-.reviews-wrap,
-main,
-.footer {
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-}
-
-.container {
-  max-width: var(--container);
-  min-width: 0;
-}
-
-.topbar > *,
-.hero-copy,
-.hero-copy__backdrop,
-.features,
-.feature,
-.reviews,
-.reviews > *,
-.steps,
-.step,
-.footer__menu > *,
-.footer__bottom > * {
-  min-width: 0;
-}
-
-/* Mantiene las opiniones dentro del ancho disponible. */
-.reviews {
-  width: min(calc(100% - 40px), var(--container));
-  max-width: var(--container);
-  grid-template-columns:
-    minmax(135px, 0.8fr)
-    repeat(3, minmax(0, 1fr))
-    minmax(145px, 0.72fr);
-}
-
-.page-home .reviews__dynamic {
-  min-width: 0;
-}
-
-.review,
-.review p,
-.review span,
-.reviews__heading,
-.reviews__link {
-  min-width: 0;
-  max-width: 100%;
-  overflow-wrap: anywhere;
-  word-break: normal;
-}
-
-@media (max-width: 1120px) {
-  .reviews {
-    grid-template-columns: minmax(135px, 0.8fr) repeat(3, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 860px) {
-  .topbar {
-    width: min(calc(100% - 32px), var(--container));
-  }
-
-  .topbar__links {
-    width: auto;
-    max-width: calc(100vw - 40px);
-  }
-
-  .hero__content {
-    width: min(calc(100% - 32px), var(--container));
-  }
-
-  .reviews {
-    width: min(calc(100% - 32px), var(--container));
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .reviews__heading,
-  .reviews__link {
-    grid-column: 1 / -1;
-  }
-
-  .page-home .reviews__dynamic {
-    display: contents;
-  }
-
-  .review:nth-of-type(3) {
-    grid-column: 1 / -1;
-  }
-}
-
-@media (max-width: 620px) {
-  body {
-    min-width: 0;
-  }
-
-  .container,
-  .topbar,
-  .hero__content,
-  .reviews {
-    width: calc(100% - 24px);
-    max-width: calc(100% - 24px);
-  }
-
-  .topbar {
-    grid-template-columns: minmax(0, 1fr) auto auto;
-  }
-
-  .brand {
-    min-width: 0;
-  }
-
-  .reserve-button {
-    white-space: nowrap;
-  }
-
-  .hero-copy__title,
-  .hero-copy__subtitle,
-  .feature p {
-    overflow-wrap: anywhere;
-  }
-
-  .reviews {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .reviews > *,
-  .reviews__heading,
-  .review:nth-of-type(3),
-  .reviews__link {
-    grid-column: 1;
-    width: 100%;
-    max-width: 100%;
-  }
-
-  .reviews > * {
-    padding: 16px;
-  }
-
-  .page-home .reviews-full__grid {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .page-home .reviews-full__grid .review {
-    width: 100%;
-    max-width: 100%;
-  }
-}
-
-@media (max-width: 390px) {
-  .container,
-  .topbar,
-  .hero__content,
-  .reviews {
-    width: calc(100% - 18px);
-    max-width: calc(100% - 18px);
-  }
-
-  .topbar {
-    gap: 7px;
-  }
-
-  .brand__name {
-    font-size: 1.12rem;
-  }
-
-  .reserve-button {
-    min-height: 40px;
-    padding-inline: 9px;
-    font-size: 0.69rem;
-  }
-
-  .menu-toggle {
-    width: 40px;
-    height: 40px;
-  }
-
-  .hero-copy__backdrop {
-    padding: 20px 15px;
-  }
-
-  .hero-copy__title {
-    font-size: clamp(2rem, 11.5vw, 2.75rem);
-  }
-}
-
-/* =========================================================
-   BARRA INFERIOR: OPINIONES + CONTACTO
-   Mantiene intacta la carga actual de comentarios.
-   ========================================================= */
-
-.reviews {
-  grid-template-columns: minmax(0, 3.2fr) minmax(210px, 1fr);
-  align-items: stretch;
-}
-
-.reviews__content {
-  min-width: 0;
-  display: grid;
-  grid-template-columns:
-    minmax(145px, 0.8fr)
-    repeat(3, minmax(0, 1fr))
-    minmax(130px, 0.68fr);
-  align-items: stretch;
-}
-
-.reviews__content > * {
-  min-width: 0;
-  padding: 18px 20px;
-}
-
-.reviews__content > * + * {
-  border-left: 1px solid rgba(255, 255, 255, 0.10);
-}
-
-.reviews__contact {
-  position: relative;
-  min-width: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 22px;
-  padding: 16px 20px 16px 28px;
-}
-
-.reviews__contact::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 18px;
-  bottom: 18px;
-  width: 1px;
-  background: rgba(255, 255, 255, 0.14);
-}
-
-.contact-shortcut {
-  min-width: 0;
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-  color: rgba(255, 255, 255, 0.80);
-  font-size: 0.72rem;
-  line-height: 1;
-  text-align: center;
-  transition:
-    color 180ms ease,
-    transform 180ms ease;
-}
-
-.contact-shortcut svg {
-  width: 23px;
-  height: 23px;
-  fill: none;
-  stroke: var(--gold-light);
-  stroke-width: 1.9;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  transition:
-    stroke 180ms ease,
-    transform 180ms ease;
-}
-
-.contact-shortcut:hover,
-.contact-shortcut:focus-visible {
-  color: var(--gold-light);
-  transform: translateY(-2px);
-}
-
-.contact-shortcut:hover svg,
-.contact-shortcut:focus-visible svg {
-  stroke: var(--gold);
-  transform: scale(1.06);
-}
-
-.reviews > .reviews__content,
-.reviews > .reviews__contact {
-  padding: 0;
-  border-left: 0;
-  border-top: 0;
-}
-
-@media (max-width: 1120px) {
-  .reviews {
-    grid-template-columns: minmax(0, 2.7fr) minmax(200px, 1fr);
-  }
-
-  .reviews__content {
-    grid-template-columns:
-      minmax(135px, 0.8fr)
-      repeat(3, minmax(0, 1fr));
-  }
-
-  .reviews__content .reviews__link {
-    grid-column: 1 / -1;
-    min-height: 44px;
-    border-top: 1px solid rgba(255, 255, 255, 0.10);
-    border-left: 0;
-  }
-
-  .reviews__contact {
-    gap: 17px;
-    padding-inline: 24px 16px;
-  }
-}
-
-@media (max-width: 860px) {
   .reviews {
     grid-template-columns: minmax(0, 1fr) minmax(180px, 0.42fr);
   }
@@ -1431,8 +762,8 @@ main,
   }
 
   .contact-shortcut {
-    flex-direction: row;
     width: 100%;
+    flex-direction: row;
     justify-content: flex-start;
     gap: 10px;
     text-align: left;
@@ -1445,98 +776,28 @@ main,
   }
 }
 
-@media (max-width: 620px) {
-  .reviews {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .reviews__content {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .reviews__content > *,
-  .reviews__content .reviews__heading,
-  .reviews__content .reviews__link,
-  .reviews__content .review:nth-of-type(3) {
-    grid-column: 1;
-    width: 100%;
-  }
-
-  .reviews__content > * + * {
-    border-left: 0;
-    border-top: 1px solid rgba(255, 255, 255, 0.10);
-  }
-
-  .reviews__contact {
-    flex-direction: row;
-    justify-content: space-evenly;
-    gap: 8px;
-    padding: 18px 12px 14px;
-  }
-
-  .reviews__contact::before {
-    left: 16px;
-    right: 16px;
-    top: 0;
-    bottom: auto;
-    width: auto;
-    height: 1px;
-  }
-
-  .contact-shortcut {
-    width: auto;
-    flex-direction: column;
-    justify-content: center;
-    gap: 6px;
-    text-align: center;
-    font-size: 0.68rem;
-  }
-
-  .contact-shortcut svg {
-    width: 22px;
-    height: 22px;
-  }
-}
-/* =========================================================
-   MÓVIL COMPACTO — PARECIDO A ESCRITORIO
-   Pegar al FINAL del archivo CSS
-   ========================================================= */
+/* =========================
+   MÓVIL FINAL
+   Este bloque es el más importante.
+   ========================= */
 
 @media (max-width: 620px) {
-
-  /* -------------------------
-     CONTENEDORES
-     ------------------------- */
-
-  html,
   body {
-    width: 100%;
     min-width: 0;
-    overflow-x: hidden;
   }
 
-  .container,
-  .topbar,
-  .hero__content,
-  .reviews {
+  .container {
     width: calc(100% - 18px);
     max-width: calc(100% - 18px);
   }
 
-  /* -------------------------
-     HERO / IMAGEN
-     ------------------------- */
+  /* HERO */
 
   .hero {
     min-height: 100svh;
     background-position: 62% center;
     background-size: cover;
   }
-
-  /*
-    Mantiene el efecto oscuro a la izquierda
-    y más claro hacia la derecha.
-  */
 
   .hero__overlay {
     background:
@@ -1556,7 +817,6 @@ main,
       );
   }
 
-  /* Reduce la sombra inferior */
   .hero::after {
     height: 28%;
     background:
@@ -1568,9 +828,7 @@ main,
       );
   }
 
-  /* -------------------------
-     BARRA SUPERIOR
-     ------------------------- */
+  /* TOPBAR */
 
   .topbar-wrap {
     padding-top: 7px;
@@ -1583,13 +841,11 @@ main,
     padding: 5px 8px;
 
     background: rgba(0, 0, 0, 0.35);
+    border-radius: 12px;
+
     backdrop-filter: blur(2px);
     -webkit-backdrop-filter: blur(2px);
-
-    border-radius: 12px;
   }
-
-  /* Logo parecido al escritorio */
 
   .brand {
     gap: 0;
@@ -1609,22 +865,18 @@ main,
     white-space: nowrap;
   }
 
-  /* Botón hamburguesa */
-
   .menu-toggle {
     display: block;
     width: 36px;
     height: 36px;
-    border-radius: 9px;
     padding: 0;
+    border-radius: 9px;
   }
 
   .menu-toggle span {
     width: 17px;
     margin: 3px auto;
   }
-
-  /* Botón reservar */
 
   .reserve-button {
     min-height: 36px;
@@ -1639,15 +891,13 @@ main,
     display: none;
   }
 
-  /* Menú desplegable */
-
   .topbar__links {
     inset: 68px 9px auto;
     width: auto;
     max-width: calc(100vw - 18px);
     padding: 8px;
-
     border-radius: 12px;
+
     background: rgba(5, 6, 7, 0.94);
 
     backdrop-filter: blur(8px);
@@ -1659,15 +909,12 @@ main,
     font-size: 0.78rem;
   }
 
-  /* -------------------------
-     CONTENIDO PRINCIPAL
-     ------------------------- */
+  /* CONTENIDO */
 
   .hero__content {
     flex: 1;
     min-height: auto;
     align-items: center;
-
     padding-top: 18px;
     padding-bottom: 12px;
   }
@@ -1679,33 +926,11 @@ main,
 
   .hero-copy__backdrop {
     padding: 14px 12px;
-
-    /*
-      Fondo más ligero para conservar
-      el estilo de escritorio.
-    */
-
     background: rgba(0, 0, 0, 0.16);
+    border-radius: 14px;
+
     backdrop-filter: blur(2px);
     -webkit-backdrop-filter: blur(2px);
-
-    border-radius: 14px;
-  }
-
-  /*
-    En las reglas anteriores se ocultaba.
-    Aquí se mantiene apagado porque el fondo
-    móvil del propio bloque ya da contraste.
-  */
-
-  .hero-copy__backdrop::before {
-    display: none;
-  }
-
-  .hero-copy__eyebrow {
-    margin-bottom: 7px;
-    font-size: 0.56rem;
-    letter-spacing: 0.13em;
   }
 
   .hero-copy__title {
@@ -1719,31 +944,20 @@ main,
     margin-top: 4px;
   }
 
-  .hero-copy__subtitle {
-    margin-top: 10px;
-    font-size: 0.78rem;
-    line-height: 1.35;
-  }
-
-  /* -------------------------
-     LOS 3 ANUNCIOS EN UNA FILA
-     ------------------------- */
+  /* BENEFICIOS EN UNA FILA */
 
   .features {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     align-items: start;
-
     gap: 5px;
     margin-top: 14px;
   }
 
   .feature {
-    min-width: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
-
     gap: 4px;
     text-align: center;
   }
@@ -1767,27 +981,21 @@ main,
     display: none;
   }
 
-  /* -------------------------
-     BARRA INFERIOR
-     ------------------------- */
+  /* BARRA FINAL */
 
   .reviews-wrap {
     padding-bottom: 8px;
   }
 
   .reviews {
-    display: grid;
     grid-template-columns: minmax(0, 1fr);
     border-radius: 13px;
 
     background: rgba(0, 0, 0, 0.38);
+
     backdrop-filter: blur(2px);
     -webkit-backdrop-filter: blur(2px);
   }
-
-  /*
-    Comentarios compactos.
-  */
 
   .reviews__content {
     display: grid;
@@ -1795,13 +1003,12 @@ main,
       minmax(85px, 0.65fr)
       minmax(0, 1.35fr)
       minmax(70px, 0.55fr);
-
     align-items: stretch;
   }
 
   .reviews__content > * {
-    min-width: 0;
     width: auto;
+    min-width: 0;
     padding: 10px 8px;
   }
 
@@ -1815,17 +1022,16 @@ main,
     line-height: 1.2;
   }
 
-  .review {
-    grid-column: auto;
+  .page-home .reviews__dynamic {
+    display: contents;
   }
-
-  /*
-    En móvil muestra solo la primera opinión
-    en esta barra compacta.
-  */
 
   .reviews__dynamic .review:not(:first-child) {
     display: none;
+  }
+
+  .review {
+    grid-column: auto;
   }
 
   .review__stars {
@@ -1834,13 +1040,14 @@ main,
   }
 
   .review p {
+    display: -webkit-box;
+    overflow: hidden;
+
     font-size: 0.61rem;
     line-height: 1.25;
 
-    display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
-    overflow: hidden;
   }
 
   .review span {
@@ -1852,53 +1059,39 @@ main,
     grid-column: auto;
     min-height: auto;
     padding: 10px 6px;
-
     border: 0;
+
     font-size: 0.62rem;
     line-height: 1.2;
   }
 
-  /* -------------------------
-     CONTACTOS
-     ------------------------- */
+  /* ICONOS DE CONTACTO */
 
   .reviews__contact {
-    position: relative;
-
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-evenly;
-
     gap: 5px;
     padding: 10px 8px 8px;
   }
 
-  /*
-    Separador horizontal corto,
-    sin tocar los bordes.
-  */
-
   .reviews__contact::before {
-    content: "";
-    position: absolute;
-
     top: 0;
     left: 14px;
     right: 14px;
+    bottom: auto;
 
     width: auto;
     height: 1px;
-
-    background: rgba(255, 255, 255, 0.12);
   }
 
   .contact-shortcut {
     width: auto;
     flex-direction: column;
     justify-content: center;
-
     gap: 4px;
+
     font-size: 0.57rem;
     text-align: center;
   }
@@ -1907,28 +1100,14 @@ main,
     width: 18px;
     height: 18px;
   }
-
-  /* -------------------------
-     FOOTER
-     Si todavía existe, se oculta.
-     La barra inferior será el footer.
-     ------------------------- */
-
-  .footer {
-    display: none;
-  }
 }
 
-/* =========================================================
+/* =========================
    TELÉFONOS MUY PEQUEÑOS
-   ========================================================= */
+   ========================= */
 
 @media (max-width: 390px) {
-
-  .container,
-  .topbar,
-  .hero__content,
-  .reviews {
+  .container {
     width: calc(100% - 12px);
     max-width: calc(100% - 12px);
   }
@@ -1964,10 +1143,6 @@ main,
 
   .hero-copy__title {
     font-size: clamp(1.55rem, 8.5vw, 2.05rem);
-  }
-
-  .hero-copy__subtitle {
-    font-size: 0.72rem;
   }
 
   .feature__icon svg {
@@ -2013,193 +1188,20 @@ main,
   }
 }
 
+/* =========================
+   ACCESIBILIDAD
+   ========================= */
 
-
-/* ==================================================
-   BARRA INFERIOR / REVIEWS - FORMATO MÓVIL
-   ================================================== */
-
-@media (max-width: 768px) {
-
-  /* Barra completa dividida en 2 */
-  .reviews {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: center;
-    gap: 10px;
-
-    width: 100%;
-    padding: 9px 10px;
-
-    border-radius: 14px;
-    overflow: hidden;
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
   }
 
-  /* Ocultar el título:
-     "Lo que dicen nuestros clientes" */
-  .reviews__intro,
-  .reviews__title,
-  .reviews-title {
-    display: none !important;
-  }
-
-  /* Área donde aparecen las opiniones */
-  .reviews__list,
-  .reviews__cards,
-  .reviews-list {
-    min-width: 0;
-
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 7px;
-  }
-
-  /* Mostrar solamente las primeras 2 opiniones */
-  .review-card:nth-child(n + 3),
-  .review:nth-child(n + 3),
-  .reviews__item:nth-child(n + 3) {
-    display: none !important;
-  }
-
-  /* Opinión pequeña */
-  .review-card,
-  .review,
-  .reviews__item {
-    min-width: 0;
-    padding: 7px 8px;
-    border-radius: 10px;
-  }
-
-  /* Ocultar elementos secundarios para ahorrar espacio */
-  .review-card__stars,
-  .review__stars,
-  .review-stars {
-    font-size: 9px;
-    margin-bottom: 2px;
-  }
-
-  .review-card__name,
-  .review__name,
-  .review-name {
-    font-size: 10px;
-    line-height: 1.1;
-    margin-bottom: 2px;
-  }
-
-  /* Mostrar solamente una introducción del comentario */
-  .review-card__text,
-  .review__text,
-  .review-text {
-    display: -webkit-box;
-    overflow: hidden;
-
-    font-size: 9px;
-    line-height: 1.25;
-
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
-  }
-
-  /* Ocultar fecha si aparece */
-  .review-card__date,
-  .review__date,
-  .review-date {
-    display: none !important;
-  }
-
-  /* Ocultar temporalmente "Ver opiniones" */
-  .reviews__more,
-  .reviews__button,
-  .reviews-more,
-  .reviews-view-all {
-    display: none !important;
-  }
-
-  /* Columna de redes sociales, a la derecha */
-  .reviews__socials,
-  .social-links,
-  .footer-socials {
-    display: grid;
-    grid-template-columns: repeat(2, 32px);
-    justify-content: end;
-    align-content: center;
-    gap: 6px;
-
-    padding-left: 9px;
-    border-left: 1px solid rgba(255, 255, 255, 0.16);
-  }
-
-  /* Iconos sociales */
-  .reviews__socials a,
-  .social-links a,
-  .footer-socials a {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    width: 32px;
-    height: 32px;
-
-    padding: 0;
-    border-radius: 9px;
-
-    font-size: 15px;
-    text-decoration: none;
-  }
-
-  .reviews__socials img,
-  .social-links img,
-  .footer-socials img,
-  .reviews__socials svg,
-  .social-links svg,
-  .footer-socials svg {
-    width: 17px;
-    height: 17px;
-    object-fit: contain;
-  }
-}
-
-
-/* Para teléfonos especialmente estrechos */
-@media (max-width: 400px) {
-
-  .reviews {
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 7px;
-    padding: 7px;
-  }
-
-  .reviews__list,
-  .reviews__cards,
-  .reviews-list {
-    gap: 5px;
-  }
-
-  .review-card,
-  .review,
-  .reviews__item {
-    padding: 6px;
-  }
-
-  .review-card__text,
-  .review__text,
-  .review-text {
-    font-size: 8px;
-  }
-
-  .reviews__socials,
-  .social-links,
-  .footer-socials {
-    grid-template-columns: 29px;
-    gap: 5px;
-    padding-left: 7px;
-  }
-
-  .reviews__socials a,
-  .social-links a,
-  .footer-socials a {
-    width: 29px;
-    height: 29px;
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
