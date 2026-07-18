@@ -964,3 +964,364 @@ html, body {
 .page-car input[type="date"]::-webkit-inner-spin-button{
   display: none;
 }
+
+/* =========================================================
+   RODES — SISTEMA VISUAL COMPARTIDO
+   Basado en el diseño del index.
+   Este bloque se mantiene al final para unificar la identidad
+   sin eliminar los estilos específicos de cada página.
+   ========================================================= */
+
+:root {
+  --gold: #e6ad5d;
+  --gold-light: #f3c987;
+  --white: #ffffff;
+  --dark: #090a0b;
+  --dark-soft: #111315;
+  --line: rgba(255, 255, 255, 0.16);
+  --primary: var(--gold);
+  --primary-soft: var(--gold-light);
+  --text-dark: #ffffff;
+  --muted-dark: rgba(255, 255, 255, 0.68);
+  --shadow-dark: 0 18px 45px rgba(0, 0, 0, 0.36);
+}
+
+html,
+body {
+  background: var(--dark) !important;
+}
+
+body {
+  color: var(--white);
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+/* Hero compartido: misma imagen, sombras y degradado del index */
+.hero:not(.hero--details) {
+  isolation: isolate;
+  background-color: #2f3941;
+  background-image: url("images/header.png");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  border-radius: 0;
+  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.36);
+}
+
+.hero:not(.hero--details)::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.82) 0%,
+      rgba(0, 0, 0, 0.68) 28%,
+      rgba(0, 0, 0, 0.34) 58%,
+      rgba(0, 0, 0, 0.08) 100%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.24) 0%,
+      rgba(0, 0, 0, 0.06) 48%,
+      rgba(0, 0, 0, 0.52) 100%
+    );
+}
+
+.hero:not(.hero--details)::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 46%;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(9, 10, 11, 0) 0%,
+    rgba(9, 10, 11, 0.28) 38%,
+    rgba(9, 10, 11, 0.92) 100%
+  );
+}
+
+.hero__title {
+  color: var(--white);
+  letter-spacing: -0.035em;
+  text-shadow: 0 10px 32px rgba(0, 0, 0, 0.72);
+}
+
+.hero__title span,
+.hero__title strong {
+  display: block;
+}
+
+.hero__title strong {
+  margin-top: 4px;
+  color: var(--gold-light);
+}
+
+.glass-btn {
+  min-height: 42px;
+  padding: 0 18px;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.94);
+  background: rgba(0, 0, 0, 0.42);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 11px;
+  box-shadow:
+    0 10px 26px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  transition: transform 180ms ease, color 180ms ease, border-color 180ms ease;
+}
+
+.glass-btn:hover,
+.glass-btn:focus-visible {
+  color: var(--gold-light);
+  border-color: rgba(230, 173, 93, 0.48);
+  background: rgba(0, 0, 0, 0.56);
+  transform: translateY(-2px);
+}
+
+/* =========================================================
+   FORMULARIO DE RENTA — PAGE CAR
+   Conserva exactamente la estructura funcional existente.
+   Solo adopta la estética negra, blanca y dorada del index.
+   ========================================================= */
+
+.page-car {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(230, 173, 93, 0.08), transparent 34rem),
+    var(--dark);
+}
+
+.page-car .hero--car {
+  min-height: 320px;
+}
+
+.page-car .hero__content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 42px 0 34px;
+}
+
+.page-car .hero__quicklinks {
+  justify-content: center;
+  margin-top: 22px;
+}
+
+.page-car .main {
+  position: relative;
+  padding: 34px 0 56px;
+}
+
+.page-car .section {
+  padding: 0;
+}
+
+.page-car .card--form {
+  width: min(780px, 100%);
+  padding: clamp(20px, 4vw, 34px);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.025));
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 20px;
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.42),
+    inset 0 1px 0 rgba(255, 255, 255, 0.055);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.page-car .card__head {
+  margin-bottom: 22px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.10);
+}
+
+.page-car .card__title {
+  margin: 0;
+  color: var(--gold-light);
+  font-size: clamp(1.35rem, 3vw, 1.8rem);
+  letter-spacing: -0.02em;
+}
+
+.page-car .form {
+  gap: 15px;
+}
+
+.page-car label {
+  color: rgba(255, 255, 255, 0.74);
+  font-weight: 700;
+}
+
+.page-car input,
+.page-car select,
+.page-car textarea {
+  min-height: 48px;
+  padding: 12px 14px;
+  color: var(--white);
+  background: rgba(0, 0, 0, 0.30);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 12px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.025);
+}
+
+.page-car input:hover,
+.page-car select:hover,
+.page-car textarea:hover {
+  border-color: rgba(255, 255, 255, 0.24);
+}
+
+.page-car input:focus,
+.page-car select:focus,
+.page-car textarea:focus {
+  border-color: rgba(230, 173, 93, 0.82);
+  box-shadow: 0 0 0 3px rgba(230, 173, 93, 0.16);
+}
+
+.page-car input::placeholder,
+.page-car textarea::placeholder {
+  color: rgba(255, 255, 255, 0.36);
+}
+
+.page-car input[type="datetime-local"] {
+  color-scheme: dark;
+}
+
+.page-car .checkline,
+.page-car .airport-box,
+.page-car .pricebox,
+.page-car .calendar {
+  border-color: rgba(255, 255, 255, 0.13);
+  background: rgba(0, 0, 0, 0.22);
+}
+
+.page-car .checkline {
+  border-style: solid;
+}
+
+.page-car .checkline input[type="checkbox"] {
+  accent-color: var(--gold);
+}
+
+.page-car .airport-box__title,
+.page-car .pricebox strong {
+  color: var(--gold-light);
+}
+
+.page-car .btn {
+  min-height: 48px;
+  border-radius: 12px;
+  transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
+}
+
+.page-car .btn-primary {
+  color: #21170b;
+  background: linear-gradient(135deg, var(--gold-light), var(--gold));
+  border-color: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 12px 28px rgba(230, 173, 93, 0.22);
+}
+
+.page-car .btn-primary:not(:disabled):hover,
+.page-car .btn-primary:not(:disabled):focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 34px rgba(230, 173, 93, 0.32);
+}
+
+.page-car .btn-primary:disabled {
+  opacity: 0.46;
+  filter: grayscale(0.3);
+}
+
+.page-car .btn-ghost {
+  color: rgba(255, 255, 255, 0.86);
+  background: rgba(255, 255, 255, 0.055);
+  border-color: rgba(255, 255, 255, 0.13);
+}
+
+.page-car .btn-ghost:hover,
+.page-car .btn-ghost:focus-visible {
+  color: var(--gold-light);
+  border-color: rgba(230, 173, 93, 0.42);
+  background: rgba(230, 173, 93, 0.08);
+}
+
+.page-car .availability {
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.20);
+}
+
+@media (max-width: 720px) {
+  .page-car .hero--car {
+    min-height: 270px;
+    background-position: 62% center;
+  }
+
+  .page-car .hero__content {
+    padding: 34px 0 28px;
+    transform: none;
+  }
+
+  .page-car .hero__title {
+    font-size: clamp(2rem, 10vw, 3.15rem);
+  }
+
+  .page-car .hero__quicklinks {
+    transform: none;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .page-car .main {
+    padding: 22px 0 38px;
+  }
+
+  .page-car .card--form {
+    padding: 18px 14px;
+    border-radius: 16px;
+  }
+
+  .page-car .grid-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    width: calc(100% - 18px);
+  }
+
+  .page-car .hero--car {
+    min-height: 235px;
+  }
+
+  .page-car .hero__title {
+    font-size: clamp(1.8rem, 9.5vw, 2.55rem);
+  }
+
+  .page-car .glass-btn {
+    flex: 1 1 0;
+    max-width: 150px;
+    min-height: 40px;
+  }
+
+  .page-car .field.checkline label {
+    white-space: normal !important;
+  }
+}
