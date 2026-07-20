@@ -1,1327 +1,525 @@
-/* =========================
-   GLOBAL / UTILIDADES
-   ========================= */
-/* HERO GLOBAL para todas las páginas */
-.hero{
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>RODES | Audi Q5 Progressive Sline</title>
+  <link rel="stylesheet" href="styles.css?v=20260720-1">
+</head>
 
-position: relative;
-  height: 220px;              /* ← altura del header */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
+<body class="page-car">
 
+  <div class="rental-page">
+    <div class="rental-page__overlay" aria-hidden="true"></div>
 
-  background-image:
-    linear-gradient(to bottom, rgba(0,0,0,.25), rgba(0,0,0,.65)),
-    url("images/header.png");
+    <div class="topbar-wrap">
+      <nav class="topbar container" aria-label="Navegación de reserva">
+        <a class="brand" href="index.html" aria-label="RODES Car Rental - Inicio">
+          <span class="brand__name">RODES</span>
+          <span class="brand__tag">CAR RENTAL</span>
+        </a>
 
-    background-size: cover;     /* llena el espacio */
-  background-position: center;
-  background-repeat: no-repeat;
-}
+        <div class="topbar__links">
+          <a class="nav-link" href="index.html">Home</a>
+          <a class="nav-link" href="detallesq5progressive.html">Car properties</a>
+        </div>
 
-   *{ box-sizing:border-box; }
-img{ max-width:100%; display:block; }
-a{ color:inherit; text-decoration:none; }
+        <div class="topbar__car" aria-label="Vehículo seleccionado">
+          <span>Audi Q5</span>
+          <strong>Progressive Sline</strong>
+        </div>
+      </nav>
+    </div>
 
-.container{ width: min(1100px, calc(100% - 40px)); margin: 0 auto; }
+    <main class="rental-main container">
+      <section class="rental-form-shell" aria-labelledby="rental-form-title">
+      <div class="card card--form">
+        <div class="card__head">
+          <div>
+            <h1 class="card__title" id="rental-form-title">Car rental form</h1>
+          </div>
+        </div>
 
-:root{
-  --radius:18px;
-  --primary:#1b4b5e;
-  --primary-soft:#2f6f86;
+        <form id="reservaForm" class="form">
 
-  --text-dark:#eaf4f7;
-  --muted-dark:#9bb3bd;
+          <div class="field">
+            <label for="nombre">Name and surname</label>
+            <input type="text" id="nombre" required placeholder="name">
+          </div>
 
-  --shadow-dark: 0 20px 40px rgba(0,0,0,.40);
-}
+          <div class="field">
+            <label for="email">Email</label>
+            <input type="email" id="email" required placeholder="name@email.com">
+          </div>
 
-/* Fondo global del sitio */
-html, body {
-  background-color: #0c3d4b !important;
-}
+          <!-- ✅ NUEVO: Teléfono -->
+          <div class="field">
+            <label for="telefono">Phone</label>
+            <input type="tel" id="telefono" required placeholder="Ej: 6471234567 o +16471234567" autocomplete="tel">
+          </div>
 
+          <div class="field field--full">
+            <label for="pickup_address">Pickup address</label>
+            <input type="text" id="pickup_address" required
+              placeholder="Ej: 123 Queen St W, Toronto, ON (o YYZ / YTZ)">
+          </div>
 
-/* =========================
-   COMPONENTES REUTILIZABLES
-   ========================= */
+          <div class="field field--full">
+            <button type="button" id="btnVerifyPickupMap" class="btn btn-ghost btn-block">
+              Check address on Google Maps
+            </button>
+          </div>
 
-/* HERO */
-.hero{
-  position: relative;
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px;
-  overflow:hidden;
-  box-shadow: 0 12px 30px rgba(0,0,0,.35);
-  background-size: cover;
-  background-position: center;
-}
-.hero__content{ padding: 15px 0 24px; }
-.hero__title{
-  margin:0;
-  font-size: clamp(30px, 4vw, 50px);
-  line-height:1.05;
-  font-weight: 900;
-  text-shadow: 0 10px 35px rgba(0,0,0,.45);
-}
-.hero__subtitle{
-  margin: 12px 0 16px;
-  font-size: 16px;
-  font-weight: 700;
-  color: rgba(255,255,255,.82);
-}
-.hero__quicklinks{
-  display:flex;
-  gap:12px;
-  flex-wrap:wrap;
-  margin-top: 10px;
-}
+          <div id="pickupAirportBox" class="airport-box">
+            <div class="airport-box__title">Airport details (pick-up)</div>
 
-/* Glass buttons */
-.glass-btn{
-  display: inline-flex;
-  align-items: right;
-  justify-content: right;
-  gap: 8px;
-  padding: 3px 16px;
-  border-radius: 5px;
-  background: rgba(255,255,255,0.14);
-  border: 1px solid rgba(255,255,255,0.18);
-  color: rgba(255,255,255,.95);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.18);
-  font-weight: 800;
-}
-.glass-btn:hover{ background: rgba(15, 23, 42, .35); }
+            <div class="grid-2">
+              <div class="field">
+                <label for="pickup_terminal">Terminal</label>
+                <input id="pickup_terminal" type="text" placeholder="Ej: T1 / T3">
+              </div>
 
-/* Layout */
-.main{ padding: 22px 0 40px; }
-.section{ padding: 22px 0; }
+              <div class="field">
+                <label for="pickup_gate">Gate</label>
+                <input id="pickup_gate" type="text" placeholder="Ej: D12 (o área/puerta)">
+              </div>
+            </div>
+          </div>
 
-/* Card */
-.card{
-  background: rgba(255,255,255,.08);
-  border: 1px solid rgba(255,255,255,.14);
-  border-radius: var(--radius);
-  padding: 18px;
-  box-shadow: var(--shadow-dark);
-  backdrop-filter: blur(10px);
-}
-.card__head{
-  display:flex;
-  align-items:flex-start;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 14px;
-}
-.card__title{
-  margin:0 0 6px;
-  font-size: 20px;
-  font-weight: 900;
-}
-.card__meta{
-  margin:0;
-  color: rgba(255,255,255,.72);
-  font-weight: 650;
-  font-size: 14px;
-}
-.pill{
-  display:inline-flex;
-  align-items:center;
-  padding: 8px 12px;
-  border-radius: 999px;
-  font-weight: 900;
-  border: 1px solid rgba(255,255,255,.16);
-  background: rgba(0,0,0,.18);
-}
-.pill--info{
-  width: 100%;
-  justify-content: center;
-  margin: 10px 0 16px;
-  font-size: 12px;
-  font-weight: 800;
-  color: rgba(203,213,225,.95);
-}
+          <div class="field field--full checkline">
+            <input type="checkbox" id="dropoffDifferent">
+            <label for="dropoffDifferent">The return address is different</label>
+          </div>
 
-/* Buttons */
-.btn{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  padding: 12px 16px;
-  border-radius: 14px;
-  font-weight: 900;
-  border: 1px solid transparent;
-  cursor:pointer;
-  user-select:none;
-}
-.btn-primary{
-  background: linear-gradient(135deg, var(--primary), var(--primary-soft));
-  color: #fff;
-}
-.btn-primary:disabled{ opacity:.55; cursor:not-allowed; }
-.btn-ghost{
-  background: rgba(255,255,255,.10);
-  color: var(--text-dark);
-  border-color: rgba(255,255,255,.16);
-}
-.btn-ghost:hover{ filter: brightness(1.06); }
-.btn-block{ width:100%; }
+          <div id="dropoffBox" class="dropoff-box">
+            <div class="field field--full">
+              <label for="dropoff_address">Dropoff address</label>
+              <input type="text" id="dropoff_address"
+                placeholder="Ej: 200 Bay St, Toronto, ON (o YYZ / YTZ)">
+            </div>
 
-/* Typography helpers */
-.small{ font-size:12px; color:#9ca3af; font-weight:700; }
-.small--spaced{ margin-top: 4px; }
-.value-strong{ font-weight: 900; }
+            <div class="field field--full">
+              <button type="button" id="btnVerifyDropoffMap" class="btn btn-ghost btn-block">
+                Check address on Google Maps
+              </button>
+            </div>
 
-/* =========================
-   PAGE: CAR (Q5PROGRESSIVE)
-   ========================= */
-.page-car{
-  margin:0;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  color: var(--text-dark);
+            <div id="dropoffAirportBox" class="airport-box">
+              <div class="airport-box__title">Airport details (dropoff)</div>
+
+              <div class="grid-2">
+                <div class="field">
+                  <label for="dropoff_terminal">Terminal</label>
+                  <input id="dropoff_terminal" type="text" placeholder="Ej: T1 / T3">
+                </div>
+
+                <div class="field">
+                  <label for="dropoff_gate">Gate</label>
+                  <input id="dropoff_gate" type="text" placeholder="Ej: D12 (o área/puerta)">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="field">
+              <label for="fechaInicio">Start date</label>
+              <input type="datetime-local" id="fechaInicio" required>
+            </div>
+
+            <div class="field">
+              <label for="fechaFin">End date</label>
+              <input type="datetime-local" id="fechaFin" required>
+            </div>
+          </div>
+
+          <p id="availabilityMsg" class="availability"></p>
+
+          <div id="calendarBox" class="calendar">
+            <div class="calendar__hint">Availability (shaded busy days)</div>
+            <iframe id="calendarIframe"
+              src="https://calendar.google.com/calendar/embed?src=a131346a7e1a176d2af7567823a3ae415030eaf33d8947a154d88289a33d8150%40group.calendar.google.com&ctz=UTC"
+              frameborder="0" scrolling="no"></iframe>
+          </div>
+
+          <p id="resultadoPrecio" class="pricebox"></p>
+
+          <button id="btnContinue" type="submit" class="btn btn-primary btn-block" disabled
+            title="Select available dates to continue">
+            Continue
+          </button>
+
+        </form>
+      </div>
+      </section>
+    </main>
+  </div>
+
+<script>
+  const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzNAOMuQdxhjkdh4Ff4pF_NeZgHYDmSKaTaXtpFd1PCLk_am0hQu4I2eVqJUjy8LwG6/exec";
+
+  const PRECIO_SEMANA = 130;
+  const PRECIO_FINDE  = 145;
+
+  // ✅ Normaliza teléfono (acepta 10 dígitos o +1…)
+  function normalizePhone(raw) {
+    const s = (raw || "").trim();
+    if (!s) return "";
+    const digits = s.replace(/\D/g, "");
+    if (digits.length === 10) return "+1" + digits;
+    if (digits.length === 11 && digits.startsWith("1")) return "+" + digits;
+    if (s.startsWith("+") && digits.length >= 11) return "+" + digits;
+    return "";
+  }
+
+  const nombreEl = document.getElementById("nombre");
+  const emailEl  = document.getElementById("email");
+  const telefonoEl = document.getElementById("telefono"); // ✅ NUEVO
+
+  const pickupEl = document.getElementById("pickup_address");
+  const btnVerifyPickup = document.getElementById("btnVerifyPickupMap");
+
+  const dropoffDifferentEl = document.getElementById("dropoffDifferent");
+  const dropoffBox = document.getElementById("dropoffBox");
+  const dropoffEl = document.getElementById("dropoff_address");
+  const btnVerifyDropoff = document.getElementById("btnVerifyDropoffMap");
+
+  const pickupAirportBox = document.getElementById("pickupAirportBox");
+  const pickupTerminalEl = document.getElementById("pickup_terminal");
+  const pickupGateEl = document.getElementById("pickup_gate");
+
+  const dropoffAirportBox = document.getElementById("dropoffAirportBox");
+  const dropoffTerminalEl = document.getElementById("dropoff_terminal");
+  const dropoffGateEl = document.getElementById("dropoff_gate");
+
+  const fiEl = document.getElementById("fechaInicio");
+  const ffEl = document.getElementById("fechaFin");
+
+  [fiEl, ffEl].forEach((el) => {
+  el.addEventListener("click", () => {
+    if (typeof el.showPicker === "function") {
+      el.showPicker();
+    }
+  });
+
+  el.addEventListener("focus", () => {
+    if (typeof el.showPicker === "function") {
+      el.showPicker();
+    }
+  });
+});
   
-}
-.hero--car{
-  min-height: 320px;
-}
-
-/* Form specific (si ya los tenías en tu versión anterior, quedan compatibles) */
-.page-car .card--form{ width: min(760px, 100%); margin: 0 auto; }
-
-.page-car .form{ display:flex; flex-direction:column; gap: 12px; }
-.page-car .field{ display:flex; flex-direction:column; gap: 8px; }
-.page-car .field--full{ width:100%; }
-
-.page-car label{
-  font-size: 13px;
-  color: var(--muted-dark);
-  font-weight: 750;
-}
-
-.page-car input, .page-car select{
-  width:100%;
-  padding: 12px 12px;
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,.14);
-  background: rgba(0,0,0,.22);
-  color: var(--text-dark);
-  outline:none;
-  transition: .2s;
-}
-.page-car input:focus, .page-car select:focus{
-  border-color: rgba(27,75,94,.9);
-  box-shadow: 0 0 0 3px rgba(27,75,94,.25);
-}
-.page-car input::placeholder{ color:#a6b0d4; }
-
-.page-car .grid-2{
-  display:grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-
-.page-car .checkline{
-  display:flex;
-  align-items:center;
-  gap: 10px;
-  padding: 10px 12px;
-  border-radius: 12px;
-  border: 1px dashed rgba(255,255,255,.16);
-  background: rgba(255,255,255,.04);
-}
-.page-car .checkline input{ width:auto; }
-
-.page-car .airport-box{
-  display:none;
-  margin-top: 2px;
-  padding: 12px;
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,.14);
-  background: rgba(0,0,0,.18);
-}
-.page-car .airport-box__title{ font-weight: 900; margin-bottom: 10px; }
-
-.page-car .dropoff-box{ display:none; }
-
-.page-car .availability{
-  display:none;
-  font-weight: 900;
-  margin: 6px 0 0;
-  text-align: center;
-}
-.page-car .pricebox{
-  display:none;
-  font-weight: 900;
-  margin: 10px 0 0;
-  text-align: center;
-  padding: 10px 12px;
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,.14);
-  background: rgba(0,0,0,.18);
-}
-.page-car .calendar{
-  display:none;
-  margin-top: 10px;
-  border-radius: 14px;
-  overflow:hidden;
-  border: 1px solid rgba(255,255,255,.14);
-  background: rgba(0,0,0,.12);
-}
-.page-car .calendar__hint{
-  font-size: 13px;
-  color: rgba(255,255,255,.70);
-  padding: 10px 12px;
-  text-align:center;
-  border-bottom: 1px solid rgba(255,255,255,.10);
-}
-.page-car #calendarIframe{ width:100%; height: 520px; border: 0; }
-
-/* Responsive */
-@media (max-width: 720px){
-  .page-car .grid-2{ grid-template-columns: 1fr; }
-  .hero__content{ padding: 62px 0 22px; }
-}
-
-/* =========================
-   PAGE: ITEMS (ARTICULOS)
-   ========================= */
-.page-items{
-  margin:0;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  color: var(--text-dark);
-  
-}
-
-/* HERO artículos */
-.hero--items{
-  min-height: 280px;
-  
-}
-
-.page-items .card--items{ width: min(950px, 100%); margin: 0 auto; }
-
-/* Grid de items */
-.items-grid{
-  display:grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-}
-@media (max-width: 820px){
-  .items-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
-@media (max-width: 560px){
-  .items-grid{ grid-template-columns: 1fr; }
-}
-
-.item-card{
-  border: 1px solid rgba(255,255,255,.12);
-  border-radius: 14px;
-  padding: 12px;
-  background: rgba(255,255,255,.04);
-}
-
-.item-row{
-  display:flex;
-  gap: 10px;
-  align-items:flex-start;
-  cursor:pointer;
-}
-
-.item-check{
-  transform: scale(1.2);
-  margin-top: 2px;
-}
-
-.thumb{
-  width:64px;
-  height:64px;
-  border-radius:12px;
-  background: rgba(255,255,255,.06);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size: 11px;
-  color:#9ca3af;
-  flex: 0 0 auto;
-}
-
-.name{ font-weight: 900; }
-.price{ font-weight: 900; margin-top: 6px; }
-
-/* Barra resumen/pago */
-.items-bar{
-  margin-top: 16px;
-  border: 1px solid rgba(255,255,255,.12);
-  border-radius: 14px;
-  padding: 12px;
-  background: rgba(255,255,255,.04);
-  display:flex;
-  gap: 12px;
-  align-items:center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-}
-.items-bar__col{ min-width: 240px; }
-
-/* Botón de pago */
-.page-items #payBtn{
-  min-width: 220px;
-}
-.page-items #payBtn:disabled{
-  opacity: .6;
-  cursor: not-allowed;
-}
-
-/* =========================
-   PAGE: HOME (INDEX)
-   ========================= */
-.page-home{
-  --brand: #1b4b5e;
-  --text: #eaf4f7;
-  --muted: #9bb3bd;
-  --card: rgba(255,255,255,.08);
-  --shadow: 0 20px 40px rgba(0,0,0,.40);
-  --radius: 18px;
-
-  margin: 0;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  color: var(--text);
-  
-}
-
-/* Hero home */
-.page-home .hero{
-  min-height: 520px;
-  
-    var(--hero-image);
-  box-shadow: var(--shadow);
-}
-.page-home .hero__title{
-  text-shadow: 0 2px 0 rgba(255,255,255,.65);
-  color: var(--text);
-}
-.page-home .hero__subtitle{ color: rgba(15, 23, 42, .80); }
-
-/* En home el glass se ve más claro */
-.page-home .glass-btn{
-  background: rgba(255,255,255,0.15);
-  border: 1px solid rgba(255,255,255,0.20);
-  color: rgba(255,255,255,.95);
-  backdrop-filter: blur(8px);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.12);
-  font-weight: 700;
-}
-.page-home .glass-btn:hover{ background: rgba(15, 23, 42, .33); }
-
-/* Home sections/cards */
-.page-home .main{ padding: 28px 0 0; }
-.page-home .section{ padding: 34px 0; }
-.page-home .section__title{
-  text-align: center;
-  margin: 0 0 18px;
-  font-size: 28px;
-  font-weight: 900;
-}
-
-.page-home .cards{
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 22px;
-  margin-top: 18px;
-}
-.page-home .card{
-  background: var(--card);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  overflow: hidden;
-  border: 1px solid rgba(15, 23, 42, .06);
-  backdrop-filter: none;
-}
-.page-home .card__media{ position: relative; aspect-ratio: 16 / 9; background: #e9eef3; }
-.page-home .card__media img{ width: 100%; height: 100%; object-fit: cover; }
-
-.page-home .card__badge{
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  font-size: 26px;
-  font-weight: 900;
-  color: rgba(255,255,255,.92);
-  background: linear-gradient(to bottom, rgba(15,23,42,.15), rgba(15,23,42,.45));
-  text-shadow: 0 2px 20px rgba(0,0,0,.35);
-}
-
-.page-home .card__body{
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 14px;
-  padding: 16px 16px 18px;
-}
-
-.page-home .card__title{ margin: 0 0 4px; font-size: 20px; font-weight: 900; }
-.page-home .card__meta{ margin: 0; color: var(--muted); font-weight: 700; }
-.page-home .price{ color: #0b8a56; }
-
-/* Botones home */
-.page-home .btn{
-  border-radius: 14px;
-  font-weight: 900;
-  padding: 12px 16px;
-}
-.page-home .btn-primary{
-  background: var(--brand);
-  color: white;
-  box-shadow: 0 10px 20px rgba(27, 75, 94, .25);
-}
-.page-home .btn-primary:hover{ filter: brightness(1.05); }
-.page-home .btn-ghost{
-  background: transparent;
-  border: 1px solid rgba(15, 23, 42, .18);
-  color: rgba(15, 23, 42, .86);
-}
-.page-home .btn-ghost:hover{ background: rgba(15,23,42,.04); }
-
-/* Responsive home */
-@media (max-width: 860px){
-  .page-home .cards{ grid-template-columns: 1fr; }
-  .page-home .card__body{ flex-direction: column; align-items: stretch; }
-  .page-home .btn{ width: 100%; }
-}
-
-/* =========================
-   PAGE: CONFIRMACION (SUCCESS)
-   ========================= */
-.page-success{
-  margin:0;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  color: var(--text-dark);
-  
-}
-
-.hero--success{
-  min-height: 260px;
- 
-}
-
-.page-success .card--success{
-  width: min(820px, 100%);
-  margin: 0 auto;
-}
-
-.success-head{
-  display:flex;
-  align-items:center;
-  gap: 14px;
-  margin-bottom: 14px;
-}
-
-.success-icon{
-  width: 46px;
-  height: 46px;
-  border-radius: 14px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size: 22px;
-  font-weight: 900;
-  background: rgba(255,255,255,.08);
-  border: 1px solid rgba(255,255,255,.14);
-}
-
-.success-title{
-  margin:0 0 4px;
-  font-size: 22px;
-  font-weight: 950;
-}
-
-.success-subtitle{
-  margin:0;
-  color: rgba(255,255,255,.72);
-  font-weight: 650;
-  font-size: 14px;
-}
-
-.success-message{
-  margin-top: 8px;
-  padding: 14px;
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,.14);
-  background: rgba(0,0,0,.18);
-}
-
-.success-text{
-  margin:0;
-  font-weight: 900;
-  font-size: 15px;
-}
-
-.success-meta{
-  margin-top: 10px;
-  font-size: 12px;
-  font-weight: 800;
-  color: rgba(255,255,255,.72);
-}
-
-.success-message.is-loading{ border-color: rgba(255,255,255,.14); }
-.success-message.is-success{ border-color: rgba(57, 217, 138, .45); }
-.success-message.is-warn{ border-color: rgba(245, 179, 1, .45); }
-.success-message.is-error{ border-color: rgba(255, 77, 109, .45); }
-
-.success-actions{
-  display:flex;
-  gap: 12px;
-  justify-content: flex-end;
-  flex-wrap: wrap;
-  margin-top: 14px;
-}
-
-.success-help{
-  margin-top: 14px;
-  padding: 12px 14px;
-  border-radius: 14px;
-  border: 1px dashed rgba(255,255,255,.16);
-  background: rgba(255,255,255,.04);
-}
-
-.success-help__title{
-  font-weight: 950;
-  margin-bottom: 6px;
-}
-
-.success-help__text{
-  color: rgba(255,255,255,.74);
-  font-weight: 650;
-  font-size: 13px;
-}
-
-/* =========================
-   PAGE: CONFIRMACION (CANCEL)
-   ========================= */
-.page-cancel{
-  margin:0;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  color: var(--text-dark);
-  
-}
-
-.hero--cancel{
-  min-height: 260px;
-  
-}
-
-.page-cancel .card--cancel{
-  width: min(820px, 100%);
-  margin: 0 auto;
-}
-
-.cancel-head{
-  display:flex;
-  align-items:center;
-  gap: 14px;
-  margin-bottom: 14px;
-}
-
-.cancel-icon{
-  width: 46px;
-  height: 46px;
-  border-radius: 14px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size: 22px;
-  font-weight: 900;
-  background: rgba(255,255,255,.08);
-  border: 1px solid rgba(255,255,255,.14);
-}
-
-.cancel-title{
-  margin:0 0 4px;
-  font-size: 22px;
-  font-weight: 950;
-}
-
-.cancel-subtitle{
-  margin:0;
-  color: rgba(255,255,255,.72);
-  font-weight: 650;
-  font-size: 14px;
-}
-
-.cancel-message{
-  margin-top: 8px;
-  padding: 14px;
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,.14);
-  background: rgba(0,0,0,.18);
-}
-
-.cancel-text{
-  margin:0;
-  font-weight: 900;
-  font-size: 15px;
-}
-
-.cancel-meta{
-  margin-top: 10px;
-  font-size: 12px;
-  font-weight: 800;
-  color: rgba(255,255,255,.72);
-}
-
-.cancel-actions{
-  display:flex;
-  gap: 12px;
-  justify-content: flex-end;
-  flex-wrap: wrap;
-  margin-top: 14px;
-}
-
-.cancel-help{
-  margin-top: 14px;
-  padding: 12px 14px;
-  border-radius: 14px;
-  border: 1px dashed rgba(255,255,255,.16);
-  background: rgba(255,255,255,.04);
-}
-
-.cancel-help__title{
-  font-weight: 950;
-  margin-bottom: 6px;
-}
-
-.cancel-help__text{
-  color: rgba(255,255,255,.74);
-  font-weight: 650;
-  font-size: 13px;
-}
-
-/* =========================
-   PAGE: DETALLES AUTO (HEADER CON CARRUSEL)
-   ========================= */
-
-.page-details{
-  margin:0;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  color: var(--text-dark);
- 
-}
-
-/* El hero ahora contiene el carrusel */
-.page-details .hero--details{
-  min-height: 320px;
-  border-bottom-left-radius: 28px;
-  border-bottom-right-radius: 28px;
-  overflow:hidden;
-  box-shadow: 0 12px 30px rgba(0,0,0,.35);
-  background: transparent;
-}
-
-.hero-carousel{
-  position: relative;
-  height: 320px;
-}
-
-/* Track horizontal (touch-friendly) */
-.hero-track{
-  height: 100%;
-  display:flex;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
-}
-.hero-track::-webkit-scrollbar{ display:none; }
-
-.hero-slide{
-  flex: 0 0 100%;
-  height: 100%;
-  scroll-snap-align: center;
-  position: relative;
-  background: rgba(0,0,0,.2);
-}
-.hero-slide img{
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display:block;
-  filter: contrast(1.05);
-}
-
-/* Overlay gradient para que los botones se vean */
-.hero-carousel::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  background: linear-gradient(to bottom, rgba(0,0,0,.18), rgba(0,0,0,.62));
-  pointer-events:none;
-}
-
-/* Flechas */
-.hero-arrow{
-  position:absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 3;
-  width: 42px;
-  height: 42px;
-  border-radius: 999px;
-  border: 1px solid rgba(255,255,255,.18);
-  background: rgba(10,18,32,.55);
-  color: rgba(255,255,255,.92);
-  font-size: 28px;
-  line-height: 0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  cursor:pointer;
-  backdrop-filter: blur(8px);
-}
-.hero-arrow--left{ left: 12px; }
-.hero-arrow--right{ right: 12px; }
-.hero-arrow:active{ transform: translateY(-50%) scale(.98); }
-
-/* Indicadores */
-.hero-indicators{
-  position:absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: 14px;
-  z-index: 3;
-  display:flex;
-  align-items:center;
-  gap: 12px;
-  padding: 10px 12px;
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,.16);
-  background: rgba(0,0,0,.25);
-  backdrop-filter: blur(10px);
-}
-
-.hero-hint{
-  font-weight: 900;
-  font-size: 12px;
-  color: rgba(255,255,255,.86);
-}
-
-.hero-count{
-  font-weight: 950;
-  font-size: 12px;
-  color: rgba(255,255,255,.92);
-  padding: 4px 10px;
-  border-radius: 999px;
-  border: 1px solid rgba(255,255,255,.14);
-  background: rgba(255,255,255,.06);
-}
-
-.hero-dots{
-  display:flex;
-  align-items:center;
-  gap: 7px;
-}
-.hero-dot{
-  width: 8px;
-  height: 8px;
-  border-radius: 999px;
-  background: rgba(255,255,255,.28);
-  border: 1px solid rgba(255,255,255,.12);
-  cursor:pointer;
-}
-.hero-dot.active{
-  background: rgba(255,255,255,.90);
-}
-
-/* Nav buttons sobre el carrusel */
-.hero-nav{
-  position:absolute;
-  top: 14px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 3;
-  display:flex;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-/* Cuadrante central (semi transparente) */
-.details-card{
-  width: min(900px, 100%);
-  margin: 0 auto;
-  padding: 22px;
-  border-radius: 18px;
-  border: 1px solid rgba(255,255,255,.14);
-  background: rgba(0,0,0,.18);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 20px 40px rgba(0,0,0,.40);
-}
-
-.details-title{
-  margin:0 0 14px;
-  font-size: 24px;
-  font-weight: 950;
-}
-
-.details-subtitle{
-  margin:18px 0 10px;
-  font-size: 18px;
-  font-weight: 900;
-}
-
-.details-grid{
-  display:grid;
-  grid-template-columns: repeat(3, minmax(0,1fr));
-  gap: 12px;
-}
-
-.details-item{
-  padding: 12px;
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,.14);
-  background: rgba(255,255,255,.05);
-  font-weight: 800;
-  text-align:center;
-}
-
-.details-list{
-  padding-left: 18px;
-  margin: 6px 0 0;
-}
-.details-list li{
-  margin-bottom: 6px;
-  font-weight: 700;
-  color: rgba(255,255,255,.85);
-}
-
-.details-actions{
-  display:flex;
-  justify-content:flex-end;
-  gap:12px;
-  margin-top: 20px;
-}
-
-@media(max-width:760px){
-  .details-grid{ grid-template-columns: repeat(2, 1fr); }
-  .hero-nav{ width: calc(100% - 24px); justify-content: center; }
-}
-
-@media(max-width:480px){
-  .details-grid{ grid-template-columns: 1fr; }
-  .hero-carousel{ height: 280px; }
-  .page-home .hero{ min-height: 200px; }
-  .page-details .hero--details{ min-height:280px; }
-  .hero--success{ min-height: 260px; }
-  .hero-indicators{ gap: 10px; padding: 8px 10px; }
-  .hero-hint{ display:none; } /* en móvil queda más limpio */
-  .hero__content{transform: translateY(-35px);}
-  .hero__subtitle{transform: translateY(73px);}
-  .hero__quicklinks{transform: translateY(60px);}
-}
-
-/* FIX: checkbox + label en una sola línea (dropoffDifferent) */
-.page-car .field.checkline{
-  display: flex !important;
-  flex-direction: row !important;
-  align-items: center !important;
-  gap: 10px !important;
-  flex-wrap: nowrap !important;
-}
-
-.page-car .field.checkline input[type="checkbox"]{
-  margin: 0 !important;
-  width: auto !important;
-  flex: 0 0 auto !important;
-}
-
-.page-car .field.checkline label{
-  margin: 0 !important;
-  display: inline !important;
-  white-space: nowrap !important;
-}
-
-
-/* Hacer que el selector de calendario cubra todo el input (Chrome/Edge) */
-.page-car input[type="date"]{
-  position: relative;
-  cursor: pointer;
-}
-
-/* El ícono del calendario (webkit) ocupa todo el input pero invisible */
-.page-car input[type="date"]::-webkit-calendar-picker-indicator{
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  cursor: pointer;
-}
-
-/* Opcional: quitar “spinners” en algunos navegadores */
-.page-car input[type="date"]::-webkit-inner-spin-button{
-  display: none;
-}
-
-/* =========================================================
-   RODES — SISTEMA VISUAL COMPARTIDO
-   Basado en el diseño del index.
-   Este bloque se mantiene al final para unificar la identidad
-   sin eliminar los estilos específicos de cada página.
-   ========================================================= */
-
-:root {
-  --gold: #e6ad5d;
-  --gold-light: #f3c987;
-  --white: #ffffff;
-  --dark: #090a0b;
-  --dark-soft: #111315;
-  --line: rgba(255, 255, 255, 0.16);
-  --primary: var(--gold);
-  --primary-soft: var(--gold-light);
-  --text-dark: #ffffff;
-  --muted-dark: rgba(255, 255, 255, 0.68);
-  --shadow-dark: 0 18px 45px rgba(0, 0, 0, 0.36);
-}
-
-html,
-body {
-  background: var(--dark) !important;
-}
-
-body {
-  color: var(--white);
-  font-family:
-    Inter,
-    ui-sans-serif,
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    sans-serif;
-}
-
-/* Hero compartido: misma imagen, sombras y degradado del index */
-.hero:not(.hero--details) {
-  isolation: isolate;
-  background-color: #2f3941;
-  background-image: url("images/header.png");
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: cover;
-  border-radius: 0;
-  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.36);
-}
-
-.hero:not(.hero--details)::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -2;
-  pointer-events: none;
-  background:
-    linear-gradient(
-      90deg,
-      rgba(0, 0, 0, 0.82) 0%,
-      rgba(0, 0, 0, 0.68) 28%,
-      rgba(0, 0, 0, 0.34) 58%,
-      rgba(0, 0, 0, 0.08) 100%
-    ),
-    linear-gradient(
-      180deg,
-      rgba(0, 0, 0, 0.24) 0%,
-      rgba(0, 0, 0, 0.06) 48%,
-      rgba(0, 0, 0, 0.52) 100%
-    );
-}
-
-.hero:not(.hero--details)::after {
-  content: "";
-  position: absolute;
-  inset: auto 0 0;
-  height: 46%;
-  z-index: -1;
-  pointer-events: none;
-  background: linear-gradient(
-    180deg,
-    rgba(9, 10, 11, 0) 0%,
-    rgba(9, 10, 11, 0.28) 38%,
-    rgba(9, 10, 11, 0.92) 100%
-  );
-}
-
-.hero__title {
-  color: var(--white);
-  letter-spacing: -0.035em;
-  text-shadow: 0 10px 32px rgba(0, 0, 0, 0.72);
-}
-
-.hero__title span,
-.hero__title strong {
-  display: block;
-}
-
-.hero__title strong {
-  margin-top: 4px;
-  color: var(--gold-light);
-}
-
-.glass-btn {
-  min-height: 42px;
-  padding: 0 18px;
-  justify-content: center;
-  color: rgba(255, 255, 255, 0.94);
-  background: rgba(0, 0, 0, 0.42);
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: 11px;
-  box-shadow:
-    0 10px 26px rgba(0, 0, 0, 0.28),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06);
-  backdrop-filter: blur(3px);
-  -webkit-backdrop-filter: blur(3px);
-  transition: transform 180ms ease, color 180ms ease, border-color 180ms ease;
-}
-
-.glass-btn:hover,
-.glass-btn:focus-visible {
-  color: var(--gold-light);
-  border-color: rgba(230, 173, 93, 0.48);
-  background: rgba(0, 0, 0, 0.56);
-  transform: translateY(-2px);
-}
-
-/* =========================================================
-   FORMULARIO DE RENTA — PAGE CAR
-   Conserva exactamente la estructura funcional existente.
-   Solo adopta la estética negra, blanca y dorada del index.
-   ========================================================= */
-
-.page-car {
-  min-height: 100vh;
-  background:
-    radial-gradient(circle at 50% 0%, rgba(230, 173, 93, 0.08), transparent 34rem),
-    var(--dark);
-}
-
-.page-car .hero--car {
-  min-height: 320px;
-}
-
-.page-car .hero__content {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 42px 0 34px;
-}
-
-.page-car .hero__quicklinks {
-  justify-content: center;
-  margin-top: 22px;
-}
-
-.page-car .main {
-  position: relative;
-  padding: 34px 0 56px;
-}
-
-.page-car .section {
-  padding: 0;
-}
-
-.page-car .card--form {
-  width: min(780px, 100%);
-  padding: clamp(20px, 4vw, 34px);
-  background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.025));
-  border: 1px solid rgba(255, 255, 255, 0.13);
-  border-radius: 20px;
-  box-shadow:
-    0 24px 60px rgba(0, 0, 0, 0.42),
-    inset 0 1px 0 rgba(255, 255, 255, 0.055);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-
-.page-car .card__head {
-  margin-bottom: 22px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.10);
-}
-
-.page-car .card__title {
-  margin: 0;
-  color: var(--gold-light);
-  font-size: clamp(1.35rem, 3vw, 1.8rem);
-  letter-spacing: -0.02em;
-}
-
-.page-car .form {
-  gap: 15px;
-}
-
-.page-car label {
-  color: rgba(255, 255, 255, 0.74);
-  font-weight: 700;
-}
-
-.page-car input,
-.page-car select,
-.page-car textarea {
-  min-height: 48px;
-  padding: 12px 14px;
-  color: var(--white);
-  background: rgba(0, 0, 0, 0.30);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 12px;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.025);
-}
-
-.page-car input:hover,
-.page-car select:hover,
-.page-car textarea:hover {
-  border-color: rgba(255, 255, 255, 0.24);
-}
-
-.page-car input:focus,
-.page-car select:focus,
-.page-car textarea:focus {
-  border-color: rgba(230, 173, 93, 0.82);
-  box-shadow: 0 0 0 3px rgba(230, 173, 93, 0.16);
-}
-
-.page-car input::placeholder,
-.page-car textarea::placeholder {
-  color: rgba(255, 255, 255, 0.36);
-}
-
-.page-car input[type="datetime-local"] {
-  color-scheme: dark;
-}
-
-.page-car .checkline,
-.page-car .airport-box,
-.page-car .pricebox,
-.page-car .calendar {
-  border-color: rgba(255, 255, 255, 0.13);
-  background: rgba(0, 0, 0, 0.22);
-}
-
-.page-car .checkline {
-  border-style: solid;
-}
-
-.page-car .checkline input[type="checkbox"] {
-  accent-color: var(--gold);
-}
-
-.page-car .airport-box__title,
-.page-car .pricebox strong {
-  color: var(--gold-light);
-}
-
-.page-car .btn {
-  min-height: 48px;
-  border-radius: 12px;
-  transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
-}
-
-.page-car .btn-primary {
-  color: #21170b;
-  background: linear-gradient(135deg, var(--gold-light), var(--gold));
-  border-color: rgba(255, 255, 255, 0.18);
-  box-shadow: 0 12px 28px rgba(230, 173, 93, 0.22);
-}
-
-.page-car .btn-primary:not(:disabled):hover,
-.page-car .btn-primary:not(:disabled):focus-visible {
-  transform: translateY(-2px);
-  box-shadow: 0 16px 34px rgba(230, 173, 93, 0.32);
-}
-
-.page-car .btn-primary:disabled {
-  opacity: 0.46;
-  filter: grayscale(0.3);
-}
-
-.page-car .btn-ghost {
-  color: rgba(255, 255, 255, 0.86);
-  background: rgba(255, 255, 255, 0.055);
-  border-color: rgba(255, 255, 255, 0.13);
-}
-
-.page-car .btn-ghost:hover,
-.page-car .btn-ghost:focus-visible {
-  color: var(--gold-light);
-  border-color: rgba(230, 173, 93, 0.42);
-  background: rgba(230, 173, 93, 0.08);
-}
-
-.page-car .availability {
-  padding: 10px 12px;
-  border-radius: 12px;
-  background: rgba(0, 0, 0, 0.20);
-}
-
-@media (max-width: 720px) {
-  .page-car .hero--car {
-    min-height: 270px;
-    background-position: 62% center;
+  const availabilityMsg = document.getElementById("availabilityMsg");
+  const calendarBox = document.getElementById("calendarBox");
+
+  const outEl = document.getElementById("resultadoPrecio");
+  const btnContinue = document.getElementById("btnContinue");
+
+  btnVerifyPickup.addEventListener("click", () => {
+    const addr = (pickupEl.value || "").trim();
+    if (!addr) { alert("Write the pickup address first."); pickupEl.focus(); return; }
+    window.open("https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(addr), "_blank");
+  });
+
+  btnVerifyDropoff.addEventListener("click", () => {
+    const addr = (dropoffEl.value || "").trim();
+    if (!addr) { alert("Write the pickup address first."); dropoffEl.focus(); return; }
+    window.open("https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(addr), "_blank");
+  });
+
+  const AIRPORT_TRIGGERS = ["6301","pearson","2 eireann","airport","yyz","ytz"];
+
+  function normalizeText(s) {
+    return (s || "").toLowerCase().replace(/\s+/g, " ").trim();
   }
 
-  .page-car .hero__content {
-    padding: 34px 0 28px;
-    transform: none;
+  function isAirportAddress(addr) {
+    const t = normalizeText(addr);
+    return AIRPORT_TRIGGERS.some(k => t.includes(k));
   }
 
-  .page-car .hero__title {
-    font-size: clamp(2rem, 10vw, 3.15rem);
+  function debounce(fn, ms=250) {
+    let timer;
+    return (...args) => {
+      clearTimeout(timer);
+      timer = setTimeout(() => fn(...args), ms);
+    };
   }
 
-  .page-car .hero__quicklinks {
-    transform: none;
-    width: 100%;
-    justify-content: center;
+  const updatePickupAirportUI = debounce(() => {
+    const on = isAirportAddress(pickupEl.value);
+    pickupAirportBox.style.display = on ? "block" : "none";
+    if (!on) { pickupTerminalEl.value = ""; pickupGateEl.value = ""; }
+  }, 250);
+
+  const updateDropoffAirportUI = debounce(() => {
+    if (dropoffBox.style.display === "none") {
+      dropoffAirportBox.style.display = "none";
+      dropoffTerminalEl.value = ""; dropoffGateEl.value = "";
+      return;
+    }
+    const on = isAirportAddress(dropoffEl.value);
+    dropoffAirportBox.style.display = on ? "block" : "none";
+    if (!on) { dropoffTerminalEl.value = ""; dropoffGateEl.value = ""; }
+  }, 250);
+
+  pickupEl.addEventListener("input", updatePickupAirportUI);
+  dropoffEl.addEventListener("input", updateDropoffAirportUI);
+
+  dropoffDifferentEl.addEventListener("change", () => {
+    const on = dropoffDifferentEl.checked;
+    dropoffBox.style.display = on ? "block" : "none";
+    if (!on) {
+      dropoffEl.value = "";
+      dropoffAirportBox.style.display = "none";
+      dropoffTerminalEl.value = "";
+      dropoffGateEl.value = "";
+    } else {
+      updateDropoffAirportUI();
+    }
+  });
+
+  let BUSY_RANGES = [];
+
+  async function loadBusyRanges() {
+    try {
+      const resp = await fetch(WEBAPP_URL + "?action=get_busy", { method: "GET" });
+      const data = await resp.json();
+      BUSY_RANGES = (data && data.ok && Array.isArray(data.ranges)) ? data.ranges : [];
+    } catch (e) {
+      BUSY_RANGES = [];
+    }
   }
 
-  .page-car .main {
-    padding: 22px 0 38px;
+  function rangesOverlapInclusive(start, end, busyStart, busyEnd) {
+    const s  = new Date(start + "T00:00:00");
+    const e  = new Date(end   + "T00:00:00");
+    const bs = new Date(busyStart + "T00:00:00");
+    const be = new Date(busyEnd   + "T00:00:00");
+    return (s <= be) && (e >= bs);
   }
 
-  .page-car .card--form {
-    padding: 18px 14px;
-    border-radius: 16px;
+  function validateAvailability() {
+    if (!fiEl.value || !ffEl.value) return { ready:false, occupied:false };
+
+    const start = fiEl.value;
+    const end   = ffEl.value;
+
+    const inicio = new Date(start);
+    const fin = new Date(end);
+    if (fin <= inicio) return { ready:true, occupied:true, error:"The return date and time must be later." };
+
+    for (const r of BUSY_RANGES) {
+      if (!r || !r.start || !r.end) continue;
+      if (rangesOverlapInclusive(start, end, r.start, r.end)) {
+        return { ready:true, occupied:true };
+      }
+    }
+    return { ready:true, occupied:false };
   }
 
-  .page-car .grid-2 {
-    grid-template-columns: 1fr;
+  function parseLocalDate(value) {
+  const [y, m, d] = value.split("-").map(Number);
+  return new Date(y, m - 1, d);
+}
+function calc() {
+  if (!fiEl.value || !ffEl.value) return null;
+
+  const inicio = new Date(fiEl.value);
+  const fin = new Date(ffEl.value);
+
+  if (fin <= inicio) return { error: "The return date and time must be later." };
+
+  const horas = (fin - inicio) / (1000 * 60 * 60);
+  const dias = Math.ceil(horas / 24);
+
+  let total = 0;
+  const cur = new Date(inicio);
+
+  for (let i = 0; i < dias; i++) {
+    const d = cur.getDay();
+
+    // Friday, Saturday and Sunday = weekend price
+    if (d === 5 || d === 6 || d === 0) {
+      total += PRECIO_FINDE;
+    } else {
+      total += PRECIO_SEMANA;
+    }
+
+    cur.setDate(cur.getDate() + 1);
   }
+
+  return {
+    dias,
+    horas: Math.ceil(horas),
+    auto_total: total
+  };
 }
 
-@media (max-width: 480px) {
-  .container {
-    width: calc(100% - 18px);
+
+  function showAvailabilityUI() {
+    const v = validateAvailability();
+
+    if (!v.ready) {
+      availabilityMsg.style.display = "none";
+      calendarBox.style.display = "none";
+      outEl.style.display = "none";
+      outEl.textContent = "";
+      btnContinue.disabled = true;
+      btnContinue.title = "Select dates to continue";
+      return;
+    }
+
+    availabilityMsg.style.display = "block";
+
+    if (v.error) {
+      availabilityMsg.textContent = v.error;
+      availabilityMsg.style.color = "crimson";
+      calendarBox.style.display = "none";
+      outEl.style.display = "none";
+      btnContinue.disabled = true;
+      btnContinue.title = "Correct the dates to continue";
+      return;
+    }
+
+    if (v.occupied) {
+      availabilityMsg.textContent = "Occupied date range";
+      availabilityMsg.style.color = "crimson";
+      calendarBox.style.display = "block";
+      outEl.style.display = "none";
+      outEl.textContent = "";
+      btnContinue.disabled = true;
+      btnContinue.title = "Choose an available range to continue.";
+      return;
+    }
+
+    availabilityMsg.textContent = "Available";
+    availabilityMsg.style.color = "green";
+    calendarBox.style.display = "none";
+
+    const r = calc();
+    if (!r || r.error) {
+      outEl.style.display = "none";
+      outEl.textContent = "";
+      btnContinue.disabled = true;
+      btnContinue.title = "Check the dates";
+      return;
+    }
+
+    outEl.style.display = "block";
+    outEl.innerHTML = `${r.dias} day(s) / approx. ${r.horas} hour(s) — <strong>Total car: CA$ ${r.auto_total}</strong>`;
+    btnContinue.disabled = false;
+    btnContinue.title = "";
   }
 
-  .page-car .hero--car {
-    min-height: 235px;
-  }
+  fiEl.addEventListener("change", showAvailabilityUI);
+  ffEl.addEventListener("change", showAvailabilityUI);
 
-  .page-car .hero__title {
-    font-size: clamp(1.8rem, 9.5vw, 2.55rem);
-  }
+  window.addEventListener("load", async () => {
+    await loadBusyRanges();
+    showAvailabilityUI();
+    updatePickupAirportUI();
+    updateDropoffAirportUI();
+  });
 
-  .page-car .glass-btn {
-    flex: 1 1 0;
-    max-width: 150px;
-    min-height: 40px;
-  }
+  document.getElementById("reservaForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-  .page-car .field.checkline label {
-    white-space: normal !important;
-  }
-}
+    const v = validateAvailability();
+    if (!v.ready) return alert("Choose the dates.");
+    if (v.occupied || v.error) return alert("The selected range is not available.");
+
+    const r = calc();
+    if (!r || r.error) return alert("Check the dates.");
+
+    // ✅ NUEVO: Teléfono obligatorio
+    const telNorm = normalizePhone(telefonoEl.value);
+    if (!telNorm) {
+      alert("Invalid phone number. Use 10 digits. (Ej: 6471234567) o +1...");
+      telefonoEl.focus();
+      return;
+    }
+
+    const pickupAddress = (pickupEl.value || "").trim();
+    if (!pickupAddress) { alert("Write the pickup address."); pickupEl.focus(); return; }
+
+    let dropoffAddress = "";
+    if (dropoffDifferentEl.checked) {
+      dropoffAddress = (dropoffEl.value || "").trim();
+      if (!dropoffAddress) { alert("You selected a different delivery address. Please enter the delivery address.."); dropoffEl.focus(); return; }
+    }
+
+    let pickup_terminal = "", pickup_gate = "";
+    if (isAirportAddress(pickupAddress)) {
+      pickup_terminal = (pickupTerminalEl.value || "").trim();
+      pickup_gate = (pickupGateEl.value || "").trim();
+      if (!pickup_terminal || !pickup_gate) {
+        alert("For airport, write Terminal and Gate (pickup).");
+        if (!pickup_terminal) pickupTerminalEl.focus(); else pickupGateEl.focus();
+        return;
+      }
+    }
+
+    let dropoff_terminal = "", dropoff_gate = "";
+    if (dropoffAddress && isAirportAddress(dropoffAddress)) {
+      dropoff_terminal = (dropoffTerminalEl.value || "").trim();
+      dropoff_gate = (dropoffGateEl.value || "").trim();
+      if (!dropoff_terminal || !dropoff_gate) {
+        alert("For airport, write Terminal and Gate (delivery).");
+        if (!dropoff_terminal) dropoffTerminalEl.focus(); else dropoffGateEl.focus();
+        return;
+      }
+    }
+
+    const payload = new URLSearchParams();
+    payload.append("action", "save_reserva");
+    payload.append("nombre", nombreEl.value);
+    payload.append("email", emailEl.value);
+    payload.append("telefono", telNorm); // ✅ NUEVO
+
+    payload.append("pickup_address", pickupAddress);
+    payload.append("dropoff_address", dropoffAddress);
+
+    payload.append("pickup_terminal", pickup_terminal);
+    payload.append("pickup_gate", pickup_gate);
+    payload.append("dropoff_terminal", dropoff_terminal);
+    payload.append("dropoff_gate", dropoff_gate);
+
+    payload.append("fechaInicio", fiEl.value);
+    payload.append("fechaFin", ffEl.value);
+    payload.append("dias", String(r.dias));
+    payload.append("auto_total", String(r.auto_total));
+
+    const resp = await fetch(WEBAPP_URL, {
+      method: "POST",
+      headers: { "Content-Type":"application/x-www-form-urlencoded;charset=UTF-8" },
+      body: payload.toString()
+    });
+
+    const data = await resp.json();
+    if (!data.ok) return alert(data.error || "Error saving reservation");
+
+    localStorage.setItem("row_index", String(data.row_index));
+    localStorage.setItem("nombre", data.nombre);
+    localStorage.setItem("email", data.email);
+    localStorage.setItem("telefono", data.telefono || telNorm); // ✅ NUEVO
+
+    localStorage.setItem("pickup_address", pickupAddress);
+    localStorage.setItem("dropoff_address", dropoffAddress);
+
+    localStorage.setItem("pickup_terminal", pickup_terminal);
+    localStorage.setItem("pickup_gate", pickup_gate);
+    localStorage.setItem("dropoff_terminal", dropoff_terminal);
+    localStorage.setItem("dropoff_gate", dropoff_gate);
+
+    localStorage.setItem("fechaInicio", data.fechaInicio);
+    localStorage.setItem("fechaFin", data.fechaFin);
+    localStorage.setItem("dias", data.dias);
+    localStorage.setItem("auto_total", String(data.auto_total));
+
+    window.location.href = "articulos.html";
+  });
+</script>
+
+</body>
+</html>
