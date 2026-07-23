@@ -23,7 +23,7 @@ a{ color:inherit; text-decoration:none; }
 
 /* Fondo global del sitio */
 html, body {
-  background-color: #0c3d4b !important;
+  background-image: #0c3d4b,
   url("images/header.png");
 }
 
