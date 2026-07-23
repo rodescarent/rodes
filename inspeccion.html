@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>RODES | Inspeccion del vehiculo</title>
+  <link rel="stylesheet" href="styles.css">
 
   <style>
     * { box-sizing: border-box; }
@@ -12,11 +13,10 @@
       margin: 0;
       font-family: Arial, sans-serif;
       min-height: 100vh;
-      background: linear-gradient(rgba(0,0,0,.65), rgba(0,0,0,.75)), #111;
       color: white;
     }
 
-    .container { max-width: 850px; margin: auto; padding: 24px; }
+    .content-container { max-width: 850px; margin: auto; padding: 24px; }
 
     .card {
       background: rgba(255,255,255,.12);
@@ -118,13 +118,36 @@
   </style>
 </head>
 
-<body>
-  <div class="container">
-    <div class="top-links">
-      <a href="index.html">← Volver</a>
-    </div>
+<body class="page-inspection">
 
-    <div class="card">
+  <div class="topbar-wrap">
+    <nav class="topbar container" aria-label="Navegación principal">
+      <a class="brand" href="index.html" aria-label="RODES Car Rental - Inicio">
+        <span class="brand__name">RODES</span>
+        <span class="brand__tag">CAR RENTAL</span>
+      </a>
+
+      <button class="menu-toggle" type="button" aria-label="Abrir menú"
+        aria-expanded="false" aria-controls="main-menu">
+        <span></span><span></span><span></span>
+      </button>
+
+      <div class="topbar__links" id="main-menu">
+        <a class="nav-link" href="index.html">Inicio</a>
+        <a class="nav-link" href="autos.html">Nuestros autos</a>
+        <a class="nav-link" href="articulos.html">Extras</a>
+        <a class="nav-link" href="contacto.html">Contacto</a>
+      </div>
+
+      <a class="reserve-button" href="q5progressive.html">
+        <span class="reserve-button__icon" aria-hidden="true">▣</span>
+        Reservar ahora
+      </a>
+    </nav>
+  </div>
+
+  <div class="content-container">
+<div class="card">
       <h1>Inspección del vehículo</h1>
 
       <form id="inspectionForm">
@@ -346,5 +369,28 @@
     setFechaActual();
     crearCampos();
   </script>
+
+  <script>
+    const menuToggle = document.querySelector(".menu-toggle");
+    const mainMenu = document.querySelector("#main-menu");
+
+    if (menuToggle && mainMenu) {
+      menuToggle.addEventListener("click", () => {
+        const isOpen = menuToggle.getAttribute("aria-expanded") === "true";
+        menuToggle.setAttribute("aria-expanded", String(!isOpen));
+        mainMenu.classList.toggle("is-open");
+        document.body.classList.toggle("menu-open");
+      });
+
+      mainMenu.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+          menuToggle.setAttribute("aria-expanded", "false");
+          mainMenu.classList.remove("is-open");
+          document.body.classList.remove("menu-open");
+        });
+      });
+    }
+  </script>
+
 </body>
 </html>
