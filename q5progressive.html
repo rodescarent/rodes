@@ -399,6 +399,15 @@
   fiEl.addEventListener("change", showAvailabilityUI);
   ffEl.addEventListener("change", showAvailabilityUI);
 
+  // Abre el selector al pulsar cualquier parte del campo de fecha y hora.
+  [fiEl, ffEl].forEach((input) => {
+    input.addEventListener("click", () => {
+      if (typeof input.showPicker === "function") {
+        try { input.showPicker(); } catch (error) {}
+      }
+    });
+  });
+
   window.addEventListener("load", async () => {
     await loadBusyRanges();
     showAvailabilityUI();
