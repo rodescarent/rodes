@@ -128,13 +128,13 @@
 
           <div class="grid-2">
             <div class="field">
-              <label for="fechaInicio">Start date</label>
-              <input type="date" id="fechaInicio" required>
+              <label for="fechaInicio">Start date and time</label>
+              <input type="datetime-local" id="fechaInicio" required>
             </div>
 
             <div class="field">
-              <label for="fechaFin">End date</label>
-              <input type="date" id="fechaFin" required>
+              <label for="fechaFin">End date and time</label>
+              <input type="datetime-local" id="fechaFin" required>
             </div>
           </div>
 
@@ -283,10 +283,17 @@
   }
 
   function rangesOverlapInclusive(start, end, busyStart, busyEnd) {
-    const s  = new Date(start + "T00:00:00");
-    const e  = new Date(end   + "T00:00:00");
-    const bs = new Date(busyStart + "T00:00:00");
-    const be = new Date(busyEnd   + "T00:00:00");
+    // The calendar returns occupied days. A reservation with hours is compared
+    // using only its date portion so those occupied days remain fully blocked.
+    const startDay = String(start).slice(0, 10);
+    const endDay = String(end).slice(0, 10);
+    const busyStartDay = String(busyStart).slice(0, 10);
+    const busyEndDay = String(busyEnd).slice(0, 10);
+
+    const s  = new Date(startDay + "T00:00:00");
+    const e  = new Date(endDay + "T00:00:00");
+    const bs = new Date(busyStartDay + "T00:00:00");
+    const be = new Date(busyEndDay + "T00:00:00");
     return (s <= be) && (e >= bs);
   }
 
@@ -314,17 +321,24 @@
 
     const inicio = new Date(fiEl.value);
     const fin = new Date(ffEl.value);
-    const dias = Math.ceil((fin - inicio) / (1000*60*60*24));
-    if (dias <= 0) return { error: "The end date must be later." };
+    const diferenciaMs = fin - inicio;
+    const horas = Math.ceil(diferenciaMs / (1000 * 60 * 60));
+    const dias = Math.ceil(horas / 24);
+    if (horas <= 0) return { error: "The end date and time must be later." };
 
     let ds = 0, df = 0;
-    const cur = new Date(inicio);
-    while (cur < fin) {
+    for (let i = 0; i < dias; i++) {
+      const cur = new Date(inicio);
+      cur.setDate(inicio.getDate() + i);
       const d = cur.getDay();
       (d === 0 || d === 6) ? df++ : ds++;
-      cur.setDate(cur.getDate() + 1);
     }
-    return { dias, auto_total: ds * PRECIO_SEMANA + df * PRECIO_FINDE };
+
+    return {
+      horas,
+      dias,
+      auto_total: ds * PRECIO_SEMANA + df * PRECIO_FINDE
+    };
   }
 
   function showAvailabilityUI() {
@@ -377,7 +391,7 @@
     }
 
     outEl.style.display = "block";
-    outEl.innerHTML = `${r.dias} día(s) — <strong>Total auto: CA$ ${r.auto_total}</strong>`;
+    outEl.innerHTML = `${r.horas} hour(s) — ${r.dias} rental day(s) — <strong>Total auto: CA$ ${r.auto_total}</strong>`;
     btnContinue.disabled = false;
     btnContinue.title = "";
   }
@@ -457,6 +471,7 @@
 
     payload.append("fechaInicio", fiEl.value);
     payload.append("fechaFin", ffEl.value);
+    payload.append("horas", String(r.horas));
     payload.append("dias", String(r.dias));
     payload.append("auto_total", String(r.auto_total));
 
@@ -484,6 +499,7 @@
 
     localStorage.setItem("fechaInicio", data.fechaInicio);
     localStorage.setItem("fechaFin", data.fechaFin);
+    localStorage.setItem("horas", String(data.horas || r.horas));
     localStorage.setItem("dias", data.dias);
     localStorage.setItem("auto_total", String(data.auto_total));
 
