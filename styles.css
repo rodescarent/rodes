@@ -23,7 +23,7 @@ a{ color:inherit; text-decoration:none; }
 
 /* Fondo global del sitio */
 html, body {
-   background-image: url("images/header.png");
+  background-image: url("images/header.png");
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
