@@ -19,6 +19,7 @@ position: relative;
     background-size: cover;     /* llena el espacio */
   background-position: center;
   background-repeat: no-repeat;
+  background-attachment:fixed;
 }
 
    *{ box-sizing:border-box; }
