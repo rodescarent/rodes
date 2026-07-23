@@ -5,6 +5,79 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>RODES|Audi Q5 Progressive Sline</title>
   <link rel="stylesheet" href="styles.css">
+
+  <style>
+    .datetime-field {
+      cursor: pointer;
+    }
+
+    .datetime-modal[hidden] {
+      display: none;
+    }
+
+    .datetime-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      background: rgba(0, 0, 0, 0.68);
+    }
+
+    .datetime-modal__panel {
+      width: min(420px, 100%);
+      padding: 22px;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 18px;
+      background: #141414;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
+      color: #fff;
+    }
+
+    .datetime-modal__title {
+      margin: 0 0 18px;
+      font-size: 1.2rem;
+      text-align: center;
+    }
+
+    .datetime-modal__grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .datetime-modal__grid label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 0.9rem;
+    }
+
+    .datetime-modal__grid input {
+      width: 100%;
+      min-height: 48px;
+      box-sizing: border-box;
+    }
+
+    .datetime-modal__actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .datetime-modal__actions button {
+      min-height: 48px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 480px) {
+      .datetime-modal__grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 
 <body class="page-car">
@@ -129,12 +202,37 @@
           <div class="grid-2">
             <div class="field">
               <label for="fechaInicio">Start date and time</label>
-              <input type="datetime-local" id="fechaInicio" required>
+              <input type="text" id="fechaInicio" class="datetime-field" required readonly
+                placeholder="Select start date and time" aria-haspopup="dialog">
             </div>
 
             <div class="field">
               <label for="fechaFin">End date and time</label>
-              <input type="datetime-local" id="fechaFin" required>
+              <input type="text" id="fechaFin" class="datetime-field" required readonly
+                placeholder="Select end date and time" aria-haspopup="dialog">
+            </div>
+          </div>
+
+          <div id="dateTimeModal" class="datetime-modal" hidden role="dialog" aria-modal="true" aria-labelledby="dateTimeModalTitle">
+            <div class="datetime-modal__panel">
+              <h3 id="dateTimeModalTitle" class="datetime-modal__title">Select date and time</h3>
+
+              <div class="datetime-modal__grid">
+                <div>
+                  <label for="dateTimeDate">Date</label>
+                  <input type="date" id="dateTimeDate">
+                </div>
+
+                <div>
+                  <label for="dateTimeTime">Time</label>
+                  <input type="time" id="dateTimeTime" step="900">
+                </div>
+              </div>
+
+              <div class="datetime-modal__actions">
+                <button type="button" id="dateTimeCancel" class="btn btn-ghost">CANCEL</button>
+                <button type="button" id="dateTimeSet" class="btn btn-primary">SET</button>
+              </div>
             </div>
           </div>
 
@@ -199,6 +297,14 @@
 
   const fiEl = document.getElementById("fechaInicio");
   const ffEl = document.getElementById("fechaFin");
+
+  const dateTimeModal = document.getElementById("dateTimeModal");
+  const dateTimeModalTitle = document.getElementById("dateTimeModalTitle");
+  const dateTimeDate = document.getElementById("dateTimeDate");
+  const dateTimeTime = document.getElementById("dateTimeTime");
+  const dateTimeSet = document.getElementById("dateTimeSet");
+  const dateTimeCancel = document.getElementById("dateTimeCancel");
+  let activeDateTimeInput = null;
 
   const availabilityMsg = document.getElementById("availabilityMsg");
   const calendarBox = document.getElementById("calendarBox");
@@ -297,11 +403,14 @@
     return (s <= be) && (e >= bs);
   }
 
-  function validateAvailability() {
-    if (!fiEl.value || !ffEl.value) return { ready:false, occupied:false };
+  function getDateTimeValue(input) {
+    return input.dataset.value || "";
+  }
 
-    const start = fiEl.value;
-    const end   = ffEl.value;
+  function validateAvailability() {
+    const start = getDateTimeValue(fiEl);
+    const end = getDateTimeValue(ffEl);
+    if (!start || !end) return { ready:false, occupied:false };
 
     const inicio = new Date(start);
     const fin = new Date(end);
@@ -317,10 +426,12 @@
   }
 
   function calc() {
-    if (!fiEl.value || !ffEl.value) return null;
+    const start = getDateTimeValue(fiEl);
+    const end = getDateTimeValue(ffEl);
+    if (!start || !end) return null;
 
-    const inicio = new Date(fiEl.value);
-    const fin = new Date(ffEl.value);
+    const inicio = new Date(start);
+    const fin = new Date(end);
     const diferenciaMs = fin - inicio;
     const horas = Math.ceil(diferenciaMs / (1000 * 60 * 60));
     const dias = Math.ceil(horas / 24);
@@ -396,16 +507,82 @@
     btnContinue.title = "";
   }
 
-  fiEl.addEventListener("change", showAvailabilityUI);
-  ffEl.addEventListener("change", showAvailabilityUI);
+  function openDateTimeModal(input, title) {
+    activeDateTimeInput = input;
+    dateTimeModalTitle.textContent = title;
 
-  // Abre el selector al pulsar cualquier parte del campo de fecha y hora.
-  [fiEl, ffEl].forEach((input) => {
-    input.addEventListener("click", () => {
-      if (typeof input.showPicker === "function") {
-        try { input.showPicker(); } catch (error) {}
-      }
-    });
+    const currentValue = input.dataset.value || "";
+    if (currentValue.includes("T")) {
+      const [datePart, timePart] = currentValue.split("T");
+      dateTimeDate.value = datePart || "";
+      dateTimeTime.value = (timePart || "").slice(0, 5);
+    } else {
+      dateTimeDate.value = "";
+      dateTimeTime.value = "";
+    }
+
+    dateTimeModal.hidden = false;
+    document.body.style.overflow = "hidden";
+    setTimeout(() => dateTimeDate.focus(), 0);
+  }
+
+  function closeDateTimeModal() {
+    dateTimeModal.hidden = true;
+    document.body.style.overflow = "";
+    activeDateTimeInput = null;
+  }
+
+  function formatDateTimeForDisplay(value) {
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return value;
+
+    return new Intl.DateTimeFormat("en-CA", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "numeric",
+      minute: "2-digit"
+    }).format(date);
+  }
+
+  function setDateTimeValue(input, value) {
+    input.dataset.value = value;
+    input.value = formatDateTimeForDisplay(value);
+    input.dispatchEvent(new Event("change", { bubbles: true }));
+  }
+
+  fiEl.addEventListener("click", () => openDateTimeModal(fiEl, "Select start date and time"));
+  ffEl.addEventListener("click", () => openDateTimeModal(ffEl, "Select end date and time"));
+
+  fiEl.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      openDateTimeModal(fiEl, "Select start date and time");
+    }
+  });
+
+  ffEl.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      openDateTimeModal(ffEl, "Select end date and time");
+    }
+  });
+
+  dateTimeSet.addEventListener("click", () => {
+    if (!dateTimeDate.value || !dateTimeTime.value) {
+      alert("Select both the date and time.");
+      return;
+    }
+
+    if (!activeDateTimeInput) return;
+    setDateTimeValue(activeDateTimeInput, `${dateTimeDate.value}T${dateTimeTime.value}`);
+    closeDateTimeModal();
+  });
+
+  dateTimeCancel.addEventListener("click", closeDateTimeModal);
+
+  dateTimeModal.addEventListener("click", (event) => {
+    if (event.target === dateTimeModal) closeDateTimeModal();
   });
 
   window.addEventListener("load", async () => {
@@ -478,8 +655,8 @@
     payload.append("dropoff_terminal", dropoff_terminal);
     payload.append("dropoff_gate", dropoff_gate);
 
-    payload.append("fechaInicio", fiEl.value);
-    payload.append("fechaFin", ffEl.value);
+    payload.append("fechaInicio", getDateTimeValue(fiEl));
+    payload.append("fechaFin", getDateTimeValue(ffEl));
     payload.append("horas", String(r.horas));
     payload.append("dias", String(r.dias));
     payload.append("auto_total", String(r.auto_total));
