@@ -4,42 +4,45 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>RODES|Audi Q5 Progressive Sline</title>
-  <link rel="stylesheet" href="styles.css?v=20260722-4">
+  <link rel="stylesheet" href="index.css?v=20260716-7">
+  <link rel="stylesheet" href="styles.css?v=20260723-1">
 </head>
 
 <body class="page-car">
+  <div class="site-shell">
+    <div class="hero rental-hero" id="inicio">
+      <div class="hero__overlay" aria-hidden="true"></div>
 
-  <header class="hero hero--car">
-    <div class="hero__overlay" aria-hidden="true"></div>
+      <div class="topbar-wrap">
+        <nav class="topbar container" aria-label="Navegación principal">
+          <a class="brand" href="index.html" aria-label="RODES Car Rental - Inicio">
+            <span class="brand__name">RODES</span>
+            <span class="brand__tag">CAR RENTAL</span>
+          </a>
 
-    <div class="car-topbar-wrap">
-      <nav class="car-topbar container" aria-label="Navegación de reserva">
-        <a class="car-brand" href="index.html" aria-label="RODES Car Rental - Home">
-          <span class="car-brand__name">RODES</span>
-          <span class="car-brand__tag">CAR RENTAL</span>
-        </a>
+          <button class="menu-toggle" type="button" aria-label="Abrir menú"
+            aria-expanded="false" aria-controls="main-menu">
+            <span></span><span></span><span></span>
+          </button>
 
-        <div class="car-topbar__links">
-          <a class="car-nav-link" href="index.html">Home</a>
-          <a class="car-nav-link" href="detallesq5progressive.html">Details</a>
-        </div>
-      </nav>
-    </div>
+          <div class="topbar__links" id="main-menu">
+            <a class="nav-link" href="index.html">Inicio</a>
+            <a class="nav-link is-active" href="detallesq5progressive.html">Propiedades del auto</a>
+          </div>
 
-    <div class="hero__content container">
-      <div class="hero__heading-backdrop">
-        <h1 class="hero__title">Audi Q5 Progressive Sline</h1>
+          <a class="reserve-button" href="#rental-form-title">
+            <span class="reserve-button__icon" aria-hidden="true">▣</span>
+            Reservar ahora
+          </a>
+        </nav>
       </div>
-    </div>
-  </header>
 
-  <main class="main">
-    <section class="section container">
-
+      <main class="main rental-main">
+        <section class="section container">
       <div class="card card--form">
         <div class="card__head">
           <div>
-            <h2 class="card__title">Car rental form</h2>
+            <h1 class="card__title" id="rental-form-title">Car rental form</h1>
           </div>
         </div>
 
@@ -155,8 +158,10 @@
         </form>
       </div>
 
-    </section>
-  </main>
+        </section>
+      </main>
+    </div>
+  </div>
 
 <script>
   const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzNAOMuQdxhjkdh4Ff4pF_NeZgHYDmSKaTaXtpFd1PCLk_am0hQu4I2eVqJUjy8LwG6/exec";
@@ -487,6 +492,17 @@
 
     window.location.href = "articulos.html";
   });
+</script>
+
+<script>
+  const menuToggle = document.querySelector('.menu-toggle');
+  const mainMenu = document.getElementById('main-menu');
+  if (menuToggle && mainMenu) {
+    menuToggle.addEventListener('click', () => {
+      const open = mainMenu.classList.toggle('is-open');
+      menuToggle.setAttribute('aria-expanded', String(open));
+    });
+  }
 </script>
 
 </body>
