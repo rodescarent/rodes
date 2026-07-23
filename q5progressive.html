@@ -9,7 +9,31 @@
 
 <body class="page-car">
 
-  
+  <div class="topbar-wrap">
+    <nav class="topbar container" aria-label="Main navigation">
+      <a class="brand" href="index.html" aria-label="RODES Car Rental - Home">
+        <span class="brand__name">RODES</span>
+        <span class="brand__tag">CAR RENTAL</span>
+      </a>
+
+      <button class="menu-toggle" type="button" aria-label="Open menu"
+        aria-expanded="false" aria-controls="main-menu">
+        <span></span><span></span><span></span>
+      </button>
+
+      <div class="topbar__links" id="main-menu">
+        <a class="nav-link" href="index.html">Home</a>
+        <a class="nav-link" href="autos.html">Our cars</a>
+        <a class="nav-link" href="articulos.html">Extras</a>
+        <a class="nav-link" href="contacto.html">Contact</a>
+      </div>
+
+      <a class="reserve-button is-current" href="#reservaForm">
+        <span class="reserve-button__icon" aria-hidden="true">▣</span>
+        Reserve now
+      </a>
+    </nav>
+  </div>
 
   <main class="main">
     <section class="section container">
@@ -465,6 +489,28 @@
 
     window.location.href = "articulos.html";
   });
+</script>
+
+<script>
+  const menuToggle = document.querySelector(".menu-toggle");
+  const mainMenu = document.querySelector("#main-menu");
+
+  if (menuToggle && mainMenu) {
+    menuToggle.addEventListener("click", () => {
+      const isOpen = menuToggle.getAttribute("aria-expanded") === "true";
+      menuToggle.setAttribute("aria-expanded", String(!isOpen));
+      mainMenu.classList.toggle("is-open");
+      document.body.classList.toggle("menu-open");
+    });
+
+    mainMenu.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", () => {
+        menuToggle.setAttribute("aria-expanded", "false");
+        mainMenu.classList.remove("is-open");
+        document.body.classList.remove("menu-open");
+      });
+    });
+  }
 </script>
 
 </body>
