@@ -32,52 +32,6 @@ html, body {
    ========================= */
 
 /* HERO */
-.hero{
-  position: relative;
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px;
-  overflow:hidden;
-  box-shadow: 0 12px 30px rgba(0,0,0,.35);
-  background-size: cover;
-  background-position: center;
-}
-.hero__content{ padding: 15px 0 24px; }
-.hero__title{
-  margin:0;
-  font-size: clamp(30px, 4vw, 50px);
-  line-height:1.05;
-  font-weight: 900;
-  text-shadow: 0 10px 35px rgba(0,0,0,.45);
-}
-.hero__subtitle{
-  margin: 12px 0 16px;
-  font-size: 16px;
-  font-weight: 700;
-  color: rgba(255,255,255,.82);
-}
-.hero__quicklinks{
-  display:flex;
-  gap:12px;
-  flex-wrap:wrap;
-  margin-top: 10px;
-}
-
-/* Glass buttons */
-.glass-btn{
-  display: inline-flex;
-  align-items: right;
-  justify-content: right;
-  gap: 8px;
-  padding: 3px 16px;
-  border-radius: 5px;
-  background: rgba(255,255,255,0.14);
-  border: 1px solid rgba(255,255,255,0.18);
-  color: rgba(255,255,255,.95);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.18);
-  font-weight: 800;
-}
-.glass-btn:hover{ background: rgba(15, 23, 42, .35); }
 
 /* Layout */
 .main{ padding: 22px 0 40px; }
