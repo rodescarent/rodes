@@ -37,7 +37,7 @@ html, body {
   /* Imagen de fondo con degradado oscuro para legibilidad */
   background-image:
     linear-gradient(to bottom, rgba(0,0,0,.25), rgba(0,0,0,.65)),
-    url("../images/header.png"); /* Cambia a "images/header.png" si tu CSS NO está en una carpeta */
+    url("images/header.png"); /* Cambia a "images/header.png" si tu CSS NO está en una carpeta */
 
   background-size: cover;     
   background-position: center;
