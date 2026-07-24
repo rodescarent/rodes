@@ -981,20 +981,18 @@ textarea {
     display: none;
   }
 
-  /* BARRA FINAL — SOLO MÓVIL
-     Franja 1: dos comentarios + More
-     Franja 2: iconos de contacto
-  */
+  /* BARRA FINAL */
 
   .reviews-wrap {
     padding-bottom: 8px;
   }
 
   .reviews {
-    display: grid;
     grid-template-columns: minmax(0, 1fr);
     border-radius: 13px;
+
     background: rgba(0, 0, 0, 0.38);
+
     backdrop-filter: blur(2px);
     -webkit-backdrop-filter: blur(2px);
   }
@@ -1002,72 +1000,80 @@ textarea {
   .reviews__content {
     display: grid;
     grid-template-columns:
-      minmax(0, 1fr)
-      minmax(0, 1fr)
-      minmax(64px, 0.48fr);
+      minmax(85px, 0.65fr)
+      minmax(0, 1.35fr)
+      minmax(70px, 0.55fr);
     align-items: stretch;
   }
 
   .reviews__content > * {
+    width: auto;
     min-width: 0;
-    padding: 9px 7px;
+    padding: 10px 8px;
   }
 
-  /* En móvil no mostramos el título; así caben dos comentarios reales */
   .reviews__heading {
-    display: none;
+    grid-column: auto;
+    border: 0;
+  }
+
+  .reviews__heading p {
+    font-size: 0.66rem;
+    line-height: 1.2;
   }
 
   .page-home .reviews__dynamic {
     display: contents;
   }
 
-  .reviews__dynamic .review {
-    display: block;
-    min-width: 0;
-  }
-
-  .reviews__dynamic .review:nth-child(n + 3) {
+  .reviews__dynamic .review:not(:first-child) {
     display: none;
   }
 
+  .review {
+    grid-column: auto;
+  }
+
   .review__stars {
-    margin-bottom: 3px;
-    font-size: 0.62rem;
+    margin-bottom: 4px;
+    font-size: 0.64rem;
   }
 
   .review p {
     display: -webkit-box;
     overflow: hidden;
-    font-size: 0.58rem;
-    line-height: 1.22;
+
+    font-size: 0.61rem;
+    line-height: 1.25;
+
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
   }
 
   .review span {
-    margin-top: 3px;
-    font-size: 0.52rem;
+    margin-top: 4px;
+    font-size: 0.56rem;
   }
 
   .reviews__link {
     grid-column: auto;
     min-height: auto;
-    padding: 9px 5px;
+    padding: 10px 6px;
     border: 0;
-    font-size: 0.58rem;
-    line-height: 1.15;
+
+    font-size: 0.62rem;
+    line-height: 1.2;
   }
 
-  /* SEGUNDA FRANJA: ICONOS DE CONTACTO */
+  /* ICONOS DE CONTACTO */
 
   .reviews__contact {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-evenly;
-    gap: 6px;
-    padding: 9px 8px 8px;
+    gap: 5px;
+    padding: 10px 8px 8px;
   }
 
   .reviews__contact::before {
@@ -1075,6 +1081,7 @@ textarea {
     left: 14px;
     right: 14px;
     bottom: auto;
+
     width: auto;
     height: 1px;
   }
@@ -1084,6 +1091,7 @@ textarea {
     flex-direction: column;
     justify-content: center;
     gap: 4px;
+
     font-size: 0.57rem;
     text-align: center;
   }
@@ -1148,9 +1156,9 @@ textarea {
 
   .reviews__content {
     grid-template-columns:
-      minmax(0, 1fr)
-      minmax(0, 1fr)
-      minmax(58px, 0.45fr);
+      minmax(75px, 0.65fr)
+      minmax(0, 1.25fr)
+      minmax(62px, 0.52fr);
   }
 
   .reviews__content > * {
