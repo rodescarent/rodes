@@ -117,7 +117,7 @@
       </div>
 
       <a class="reviews__link" href="#opiniones">
-        Ver opiniones
+        More
         <span aria-hidden="true">→</span>
       </a>
 
@@ -227,7 +227,7 @@
         }
 
         resumen.innerHTML = opiniones
-          .slice(0, 3)
+          .slice(0, 2)
           .map((opinion) => crearOpinion(opinion))
           .join("");
       } catch (error) {
