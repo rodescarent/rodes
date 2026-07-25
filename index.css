@@ -479,9 +479,7 @@ textarea {
 }
 
 .page-home .reviews__dynamic {
-  display: grid;
-   grid-template-columns:repeat(2,minmax(0,1fr));
-    gap:8px;
+  display: contents;
 }
 
 .review {
@@ -1082,12 +1080,20 @@ textarea {
     display: contents;
   }
 
-  .reviews__dynamic .review:nth-child(n+3){
-    display:none;
+  /* Solo móvil: mostrar 2 opiniones */
+  .page-home .reviews__dynamic{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:8px;
   }
 
   .reviews__dynamic .review{
     display:block;
+  }
+
+  .reviews__dynamic .review:nth-child(n+3){
+    display:none;
+  }
 
   .review {
     grid-column: auto;
