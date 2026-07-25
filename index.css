@@ -479,7 +479,9 @@ textarea {
 }
 
 .page-home .reviews__dynamic {
-  display: contents;
+  display: grid;
+   grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:8px;
 }
 
 .review {
@@ -1080,9 +1082,12 @@ textarea {
     display: contents;
   }
 
-  .reviews__dynamic .review:not(:first-child) {
-    display: none;
+  .reviews__dynamic .review:nth-child(n+3){
+    display:none;
   }
+
+  .reviews__dynamic .review{
+    display:block;
 
   .review {
     grid-column: auto;
