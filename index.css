@@ -1268,3 +1268,38 @@ textarea {
     transition-duration: 0.01ms !important;
   }
 }
+
+
+/* =====================================================
+   SOLO MOVIL
+   Une opiniones + More
+   ===================================================== */
+
+@media (max-width:620px){
+
+    .reviews__content{
+        display:grid;
+        grid-template-columns:1fr auto;
+        gap:0;
+        align-items:stretch;
+    }
+
+    .page-home .reviews__dynamic{
+        display:grid;
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:0;
+    }
+
+    .reviews__dynamic .review:nth-child(n+3){
+        display:none;
+    }
+
+    .reviews__link{
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        padding:0 10px;
+        border-left:1px solid rgba(255,255,255,.12);
+        white-space:nowrap;
+    }
+}
