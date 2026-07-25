@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Opiniones de clientes | RODES Car Rental</title>
+
+  <meta
+    name="description"
+    content="Opiniones de clientes de RODES Car Rental en Toronto."
+  >
+
+  <link rel="icon" href="images/favicon.png" sizes="64x64">
+
+  <style>
+    :root {
+      --gold: #e6ad5d;
+      --gold-light: #f3c987;
+      --white: #ffffff;
+      --dark: #090a0b;
+      --card: rgba(15, 16, 18, 0.88);
+      --line: rgba(255, 255, 255, 0.13);
+      --muted: rgba(255, 255, 255, 0.72);
+      --container: 1120px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-width: 320px;
+      min-height: 100vh;
+      margin: 0;
+
+      color: var(--white);
+      background:
+        linear-gradient(
+          rgba(0, 0, 0, 0.78),
+          rgba(0, 0, 0, 0.92)
+        ),
+        url("images/header.png") center / cover fixed no-repeat;
+
+      font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .container {
+      width: min(calc(100% - 36px), var(--container));
+      margin-inline: auto;
+    }
+
+    /* =========================
+       BARRA SUPERIOR
+       ========================= */
+
+    .topbar-wrap {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      padding-top: 12px;
+    }
+
+    .topbar {
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 8px 16px;
+
+      background: rgba(0, 0, 0, 0.62);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.35);
+
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .brand {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      line-height: 1;
+    }
+
+    .brand__name {
+      font-size: 1.7rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+    }
+
+    .brand__tag {
+      width: 100%;
+      margin-top: 3px;
+
+      color: var(--gold-light);
+
+      font-size: 0.52rem;
+      font-weight: 600;
+      letter-spacing: 0.55em;
+      text-align: center;
+    }
+
+    .back-button {
+      min-height: 42px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 0 16px;
+
+      color: #24180a;
+      background: linear-gradient(
+        135deg,
+        var(--gold-light),
+        var(--gold)
+      );
+
+      border-radius: 11px;
+
+      font-size: 0.84rem;
+      font-weight: 700;
+
+      transition:
+        transform 180ms ease,
+        box-shadow 180ms ease;
+    }
+
+    .back-button:hover,
+    .back-button:focus-visible {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(230, 173, 93, 0.28);
+    }
+
+    /* =========================
+       CONTENIDO
+       ========================= */
+
+    main {
+      padding: 70px 0 60px;
+    }
+
+    .page-heading {
+      max-width: 720px;
+      margin: 0 auto 38px;
+      text-align: center;
+    }
+
+    .page-heading h1 {
+      margin: 0;
+
+      font-size: clamp(2.2rem, 7vw, 4.3rem);
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+
+    .page-heading h1 span {
+      display: block;
+      margin-top: 8px;
+      color: var(--gold-light);
+    }
+
+    .page-heading p {
+      max-width: 590px;
+      margin: 18px auto 0;
+
+      color: var(--muted);
+
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    /* =========================
+       OPINIONES
+       ========================= */
+
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .review-card {
+      min-width: 0;
+      padding: 22px;
+
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 17px;
+
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.28);
+
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+    }
+
+    .review-card__stars {
+      margin-bottom: 12px;
+
+      color: var(--gold);
+      font-size: 1rem;
+      letter-spacing: 0.08em;
+    }
+
+    .review-card p {
+      margin: 0;
+
+      color: rgba(255, 255, 255, 0.88);
+
+      font-size: 0.91rem;
+      line-height: 1.6;
+      overflow-wrap: anywhere;
+    }
+
+    .review-card span {
+      display: block;
+      margin-top: 16px;
+
+      color: rgba(255, 255, 255, 0.58);
+
+      font-size: 0.78rem;
+    }
+
+    .reviews-status {
+      grid-column: 1 / -1;
+      padding: 35px 20px;
+
+      color: var(--muted);
+      background: rgba(0, 0, 0, 0.48);
+
+      border: 1px solid var(--line);
+      border-radius: 16px;
+
+      text-align: center;
+    }
+
+    .reviews-status p {
+      margin: 0;
+      line-height: 1.5;
+    }
+
+    .retry-button {
+      margin-top: 18px;
+      padding: 10px 18px;
+
+      color: #21170b;
+      background: var(--gold-light);
+
+      border: 0;
+      border-radius: 10px;
+
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    /* =========================
+       PIE DE PÁGINA
+       ========================= */
+
+    .footer {
+      padding: 20px 0 28px;
+      color: rgba(255, 255, 255, 0.55);
+      font-size: 0.76rem;
+      text-align: center;
+    }
+
+    /* =========================
+       TABLET
+       ========================= */
+
+    @media (max-width: 900px) {
+      .reviews-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    /* =========================
+       MÓVIL
+       ========================= */
+
+    @media (max-width: 620px) {
+      body {
+        background-attachment: scroll;
+      }
+
+      .container {
+        width: calc(100% - 18px);
+      }
+
+      .topbar-wrap {
+        padding-top: 7px;
+      }
+
+      .topbar {
+        min-height: 52px;
+        padding: 6px 8px;
+        border-radius: 12px;
+      }
+
+      .brand__name {
+        font-size: 1.08rem;
+      }
+
+      .brand__tag {
+        font-size: 0.32rem;
+        letter-spacing: 0.46em;
+      }
+
+      .back-button {
+        min-height: 36px;
+        padding-inline: 10px;
+        font-size: 0.66rem;
+      }
+
+      main {
+        padding: 50px 0 36px;
+      }
+
+      .page-heading {
+        margin-bottom: 25px;
+      }
+
+      .page-heading h1 {
+        font-size: clamp(2rem, 10vw, 3rem);
+      }
+
+      .page-heading p {
+        margin-top: 13px;
+        font-size: 0.83rem;
+        line-height: 1.5;
+      }
+
+      .reviews-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .review-card {
+        padding: 17px;
+        border-radius: 14px;
+      }
+
+      .review-card p {
+        font-size: 0.82rem;
+      }
+
+      .review-card span {
+        margin-top: 12px;
+        font-size: 0.72rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="topbar-wrap">
+    <nav class="topbar container" aria-label="Navegación principal">
+
+      <a
+        class="brand"
+        href="index.html"
+        aria-label="Regresar al inicio de RODES Car Rental"
+      >
+        <span class="brand__name">RODES</span>
+        <span class="brand__tag">CAR RENTAL</span>
+      </a>
+
+      <a class="back-button" href="index.html">
+        <span aria-hidden="true">←</span>
+        Regresar
+      </a>
+
+    </nav>
+  </div>
+
+  <main class="container">
+
+    <header class="page-heading">
+      <h1>
+        Lo que dicen
+        <span>nuestros clientes</span>
+      </h1>
+
+      <p>
+        Experiencias compartidas por clientes que han utilizado
+        nuestros vehículos y servicios.
+      </p>
+    </header>
+
+    <section
+      id="listaOpiniones"
+      class="reviews-grid"
+      aria-label="Opiniones de clientes"
+      aria-live="polite"
+    >
+      <div class="reviews-status">
+        <p>Cargando opiniones…</p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer container">
+    RODES Car Rental · Toronto
+  </footer>
+
+  <script>
+    const OPINIONES_URL =
+      "https://script.google.com/macros/s/AKfycbzaRWrQtfdDe8-V--rGcAY565760tZkUVtWDtcL3EGOJmen3dLfiKLiTdIXqz7pVLxruQ/exec";
+
+    function escaparHTML(valor) {
+      return String(valor ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function crearOpinion(opinion) {
+      const cantidad = Math.max(
+        0,
+        Math.min(5, Number(opinion.estrellas) || 0)
+      );
+
+      const estrellas =
+        "★".repeat(cantidad) +
+        "☆".repeat(5 - cantidad);
+
+      return `
+        <article class="review-card">
+          <div
+            class="review-card__stars"
+            aria-label="${cantidad} de 5 estrellas"
+          >
+            ${estrellas}
+          </div>
+
+          <p>
+            “${escaparHTML(opinion.comentario)}”
+          </p>
+
+          <span>
+            — ${escaparHTML(opinion.nombre)}
+          </span>
+        </article>
+      `;
+    }
+
+    async function cargarOpiniones() {
+      const contenedor =
+        document.getElementById("listaOpiniones");
+
+      contenedor.innerHTML = `
+        <div class="reviews-status">
+          <p>Cargando opiniones…</p>
+        </div>
+      `;
+
+      try {
+        const respuesta = await fetch(OPINIONES_URL, {
+          method: "GET",
+          cache: "no-store"
+        });
+
+        if (!respuesta.ok) {
+          throw new Error(`HTTP ${respuesta.status}`);
+        }
+
+        const data = await respuesta.json();
+
+        const opiniones =
+          Array.isArray(data.opiniones)
+            ? data.opiniones
+            : [];
+
+        if (!data.ok || opiniones.length === 0) {
+          contenedor.innerHTML = `
+            <div class="reviews-status">
+              <p>
+                Todavía no hay opiniones disponibles.
+              </p>
+            </div>
+          `;
+          return;
+        }
+
+        /*
+          No utilizamos .slice(0, 3).
+          Esta página muestra todas las opiniones
+          aprobadas que devuelve el Apps Script.
+        */
+
+        contenedor.innerHTML = opiniones
+          .map(crearOpinion)
+          .join("");
+
+      } catch (error) {
+        console.error(
+          "No se pudieron cargar las opiniones:",
+          error
+        );
+
+        contenedor.innerHTML = `
+          <div class="reviews-status">
+            <p>
+              No se pudieron cargar las opiniones.
+            </p>
+
+            <button
+              class="retry-button"
+              type="button"
+              onclick="cargarOpiniones()"
+            >
+              Intentar otra vez
+            </button>
+          </div>
+        `;
+      }
+    }
+
+    cargarOpiniones();
+  </script>
+
+</body>
+</html>
