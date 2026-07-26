@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="EN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RODES | Our Cars</title>
+  <meta name="description" content="Choose between our Audi Q5 Progressive S line and Audi Q5 Comfort rental vehicles in Toronto.">
+  <link rel="icon" href="images/favicon.png" sizes="64x64">
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="page-home page-autos">
+
+  <header class="hero hero--autos">
+    <div class="hero__overlay"></div>
+
+    <div class="topbar-wrap">
+      <nav class="topbar container" aria-label="Main navigation">
+        <a class="brand" href="index.html" aria-label="RODES Car Rental - Home">
+          <span class="brand__name">RODES</span>
+          <span class="brand__tag">CAR RENTAL</span>
+        </a>
+
+        <button class="menu-toggle" type="button" aria-label="Open menu"
+          aria-expanded="false" aria-controls="main-menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        <div class="topbar__links" id="main-menu">
+          <a class="nav-link" href="index.html">Home</a>
+          <a class="nav-link is-active" href="autos.html" aria-current="page">Our cars</a>
+          <a class="nav-link" href="articulos.html">Extras</a>
+          <a class="nav-link" href="contacto.html">Contact</a>
+        </div>
+
+        <a class="reserve-button" href="#our-cars">
+          <span class="reserve-button__icon" aria-hidden="true">▣</span>
+          Reserve now
+        </a>
+      </nav>
+    </div>
+
+    <div class="hero__content container">
+      <h1 class="hero__title">Choose your Audi Q5</h1>
+      <p class="hero__subtitle">Comfort, space and confidence for your trip from Toronto.</p>
+    </div>
+  </header>
+
+  <main class="main" id="our-cars">
+    <section class="section container" aria-labelledby="cars-title">
+      <h2 class="section__title" id="cars-title">Our cars</h2>
+
+      <div class="cards">
+
+        <article class="card">
+          <div class="card__media">
+            <img src="images/audiprog.jpg"
+              alt="White Audi Q5 Progressive S line" loading="eager">
+            <div class="card__badge">Progressive S line</div>
+          </div>
+
+          <div class="card__body">
+            <div>
+              <h3 class="card__title">Audi Q5 Progressive S line</h3>
+              <p class="card__meta">Premium SUV · Sport design · Quattro AWD</p>
+              <p class="card__meta small--spaced">
+                A refined and sporty option with generous passenger and luggage space.
+                Ideal for family trips, business travel and weekend adventures.
+              </p>
+              <p class="price">From <span class="value-strong">CA$100/day</span></p>
+            </div>
+
+            <div class="car-actions">
+              <a class="btn btn-ghost" href="q5progressive-details.html">View details</a>
+              <a class="btn btn-primary" href="q5progressive.html">Reserve</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card__media">
+            <img src="images/audiconfor.jpeg"
+              alt="Audi Q5 Comfort" loading="lazy">
+            <div class="card__badge">Comfort</div>
+          </div>
+
+          <div class="card__body">
+            <div>
+              <h3 class="card__title">Audi Q5 Comfort</h3>
+              <p class="card__meta">Premium SUV · Comfortable interior · Quattro AWD</p>
+              <p class="card__meta small--spaced">
+                A comfortable and practical premium SUV with smooth driving,
+                excellent space and the versatility needed for everyday use or longer journeys.
+              </p>
+              <p class="price">Price <span class="value-strong">coming soon</span></p>
+            </div>
+
+            <div class="car-actions">
+              <a class="btn btn-ghost" href="q5comfort-details.html">View details</a>
+              <a class="btn btn-primary" href="q5comfort.html">No disponible</a>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const menuToggle = document.querySelector(".menu-toggle");
+    const mainMenu = document.querySelector("#main-menu");
+
+    if (menuToggle && mainMenu) {
+      menuToggle.addEventListener("click", () => {
+        const isOpen = menuToggle.getAttribute("aria-expanded") === "true";
+        menuToggle.setAttribute("aria-expanded", String(!isOpen));
+        mainMenu.classList.toggle("is-open");
+        document.body.classList.toggle("menu-open");
+      });
+
+      mainMenu.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+          menuToggle.setAttribute("aria-expanded", "false");
+          mainMenu.classList.remove("is-open");
+          document.body.classList.remove("menu-open");
+        });
+      });
+    }
+  </script>
+
+</body>
+</html>
