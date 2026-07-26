@@ -1362,3 +1362,208 @@ body.menu-open{ overflow:hidden; }
     padding-top:20px;
   }
 }
+
+
+/* =========================================================
+   SELECTOR SIMPLE DE FECHA Y HORA — PC Y MÓVIL
+   ========================================================= */
+
+.rental-datetime{
+  position:relative;
+  padding:12px;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:14px;
+  background:rgba(0,0,0,.18);
+}
+
+.rental-datetime__label{
+  margin-bottom:9px;
+  color:#fff;
+  font-size:14px;
+  font-weight:900;
+}
+
+.rental-datetime__controls{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(145px,.42fr);
+  gap:10px;
+  align-items:end;
+}
+
+.date-picker{
+  position:relative;
+  min-width:0;
+}
+
+.date-picker__button{
+  width:100%;
+  min-height:46px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:0 13px;
+  color:var(--text-dark);
+  background:rgba(0,0,0,.28);
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:12px;
+  cursor:pointer;
+  text-align:left;
+  font:inherit;
+}
+
+.date-picker__button:hover,
+.date-picker__button:focus-visible,
+.date-picker.is-open .date-picker__button{
+  border-color:rgba(230,173,93,.85);
+  box-shadow:0 0 0 3px rgba(230,173,93,.16);
+}
+
+.date-picker__icon{
+  color:var(--gold-light);
+  font-size:19px;
+  line-height:1;
+}
+
+.date-picker__text{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-weight:800;
+}
+
+.date-picker__panel{
+  position:absolute;
+  z-index:60;
+  top:calc(100% + 8px);
+  left:0;
+  width:min(330px, calc(100vw - 44px));
+  padding:12px 12px 58px;
+  color:var(--text-dark);
+  background:rgba(7,9,11,.98);
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:14px;
+  box-shadow:0 18px 45px rgba(0,0,0,.48);
+}
+
+.date-picker__panel[hidden]{
+  display:none;
+}
+
+.date-picker__panel label,
+.time-picker label{
+  display:block;
+  margin:0 0 7px;
+  color:var(--muted-dark);
+  font-size:12px;
+  font-weight:800;
+}
+
+.date-picker__input-wrap,
+.time-picker__input-wrap{
+  width:100%;
+  min-width:0;
+  padding:11px 12px;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:11px;
+}
+
+.page-car .date-picker__input-wrap input[type="date"],
+.page-car .time-picker__input-wrap input[type="time"]{
+  display:block;
+  width:100%;
+  min-width:0;
+  padding:0;
+  color:var(--text-dark);
+  background:transparent;
+  border:0;
+  border-radius:0;
+  box-shadow:none;
+  font:inherit;
+  cursor:pointer;
+}
+
+.page-car .date-picker__input-wrap input:focus,
+.page-car .time-picker__input-wrap input:focus{
+  border:0;
+  box-shadow:none;
+}
+
+.page-car input[type="date"]::-webkit-calendar-picker-indicator{
+  position:static;
+  width:auto;
+  height:auto;
+  opacity:1;
+  cursor:pointer;
+  filter:invert(1);
+}
+
+.date-picker__ok{
+  position:absolute;
+  right:12px;
+  bottom:12px;
+  min-width:68px;
+  min-height:36px;
+  padding:0 16px;
+  color:#21170b;
+  background:linear-gradient(135deg,var(--gold-light),var(--gold));
+  border:0;
+  border-radius:9px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.time-picker{
+  min-width:0;
+}
+
+@media(max-width:620px){
+  .rental-datetime{
+    padding:10px;
+  }
+
+  .rental-datetime__controls{
+    grid-template-columns:minmax(0,1fr) 118px;
+    gap:8px;
+  }
+
+  .date-picker__button{
+    min-height:44px;
+    padding-inline:10px;
+  }
+
+  .date-picker__panel{
+    position:fixed;
+    z-index:100;
+    top:50%;
+    left:50%;
+    width:min(340px, calc(100vw - 24px));
+    transform:translate(-50%,-50%);
+  }
+
+  .date-picker.is-open::after{
+    content:"";
+    position:fixed;
+    z-index:99;
+    inset:0;
+    background:rgba(0,0,0,.58);
+  }
+
+  .date-picker.is-open .date-picker__panel{
+    z-index:100;
+  }
+}
+
+@media(max-width:390px){
+  .rental-datetime__controls{
+    grid-template-columns:minmax(0,1fr) 108px;
+  }
+
+  .date-picker__text{
+    font-size:13px;
+  }
+
+  .date-picker__icon{
+    font-size:17px;
+  }
+}

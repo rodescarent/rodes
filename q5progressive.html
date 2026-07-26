@@ -10,15 +10,41 @@
 <body class="page-car">
 
   <header class="hero hero--car">
-    <div class="hero__content container">
-      <h1 class="hero__title">Audi Q5 Progressive Sline</h1>
+    <div class="hero__overlay"></div>
 
-      <nav class="hero__quicklinks" aria-label="Quick links">
-        <a class="glass-btn" href="index.html">Home</a>
-        <a class="glass-btn" href="detallesq5progressive.html">Details</a>
+    <div class="topbar-wrap">
+      <nav class="topbar container" aria-label="Main navigation">
+        <a class="brand" href="index.html" aria-label="RODES Car Rental - Home">
+          <span class="brand__name">RODES</span>
+          <span class="brand__tag">CAR RENTAL</span>
+        </a>
+
+        <button
+          class="menu-toggle"
+          type="button"
+          aria-label="Open menu"
+          aria-expanded="false"
+          aria-controls="main-menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        <div class="topbar__links" id="main-menu">
+          <a class="nav-link" href="index.html">Home</a>
+          <a class="nav-link" href="autos.html">Our cars</a>
+          <a class="nav-link" href="articulos.html">Extras</a>
+          <a class="nav-link" href="contacto.html">Contact</a>
+        </div>
+
+        <a class="reserve-button" href="#reservaForm">
+          <span class="reserve-button__icon" aria-hidden="true">▣</span>
+          Reserve now
+        </a>
       </nav>
     </div>
-  </header>
+
+   </header>
 
   <main class="main">
     <section class="section container">
@@ -105,25 +131,67 @@
             </div>
           </div>
 
-          <div class="grid-2">
-            <div class="field">
-              <label for="fechaInicio">Start date</label>
-              <input type="date" id="fechaInicio" required>
-            </div>
-            <div class="field">
-              <label for="horaInicio">Start time</label>
-              <input type="time" id="horaInicio" required>
+          <div class="rental-datetime">
+            <div class="rental-datetime__label">Start</div>
+
+            <div class="rental-datetime__controls">
+              <div class="date-picker">
+                <button
+                  type="button"
+                  class="date-picker__button"
+                  data-date-target="fechaInicio"
+                  aria-expanded="false">
+                  <span class="date-picker__icon" aria-hidden="true">▦</span>
+                  <span class="date-picker__text">Choose date</span>
+                </button>
+
+                <div class="date-picker__panel" hidden>
+                  <label for="fechaInicio">Start date</label>
+                  <div class="date-picker__input-wrap">
+                    <input type="date" id="fechaInicio" required>
+                  </div>
+                  <button type="button" class="date-picker__ok">OK</button>
+                </div>
+              </div>
+
+              <div class="time-picker">
+                <label for="horaInicio">Time</label>
+                <div class="time-picker__input-wrap">
+                  <input type="time" id="horaInicio" required>
+                </div>
+              </div>
             </div>
           </div>
 
-          <div class="grid-2">
-            <div class="field">
-              <label for="fechaFin">End date</label>
-              <input type="date" id="fechaFin" required>
-            </div>
-            <div class="field">
-              <label for="horaFin">End time</label>
-              <input type="time" id="horaFin" required>
+          <div class="rental-datetime">
+            <div class="rental-datetime__label">End</div>
+
+            <div class="rental-datetime__controls">
+              <div class="date-picker">
+                <button
+                  type="button"
+                  class="date-picker__button"
+                  data-date-target="fechaFin"
+                  aria-expanded="false">
+                  <span class="date-picker__icon" aria-hidden="true">▦</span>
+                  <span class="date-picker__text">Choose date</span>
+                </button>
+
+                <div class="date-picker__panel" hidden>
+                  <label for="fechaFin">End date</label>
+                  <div class="date-picker__input-wrap">
+                    <input type="date" id="fechaFin" required>
+                  </div>
+                  <button type="button" class="date-picker__ok">OK</button>
+                </div>
+              </div>
+
+              <div class="time-picker">
+                <label for="horaFin">Time</label>
+                <div class="time-picker__input-wrap">
+                  <input type="time" id="horaFin" required>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -552,6 +620,125 @@
       alert(error.message || "Could not save the reservation.");
       btnContinue.textContent = "Continue";
       updateContinueState();
+    }
+  });
+</script>
+
+
+<script>
+  const menuToggle = document.querySelector(".menu-toggle");
+  const mainMenu = document.querySelector("#main-menu");
+
+  if (menuToggle && mainMenu) {
+    menuToggle.addEventListener("click", () => {
+      const isOpen = menuToggle.getAttribute("aria-expanded") === "true";
+
+      menuToggle.setAttribute("aria-expanded", String(!isOpen));
+      mainMenu.classList.toggle("is-open");
+      document.body.classList.toggle("menu-open");
+    });
+
+    mainMenu.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", () => {
+        menuToggle.setAttribute("aria-expanded", "false");
+        mainMenu.classList.remove("is-open");
+        document.body.classList.remove("menu-open");
+      });
+    });
+  }
+</script>
+
+
+<script>
+  function formatRentalDate(value) {
+    if (!value) return "Choose date";
+    const parts = value.split("-");
+    if (parts.length !== 3) return value;
+
+    const localDate = new Date(
+      Number(parts[0]),
+      Number(parts[1]) - 1,
+      Number(parts[2])
+    );
+
+    return localDate.toLocaleDateString("en-CA", {
+      month: "short",
+      day: "numeric",
+      year: "numeric"
+    });
+  }
+
+  function closeAllDatePanels(exceptPicker = null) {
+    document.querySelectorAll(".date-picker").forEach((picker) => {
+      if (picker === exceptPicker) return;
+
+      const panel = picker.querySelector(".date-picker__panel");
+      const button = picker.querySelector(".date-picker__button");
+
+      panel.hidden = true;
+      button.setAttribute("aria-expanded", "false");
+      picker.classList.remove("is-open");
+    });
+  }
+
+  document.querySelectorAll(".date-picker").forEach((picker) => {
+    const button = picker.querySelector(".date-picker__button");
+    const panel = picker.querySelector(".date-picker__panel");
+    const okButton = picker.querySelector(".date-picker__ok");
+    const dateInput = picker.querySelector('input[type="date"]');
+    const text = picker.querySelector(".date-picker__text");
+
+    button.addEventListener("click", () => {
+      const willOpen = panel.hidden;
+      closeAllDatePanels(willOpen ? picker : null);
+
+      panel.hidden = !willOpen;
+      button.setAttribute("aria-expanded", String(willOpen));
+      picker.classList.toggle("is-open", willOpen);
+
+      if (willOpen) {
+        window.setTimeout(() => {
+          dateInput.focus();
+          if (typeof dateInput.showPicker === "function") {
+            try { dateInput.showPicker(); } catch (_) {}
+          }
+        }, 0);
+      }
+    });
+
+    okButton.addEventListener("click", () => {
+      if (!dateInput.value) {
+        dateInput.focus();
+        if (typeof dateInput.showPicker === "function") {
+          try { dateInput.showPicker(); } catch (_) {}
+        }
+        return;
+      }
+
+      text.textContent = formatRentalDate(dateInput.value);
+      panel.hidden = true;
+      button.setAttribute("aria-expanded", "false");
+      picker.classList.remove("is-open");
+
+      dateInput.dispatchEvent(new Event("change", { bubbles: true }));
+    });
+
+    dateInput.addEventListener("change", () => {
+      if (dateInput.value) {
+        text.textContent = formatRentalDate(dateInput.value);
+      }
+    });
+  });
+
+  document.addEventListener("click", (event) => {
+    if (!event.target.closest(".date-picker")) {
+      closeAllDatePanels();
+    }
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      closeAllDatePanels();
     }
   });
 </script>
