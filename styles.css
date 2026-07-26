@@ -1507,3 +1507,136 @@ body.menu-open{ overflow:hidden; }
   cursor:pointer;
 }
 
+
+/* =========================================================
+   FIX MÓVIL — AUTOS.HTML
+   Reduce el espacio entre el encabezado, el hero y "Our cars"
+   PEGAR AL FINAL DEL CSS
+   ========================================================= */
+
+@media (max-width: 620px){
+
+  /* Contenedor general más ancho en móvil */
+  .container{
+    width: calc(100% - 24px);
+  }
+
+  /* Hero de autos más compacto */
+  .page-home .hero{
+    min-height: 270px !important;
+    height: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background-position: center center;
+  }
+
+  /* Evita desplazamientos artificiales */
+  .page-home .hero__content{
+    min-height: 190px;
+    padding: 45px 12px 24px !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transform: none !important;
+  }
+
+  .page-home .hero__title{
+    margin: 0 !important;
+    font-size: clamp(2rem, 10vw, 3rem);
+    line-height: 1.08;
+    transform: none !important;
+  }
+
+  .page-home .hero__subtitle{
+    margin: 10px 0 0 !important;
+    transform: none !important;
+  }
+
+  .page-home .hero__quicklinks{
+    margin-top: 14px !important;
+    transform: none !important;
+  }
+
+  /* Elimina espacio antes de la sección de autos */
+  .page-home .main{
+    padding: 8px 0 0 !important;
+  }
+
+  .page-home .section{
+    padding: 18px 0 24px !important;
+  }
+
+  .page-home .section__title{
+    margin: 0 0 14px !important;
+    font-size: 2rem;
+    line-height: 1.1;
+  }
+
+  /* Tarjetas más compactas */
+  .page-home .cards{
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-top: 0 !important;
+  }
+
+  .page-home .card{
+    padding: 12px;
+    border-radius: 18px;
+  }
+
+  .page-home .card__media{
+    aspect-ratio: 16 / 9;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .page-home .card__badge{
+    padding: 12px;
+    font-size: clamp(1.55rem, 7vw, 2.1rem);
+    line-height: 1.1;
+    text-align: center;
+  }
+
+  .page-home .card__body{
+    padding: 14px 4px 6px;
+    gap: 10px;
+  }
+
+  .page-home .card__title{
+    font-size: 1.45rem;
+    line-height: 1.12;
+  }
+
+  .page-home .card__meta{
+    font-size: 1rem;
+    line-height: 1.35;
+  }
+}
+
+
+/* Ajuste adicional para celulares pequeños */
+@media (max-width: 480px){
+
+  .page-home .hero{
+    min-height: 240px !important;
+  }
+
+  .page-home .hero__content{
+    min-height: 160px;
+    padding: 32px 8px 18px !important;
+    transform: none !important;
+  }
+
+  .page-home .hero__subtitle,
+  .page-home .hero__quicklinks{
+    transform: none !important;
+  }
+
+  .page-home .section{
+    padding-top: 14px !important;
+  }
+
+  .page-home .section__title{
+    font-size: 1.8rem;
+  }
+}
