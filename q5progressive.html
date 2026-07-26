@@ -133,18 +133,20 @@
 
           <div class="datetime-simple">
             <label for="fechaHoraInicio">Start date and time</label>
-            <div class="datetime-simple__control">
+            <div class="datetime-simple__control" data-datetime-control="fechaHoraInicio">
               <span class="datetime-simple__icon" aria-hidden="true">▦</span>
               <input type="datetime-local" id="fechaHoraInicio" required>
             </div>
+            <button type="button" class="datetime-desktop-ok" data-datetime-ok="fechaHoraInicio">OK</button>
           </div>
 
           <div class="datetime-simple">
             <label for="fechaHoraFin">End date and time</label>
-            <div class="datetime-simple__control">
+            <div class="datetime-simple__control" data-datetime-control="fechaHoraFin">
               <span class="datetime-simple__icon" aria-hidden="true">▦</span>
               <input type="datetime-local" id="fechaHoraFin" required>
             </div>
+            <button type="button" class="datetime-desktop-ok" data-datetime-ok="fechaHoraFin">OK</button>
           </div>
 
           <!-- Campos originales: mantienen intacta la lógica existente -->
@@ -654,6 +656,54 @@
     fechaHoraInicioEl.min = ahoraLocal;
     fechaHoraFinEl.min = ahoraLocal;
   });
+</script>
+
+
+<script>
+  /* Mejora exclusiva para escritorio: toda el área abre el selector */
+  if (window.matchMedia("(min-width: 621px)").matches) {
+    document.querySelectorAll("[data-datetime-control]").forEach((control) => {
+      const inputId = control.getAttribute("data-datetime-control");
+      const input = document.getElementById(inputId);
+
+      control.addEventListener("click", (event) => {
+        if (event.target === input) return;
+
+        input.focus();
+
+        if (typeof input.showPicker === "function") {
+          try {
+            input.showPicker();
+          } catch (_) {}
+        } else {
+          input.click();
+        }
+      });
+    });
+
+    document.querySelectorAll("[data-datetime-ok]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const input = document.getElementById(
+          button.getAttribute("data-datetime-ok")
+        );
+
+        if (!input.value) {
+          input.focus();
+
+          if (typeof input.showPicker === "function") {
+            try {
+              input.showPicker();
+            } catch (_) {}
+          }
+          return;
+        }
+
+        input.dispatchEvent(new Event("input", { bubbles: true }));
+        input.dispatchEvent(new Event("change", { bubbles: true }));
+        button.blur();
+      });
+    });
+  }
 </script>
 
 </body>

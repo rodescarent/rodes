@@ -1478,3 +1478,57 @@ body.menu-open{ overflow:hidden; }
     padding:9px 10px;
   }
 }
+
+
+/* =========================================================
+   MEJORA DATETIME — SOLO ESCRITORIO
+   No modifica el formato móvil.
+   ========================================================= */
+
+.datetime-desktop-ok{
+  display:none;
+}
+
+@media (min-width:621px){
+  .datetime-simple{
+    position:relative;
+    padding-bottom:64px;
+  }
+
+  .datetime-simple__control{
+    cursor:pointer;
+  }
+
+  .datetime-simple__control,
+  .datetime-simple__control *{
+    cursor:pointer;
+  }
+
+  .page-car .datetime-simple input[type="datetime-local"]{
+    min-height:28px;
+  }
+
+  .datetime-desktop-ok{
+    position:absolute;
+    right:12px;
+    bottom:12px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-width:72px;
+    min-height:38px;
+    padding:0 18px;
+    color:#21170b;
+    background:linear-gradient(135deg,var(--gold-light),var(--gold));
+    border:1px solid rgba(255,255,255,.20);
+    border-radius:9px;
+    font-weight:900;
+    cursor:pointer;
+    box-shadow:0 8px 20px rgba(230,173,93,.22);
+  }
+
+  .datetime-desktop-ok:hover,
+  .datetime-desktop-ok:focus-visible{
+    filter:brightness(1.06);
+  }
+}
