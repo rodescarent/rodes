@@ -1012,7 +1012,7 @@ body.menu-open{ overflow:hidden; }
   gap:10px;
   min-height:44px;
   padding:0 20px;
-  color:#21170b;
+  color:#ece8e4;
   background:linear-gradient(135deg,var(--gold-light),var(--gold));
   border:1px solid rgba(255,255,255,.20);
   border-radius:12px;
