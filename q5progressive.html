@@ -131,69 +131,27 @@
             </div>
           </div>
 
-          <div class="rental-datetime">
-            <div class="rental-datetime__label">Start</div>
-
-            <div class="rental-datetime__controls">
-              <div class="date-picker">
-                <button
-                  type="button"
-                  class="date-picker__button"
-                  data-date-target="fechaInicio"
-                  aria-expanded="false">
-                  <span class="date-picker__icon" aria-hidden="true">▦</span>
-                  <span class="date-picker__text">Choose date</span>
-                </button>
-
-                <div class="date-picker__panel" hidden>
-                  <label for="fechaInicio">Start date</label>
-                  <div class="date-picker__input-wrap">
-                    <input type="date" id="fechaInicio" required>
-                  </div>
-                  <button type="button" class="date-picker__ok">OK</button>
-                </div>
-              </div>
-
-              <div class="time-picker">
-                <label for="horaInicio">Time</label>
-                <div class="time-picker__input-wrap">
-                  <input type="time" id="horaInicio" required>
-                </div>
-              </div>
+          <div class="datetime-simple">
+            <label for="fechaHoraInicio">Start date and time</label>
+            <div class="datetime-simple__control">
+              <span class="datetime-simple__icon" aria-hidden="true">▦</span>
+              <input type="datetime-local" id="fechaHoraInicio" required>
             </div>
           </div>
 
-          <div class="rental-datetime">
-            <div class="rental-datetime__label">End</div>
-
-            <div class="rental-datetime__controls">
-              <div class="date-picker">
-                <button
-                  type="button"
-                  class="date-picker__button"
-                  data-date-target="fechaFin"
-                  aria-expanded="false">
-                  <span class="date-picker__icon" aria-hidden="true">▦</span>
-                  <span class="date-picker__text">Choose date</span>
-                </button>
-
-                <div class="date-picker__panel" hidden>
-                  <label for="fechaFin">End date</label>
-                  <div class="date-picker__input-wrap">
-                    <input type="date" id="fechaFin" required>
-                  </div>
-                  <button type="button" class="date-picker__ok">OK</button>
-                </div>
-              </div>
-
-              <div class="time-picker">
-                <label for="horaFin">Time</label>
-                <div class="time-picker__input-wrap">
-                  <input type="time" id="horaFin" required>
-                </div>
-              </div>
+          <div class="datetime-simple">
+            <label for="fechaHoraFin">End date and time</label>
+            <div class="datetime-simple__control">
+              <span class="datetime-simple__icon" aria-hidden="true">▦</span>
+              <input type="datetime-local" id="fechaHoraFin" required>
             </div>
           </div>
+
+          <!-- Campos originales: mantienen intacta la lógica existente -->
+          <input type="hidden" id="fechaInicio">
+          <input type="hidden" id="horaInicio">
+          <input type="hidden" id="fechaFin">
+          <input type="hidden" id="horaFin">
 
           <p id="availabilityMsg" class="availability"></p>
 
@@ -650,96 +608,51 @@
 
 
 <script>
-  function formatRentalDate(value) {
-    if (!value) return "Choose date";
-    const parts = value.split("-");
-    if (parts.length !== 3) return value;
+  const fechaHoraInicioEl = document.getElementById("fechaHoraInicio");
+  const fechaHoraFinEl = document.getElementById("fechaHoraFin");
 
-    const localDate = new Date(
-      Number(parts[0]),
-      Number(parts[1]) - 1,
-      Number(parts[2])
-    );
+  function copiarFechaHora(origen, campoFecha, campoHora) {
+    const valor = origen.value || "";
 
-    return localDate.toLocaleDateString("en-CA", {
-      month: "short",
-      day: "numeric",
-      year: "numeric"
-    });
+    if (!valor.includes("T")) {
+      campoFecha.value = "";
+      campoHora.value = "";
+    } else {
+      const partes = valor.split("T");
+      campoFecha.value = partes[0] || "";
+      campoHora.value = (partes[1] || "").slice(0, 5);
+    }
+
+    campoFecha.dispatchEvent(new Event("input", { bubbles: true }));
+    campoHora.dispatchEvent(new Event("input", { bubbles: true }));
+    campoFecha.dispatchEvent(new Event("change", { bubbles: true }));
+    campoHora.dispatchEvent(new Event("change", { bubbles: true }));
   }
 
-  function closeAllDatePanels(exceptPicker = null) {
-    document.querySelectorAll(".date-picker").forEach((picker) => {
-      if (picker === exceptPicker) return;
-
-      const panel = picker.querySelector(".date-picker__panel");
-      const button = picker.querySelector(".date-picker__button");
-
-      panel.hidden = true;
-      button.setAttribute("aria-expanded", "false");
-      picker.classList.remove("is-open");
-    });
-  }
-
-  document.querySelectorAll(".date-picker").forEach((picker) => {
-    const button = picker.querySelector(".date-picker__button");
-    const panel = picker.querySelector(".date-picker__panel");
-    const okButton = picker.querySelector(".date-picker__ok");
-    const dateInput = picker.querySelector('input[type="date"]');
-    const text = picker.querySelector(".date-picker__text");
-
-    button.addEventListener("click", () => {
-      const willOpen = panel.hidden;
-      closeAllDatePanels(willOpen ? picker : null);
-
-      panel.hidden = !willOpen;
-      button.setAttribute("aria-expanded", String(willOpen));
-      picker.classList.toggle("is-open", willOpen);
-
-      if (willOpen) {
-        window.setTimeout(() => {
-          dateInput.focus();
-          if (typeof dateInput.showPicker === "function") {
-            try { dateInput.showPicker(); } catch (_) {}
-          }
-        }, 0);
-      }
-    });
-
-    okButton.addEventListener("click", () => {
-      if (!dateInput.value) {
-        dateInput.focus();
-        if (typeof dateInput.showPicker === "function") {
-          try { dateInput.showPicker(); } catch (_) {}
-        }
-        return;
-      }
-
-      text.textContent = formatRentalDate(dateInput.value);
-      panel.hidden = true;
-      button.setAttribute("aria-expanded", "false");
-      picker.classList.remove("is-open");
-
-      dateInput.dispatchEvent(new Event("change", { bubbles: true }));
-    });
-
-    dateInput.addEventListener("change", () => {
-      if (dateInput.value) {
-        text.textContent = formatRentalDate(dateInput.value);
-      }
-    });
+  fechaHoraInicioEl.addEventListener("input", () => {
+    copiarFechaHora(fechaHoraInicioEl, fiEl, hiEl);
   });
 
-  document.addEventListener("click", (event) => {
-    if (!event.target.closest(".date-picker")) {
-      closeAllDatePanels();
-    }
+  fechaHoraInicioEl.addEventListener("change", () => {
+    copiarFechaHora(fechaHoraInicioEl, fiEl, hiEl);
   });
 
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") {
-      closeAllDatePanels();
-    }
+  fechaHoraFinEl.addEventListener("input", () => {
+    copiarFechaHora(fechaHoraFinEl, ffEl, hfEl);
+  });
+
+  fechaHoraFinEl.addEventListener("change", () => {
+    copiarFechaHora(fechaHoraFinEl, ffEl, hfEl);
+  });
+
+  window.addEventListener("load", () => {
+    const ahora = new Date();
+    const ahoraLocal = new Date(
+      ahora.getTime() - ahora.getTimezoneOffset() * 60000
+    ).toISOString().slice(0, 16);
+
+    fechaHoraInicioEl.min = ahoraLocal;
+    fechaHoraFinEl.min = ahoraLocal;
   });
 </script>
 
