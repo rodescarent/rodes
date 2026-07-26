@@ -107,9 +107,8 @@ html, body {
 }
 .btn-primary:disabled{ opacity:.55; cursor:not-allowed; }
 .btn-ghost{
-  background: rgba(255,255,255,.10);
-  color: var(--text-dark);
-  border-color: rgba(255,255,255,.16);
+  background: linear-gradient(135deg, var(--primary), var(--primary-soft));
+  color: #fff;
 }
 .btn-ghost:hover{ filter: brightness(1.06); }
 .btn-block{ width:100%; }
