@@ -133,7 +133,7 @@
 
           <div class="datetime-simple">
             <label for="fechaHoraInicio">Start date and time</label>
-            <div class="datetime-simple__control" data-datetime-open="fechaHoraInicio">
+            <div class="datetime-simple__control">
               <span class="datetime-simple__icon" aria-hidden="true">▦</span>
               <input type="datetime-local" id="fechaHoraInicio" required>
             </div>
@@ -141,42 +141,13 @@
 
           <div class="datetime-simple">
             <label for="fechaHoraFin">End date and time</label>
-            <div class="datetime-simple__control" data-datetime-open="fechaHoraFin">
+            <div class="datetime-simple__control">
               <span class="datetime-simple__icon" aria-hidden="true">▦</span>
               <input type="datetime-local" id="fechaHoraFin" required>
             </div>
           </div>
 
-          <div class="desktop-datetime-modal" id="desktopDatetimeModal" hidden>
-            <div class="desktop-datetime-modal__backdrop"></div>
-
-            <div class="desktop-datetime-modal__dialog" role="dialog" aria-modal="true"
-              aria-labelledby="desktopDatetimeTitle">
-              <div class="desktop-datetime-modal__head">
-                <h3 id="desktopDatetimeTitle">Choose date and time</h3>
-                <button type="button" class="desktop-datetime-modal__close"
-                  aria-label="Close">×</button>
-              </div>
-
-              <div class="desktop-datetime-modal__body">
-                <div class="desktop-datetime-modal__field">
-                  <label for="desktopDate">Date</label>
-                  <input type="date" id="desktopDate">
-                </div>
-
-                <div class="desktop-datetime-modal__field">
-                  <label for="desktopTime">Time</label>
-                  <input type="time" id="desktopTime">
-                </div>
-              </div>
-
-              <div class="desktop-datetime-modal__actions">
-                <button type="button" class="desktop-datetime-modal__ok">OK</button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Campos originales: mantienen intacta la lógica existente -->
+<!-- Campos originales: mantienen intacta la lógica existente -->
           <input type="hidden" id="fechaInicio">
           <input type="hidden" id="horaInicio">
           <input type="hidden" id="fechaFin">
@@ -686,112 +657,6 @@
 </script>
 
 
-
-<script>
-  /* Selector personalizado exclusivo para escritorio */
-  (() => {
-    const desktopQuery = window.matchMedia("(min-width: 621px)");
-    const modal = document.getElementById("desktopDatetimeModal");
-    const dialog = modal.querySelector(".desktop-datetime-modal__dialog");
-    const backdrop = modal.querySelector(".desktop-datetime-modal__backdrop");
-    const closeButton = modal.querySelector(".desktop-datetime-modal__close");
-    const okButton = modal.querySelector(".desktop-datetime-modal__ok");
-    const dateInput = document.getElementById("desktopDate");
-    const timeInput = document.getElementById("desktopTime");
-    const title = document.getElementById("desktopDatetimeTitle");
-
-    let activeInput = null;
-
-    function openDesktopPicker(targetId) {
-      if (!desktopQuery.matches) return;
-
-      activeInput = document.getElementById(targetId);
-      if (!activeInput) return;
-
-      const currentValue = activeInput.value || "";
-      const [currentDate = "", currentTime = ""] = currentValue.split("T");
-
-      dateInput.value = currentDate;
-      timeInput.value = currentTime.slice(0, 5);
-
-      title.textContent = targetId === "fechaHoraInicio"
-        ? "Choose start date and time"
-        : "Choose end date and time";
-
-      modal.hidden = false;
-      document.body.classList.add("desktop-datetime-open");
-
-      window.setTimeout(() => {
-        dateInput.focus();
-        if (typeof dateInput.showPicker === "function") {
-          try { dateInput.showPicker(); } catch (_) {}
-        }
-      }, 0);
-    }
-
-    function closeDesktopPicker() {
-      modal.hidden = true;
-      document.body.classList.remove("desktop-datetime-open");
-      activeInput = null;
-    }
-
-    document.querySelectorAll("[data-datetime-open]").forEach((control) => {
-      const targetId = control.getAttribute("data-datetime-open");
-
-      control.addEventListener("pointerdown", (event) => {
-        if (!desktopQuery.matches) return;
-        event.preventDefault();
-      });
-
-      control.addEventListener("click", (event) => {
-        if (!desktopQuery.matches) return;
-
-        event.preventDefault();
-        event.stopPropagation();
-        openDesktopPicker(targetId);
-      });
-    });
-
-    okButton.addEventListener("click", () => {
-      if (!activeInput) return;
-
-      if (!dateInput.value) {
-        dateInput.focus();
-        if (typeof dateInput.showPicker === "function") {
-          try { dateInput.showPicker(); } catch (_) {}
-        }
-        return;
-      }
-
-      if (!timeInput.value) {
-        timeInput.focus();
-        if (typeof timeInput.showPicker === "function") {
-          try { timeInput.showPicker(); } catch (_) {}
-        }
-        return;
-      }
-
-      activeInput.value = `${dateInput.value}T${timeInput.value}`;
-      activeInput.dispatchEvent(new Event("input", { bubbles: true }));
-      activeInput.dispatchEvent(new Event("change", { bubbles: true }));
-
-      closeDesktopPicker();
-    });
-
-    closeButton.addEventListener("click", closeDesktopPicker);
-    backdrop.addEventListener("click", closeDesktopPicker);
-
-    dialog.addEventListener("click", (event) => {
-      event.stopPropagation();
-    });
-
-    document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape" && !modal.hidden) {
-        closeDesktopPicker();
-      }
-    });
-  })();
-</script>
 
 </body>
 </html>
