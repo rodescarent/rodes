@@ -1479,12 +1479,9 @@ body.menu-open{ overflow:hidden; }
   }
 }
 
-
-
-
 /* =========================================================
-   SELECTOR FECHA/HORA — SOLO ESCRITORIO
-   Móvil conserva el selector nativo actual.
+   FECHA Y HORA — VENTANA ÚNICA SOLO EN PC
+   El formato móvil no se modifica.
    ========================================================= */
 
 .desktop-datetime-modal{
@@ -1500,20 +1497,21 @@ body.menu-open{ overflow:hidden; }
     cursor:pointer;
   }
 
-  .datetime-simple__control,
   .datetime-simple__control *{
     cursor:pointer;
   }
 
+  /* Evita que el datetime-local nativo se abra detrás de la ventana */
   .page-car .datetime-simple input[type="datetime-local"]{
     pointer-events:none;
+    user-select:none;
   }
 
   .desktop-datetime-modal[hidden]{
-    display:none;
+    display:none !important;
   }
 
-  .desktop-datetime-modal{
+  .desktop-datetime-modal:not([hidden]){
     position:fixed;
     z-index:9999;
     inset:0;
@@ -1531,7 +1529,7 @@ body.menu-open{ overflow:hidden; }
   .desktop-datetime-modal__dialog{
     position:relative;
     z-index:1;
-    width:min(430px, 100%);
+    width:min(430px,100%);
     padding:18px;
     color:var(--text-dark);
     background:rgba(8,10,12,.98);
@@ -1625,3 +1623,4 @@ body.menu-open{ overflow:hidden; }
     filter:brightness(1.06);
   }
 }
+

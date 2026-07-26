@@ -736,12 +736,19 @@
     }
 
     document.querySelectorAll("[data-datetime-open]").forEach((control) => {
+      const targetId = control.getAttribute("data-datetime-open");
+
+      control.addEventListener("pointerdown", (event) => {
+        if (!desktopQuery.matches) return;
+        event.preventDefault();
+      });
+
       control.addEventListener("click", (event) => {
         if (!desktopQuery.matches) return;
 
         event.preventDefault();
         event.stopPropagation();
-        openDesktopPicker(control.getAttribute("data-datetime-open"));
+        openDesktopPicker(targetId);
       });
     });
 
