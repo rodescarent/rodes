@@ -21,15 +21,10 @@ a{ color:inherit; text-decoration:none; }
   --shadow-dark: 0 20px 40px rgba(0,0,0,.40);
 }
 
-/* Fondo global del sitio */
+/* Fondo base del sitio */
 html, body {
-  background-image:
-    linear-gradient(rgba(0,0,0,.25), rgba(0,0,0,.25)),
-    url("images/header.png");
-
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: cover;
+  min-height: 100%;
+  background: #090a0b;
 }
 
 
@@ -1638,5 +1633,347 @@ body.menu-open{ overflow:hidden; }
 
   .page-home .section__title{
     font-size: 1.8rem;
+  }
+}
+
+/* =========================================================
+   AUTOS — FONDO, ENCUADRE Y SOMBRAS IGUALES AL INDEX
+   ========================================================= */
+
+.page-autos{
+  --gold: #e6ad5d;
+  --gold-light: #f3c987;
+  --white: #ffffff;
+  --dark: #090a0b;
+  --line: rgba(255, 255, 255, 0.16);
+  --container: 1240px;
+  --shadow: 0 18px 45px rgba(0, 0, 0, 0.30);
+
+  min-width: 320px;
+  margin: 0;
+  overflow-x: hidden;
+  color: var(--white);
+  background: var(--dark);
+}
+
+.page-autos .container{
+  width: min(calc(100% - 40px), var(--container));
+  margin-inline: auto;
+}
+
+.page-autos .site-shell,
+.page-autos .hero,
+.page-autos .topbar-wrap,
+.page-autos .hero__content{
+  width: 100%;
+  min-width: 0;
+}
+
+.page-autos .site-shell{
+  position: relative;
+  min-height: 100svh;
+  overflow: hidden;
+  isolation: isolate;
+
+  background-image: url("images/header.png");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+/* Misma sombra horizontal y vertical del index */
+.page-autos .site-shell::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.86) 0%,
+      rgba(0, 0, 0, 0.78) 18%,
+      rgba(0, 0, 0, 0.62) 36%,
+      rgba(0, 0, 0, 0.02) 56%,
+      rgba(0, 0, 0, 0.02) 100%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.28) 0%,
+      rgba(0, 0, 0, 0.08) 22%,
+      rgba(0, 0, 0, 0.03) 58%,
+      rgba(0, 0, 0, 0.15) 100%
+    );
+}
+
+/* Misma sombra inferior difuminada del index */
+.page-autos .site-shell::after{
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 42%;
+  z-index: -1;
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(4, 5, 6, 0) 0%,
+      rgba(4, 5, 6, 0.36) 25%,
+      rgba(4, 5, 6, 0.96) 100%
+    );
+}
+
+/* El hero de Autos ya no crea un fondo diferente */
+.page-autos .hero--autos{
+  position: relative;
+  min-height: auto;
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+  isolation: auto;
+  background: transparent;
+  box-shadow: none;
+}
+
+.page-autos .hero--autos .hero__overlay{
+  display: none;
+}
+
+.page-autos .hero--autos::after{
+  display: none;
+}
+
+.page-autos .hero__content{
+  flex: none;
+  min-height: 180px;
+  display: flex;
+  align-items: center;
+  padding: 34px 0 20px;
+}
+
+.page-autos .hero__title{
+  margin: 0;
+  color: #fff;
+  font-size: clamp(2.6rem, 5.3vw, 5rem);
+  line-height: .97;
+  letter-spacing: -.05em;
+  text-shadow: 0 4px 20px rgba(0,0,0,.55);
+}
+
+.page-autos .main{
+  position: relative;
+  z-index: 2;
+  padding: 0 0 40px;
+}
+
+.page-autos .section{
+  padding: 16px 0 34px;
+}
+
+.page-autos .section__title{
+  color: #fff;
+  text-shadow: 0 3px 16px rgba(0,0,0,.55);
+}
+
+/* Las tarjetas conservan su diseño, pero con contraste sobre el mismo fondo */
+.page-autos .card{
+  background: rgba(0,0,0,.50);
+  border: 1px solid rgba(255,255,255,.18);
+  box-shadow: 0 25px 60px rgba(0,0,0,.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.page-autos .card__body,
+.page-autos .card__title{
+  color: #fff;
+}
+
+.page-autos .card__meta{
+  color: rgba(255,255,255,.72);
+}
+
+.page-autos .btn-ghost{
+  color: #fff;
+  border-color: rgba(255,255,255,.22);
+  background: rgba(0,0,0,.22);
+}
+
+@media (max-width: 860px){
+  .page-autos .site-shell{
+    background-position: 62% center;
+  }
+}
+
+@media (max-width: 620px){
+  .page-autos{
+    min-width: 0;
+  }
+
+  .page-autos .container{
+    width: calc(100% - 18px);
+    max-width: calc(100% - 18px);
+  }
+
+  .page-autos .site-shell{
+    min-height: 100svh;
+    background-position: 62% center;
+    background-size: cover;
+    background-attachment: scroll;
+  }
+
+  .page-autos .site-shell::after{
+    height: 28%;
+    background:
+      linear-gradient(
+        180deg,
+        rgba(0, 0, 0, 0) 0%,
+        rgba(0, 0, 0, 0.08) 45%,
+        rgba(0, 0, 0, 0.30) 100%
+      );
+  }
+
+  .page-autos .hero--autos{
+    min-height: auto !important;
+  }
+
+  .page-autos .hero__content{
+    min-height: 135px;
+    padding: 24px 0 14px !important;
+  }
+
+  .page-autos .hero__title{
+    font-size: clamp(2rem, 10vw, 3rem);
+  }
+
+  .page-autos .main{
+    padding-top: 0 !important;
+  }
+}
+
+
+/* =========================================================
+   FONDO COMPARTIDO — MISMO INDEX EN PÁGINAS INTERNAS
+   ========================================================= */
+
+.page-index-background{
+  --gold: #e6ad5d;
+  --gold-light: #f3c987;
+  --white: #ffffff;
+  --dark: #090a0b;
+  --line: rgba(255, 255, 255, 0.16);
+  --container: 1240px;
+  --shadow: 0 18px 45px rgba(0, 0, 0, 0.30);
+
+  min-width: 320px;
+  min-height: 100svh;
+  margin: 0;
+  overflow-x: hidden;
+  color: var(--white);
+  background: var(--dark) !important;
+}
+
+.page-index-background .site-shell{
+  position: relative;
+  width: 100%;
+  min-height: 100svh;
+  overflow: hidden;
+  isolation: isolate;
+  background-image: url("images/header.png");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+.page-index-background .site-shell::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.86) 0%,
+      rgba(0, 0, 0, 0.78) 18%,
+      rgba(0, 0, 0, 0.62) 36%,
+      rgba(0, 0, 0, 0.02) 56%,
+      rgba(0, 0, 0, 0.02) 100%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.28) 0%,
+      rgba(0, 0, 0, 0.08) 22%,
+      rgba(0, 0, 0, 0.03) 58%,
+      rgba(0, 0, 0, 0.15) 100%
+    );
+}
+
+.page-index-background .site-shell::after{
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 42%;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(4, 5, 6, 0) 0%,
+      rgba(4, 5, 6, 0.36) 25%,
+      rgba(4, 5, 6, 0.96) 100%
+    );
+}
+
+.page-index-background .hero{
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.page-index-background .hero__overlay,
+.page-index-background .hero::after{
+  display: none !important;
+}
+
+.page-index-background .topbar-wrap,
+.page-index-background .main,
+.page-index-background .content-container,
+.page-index-background main,
+.page-index-background footer{
+  position: relative;
+  z-index: 2;
+}
+
+@media (max-width: 860px){
+  .page-index-background .site-shell{
+    background-position: 62% center;
+  }
+}
+
+@media (max-width: 620px){
+  .page-index-background{
+    min-width: 0;
+  }
+
+  .page-index-background .site-shell{
+    min-height: 100svh;
+    background-position: 62% center;
+    background-size: cover;
+    background-attachment: scroll;
+  }
+
+  .page-index-background .site-shell::after{
+    height: 28%;
+    background:
+      linear-gradient(
+        180deg,
+        rgba(0, 0, 0, 0) 0%,
+        rgba(0, 0, 0, 0.08) 45%,
+        rgba(0, 0, 0, 0.30) 100%
+      );
   }
 }
