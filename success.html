@@ -10,232 +10,246 @@
 <body class="page-success page-index-background">
   <div class="site-shell">
 
+    <div class="topbar-wrap">
+      <nav class="topbar container" aria-label="Main navigation">
+        <a class="brand" href="index.html" aria-label="RODES Car Rental - Home">
+          <span class="brand__name">RODES</span>
+          <span class="brand__tag">CAR RENTAL</span>
+        </a>
 
-  <div class="topbar-wrap">
-    <nav class="topbar container" aria-label="Main navigation">
-      <a class="brand" href="index.html" aria-label="RODES Car Rental - Home">
-        <span class="brand__name">RODES</span>
-        <span class="brand__tag">CAR RENTAL</span>
-      </a>
+        <button class="menu-toggle" type="button" aria-label="Open menu"
+          aria-expanded="false" aria-controls="main-menu">
+          <span></span><span></span><span></span>
+        </button>
 
-      <button class="menu-toggle" type="button" aria-label="Open menu"
-        aria-expanded="false" aria-controls="main-menu">
-        <span></span><span></span><span></span>
-      </button>
+        <div class="topbar__links" id="main-menu">
+          <a class="nav-link" href="index.html">Home</a>
+          <a class="nav-link" href="autos.html">Our cars</a>
+          <a class="nav-link" href="articulos.html">Extras</a>
+          <a class="nav-link" href="contacto.html">Contact</a>
+        </div>
 
-      <div class="topbar__links" id="main-menu">
-        <a class="nav-link" href="index.html">Home</a>
-        <a class="nav-link" href="autos.html">Our cars</a>
-        <a class="nav-link" href="articulos.html">Extras</a>
-        <a class="nav-link" href="contacto.html">Contact</a>
-      </div>
+        <a class="reserve-button" href="q5progressive.html">
+          <span class="reserve-button__icon" aria-hidden="true">▣</span>
+          Reserve now
+        </a>
+      </nav>
+    </div>
 
-      <a class="reserve-button" href="q5progressive.html">
-        <span class="reserve-button__icon" aria-hidden="true">▣</span>
-        Reserve now
-      </a>
-    </nav>
-  </div>
+    <main class="main">
+      <section class="section container">
+        <div class="card card--success">
+          <div class="success-head">
+            <div class="success-icon" id="statusIcon" aria-hidden="true">⏳</div>
+            <div>
+              <h2 class="success-title" id="statusTitle">Confirming your payment…</h2>
+              <p class="success-subtitle" id="statusSub">
+                This may take a few seconds. Do not close this tab.
+              </p>
+            </div>
+          </div>
 
-<main class="main">
-    <section class="section container">
+          <div class="success-message" id="msgBox">
+            <p id="msg" class="success-text">Validating session…</p>
+            <div class="success-meta" id="metaLine" style="display:none;"></div>
+          </div>
 
-      <div class="card card--success">
-        <div class="success-head">
-          <div class="success-icon" id="statusIcon" aria-hidden="true">⏳</div>
-          <div>
-            <h2 class="success-title" id="statusTitle">Confirming your payment…</h2>
-            <p class="success-subtitle" id="statusSub">
-              This may take a few seconds. Do not close this tab..
-            </p>
+          <div class="success-actions">
+            <a class="btn btn-ghost" href="index.html">Return to home page</a>
+          </div>
+
+          <div class="success-help">
+            <div class="success-help__title">Do you have a problem?</div>
+            <div class="success-help__text">
+              If you've already paid and it's not showing as confirmed here, please wait a minute and refresh the page.
+              If it's still not showing up, please contact us using your booking email address.
+            </div>
           </div>
         </div>
+      </section>
+    </main>
 
-        <!-- Mensaje principal que actualiza el JS -->
-        <div class="success-message" id="msgBox">
-          <p id="msg" class="success-text">Validating session…</p>
-          <div class="success-meta" id="metaLine" style="display:none;"></div>
-        </div>
+    <iframe name="notificationFrame" id="notificationFrame" hidden></iframe>
 
-        <div class="success-actions">
-          <a class="btn btn-ghost" href="index.html">Return to home page</a>
-        </div>
+    <form id="notificationForm" method="POST" target="notificationFrame" style="display:none;">
+      <input type="hidden" name="nombre" id="notifyNombre">
+      <input type="hidden" name="fechaInicio" id="notifyFechaInicio">
+      <input type="hidden" name="dias" id="notifyDias">
+      <input type="hidden" name="row_index" id="notifyRowIndex">
+      <input type="hidden" name="session_id" id="notifySessionId">
+    </form>
 
-        <div class="success-help">
-          <div class="success-help__title">Do you have a problem?</div>
-          <div class="success-help__text">
-            If you've already paid and it's not showing as confirmed here, please wait a minute and refresh the page.
-            If it's still not showing up, please contact us using your booking email address.
-          </div>
-        </div>
-      </div>
+    <script>
+      const WEBAPP_URL =
+        "https://script.google.com/macros/s/AKfycbzNAOMuQdxhjkdh4Ff4pF_NeZgHYDmSKaTaXtpFd1PCLk_am0hQu4I2eVqJUjy8LwG6/exec";
 
-    </section>
-  </main>
+      const NOTIFICATION_WEBAPP_URL =
+        "https://script.google.com/macros/s/AKfycbz59cUyYuiW5PkqDtQ0eN1cACDrmeyY3eQfga-WikpuycAU2iK3y1Z-9n0WD8j9HRLh/exec";
 
-  <script>
-    const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzNAOMuQdxhjkdh4Ff4pF_NeZgHYDmSKaTaXtpFd1PCLk_am0hQu4I2eVqJUjy8LwG6/exec";
-    const NOTIFICATION_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbxqfp36MpArYrqvXXbd1akTV7qVs4kQx9pFA5-KId-9jhmjUOS_oIS0M7nEX4GbUreR/exec";
+      const params = new URLSearchParams(location.search);
+      const session_id = params.get("session_id");
 
-    const params = new URLSearchParams(location.search);
-    const session_id = params.get("session_id");
+      const elMsg = document.getElementById("msg");
+      const elMeta = document.getElementById("metaLine");
+      const icon = document.getElementById("statusIcon");
+      const title = document.getElementById("statusTitle");
+      const sub = document.getElementById("statusSub");
+      const msgBox = document.getElementById("msgBox");
 
-    const elMsg = document.getElementById("msg");
-    const elMeta = document.getElementById("metaLine");
+      function setState(kind, mainText, metaText) {
+        msgBox.classList.remove("is-success", "is-warn", "is-error", "is-loading");
+        msgBox.classList.add("is-" + kind);
 
-    const icon = document.getElementById("statusIcon");
-    const title = document.getElementById("statusTitle");
-    const sub = document.getElementById("statusSub");
-    const msgBox = document.getElementById("msgBox");
-
-    function setState(kind, mainText, metaText) {
-      // kind: "loading" | "success" | "warn" | "error"
-      msgBox.classList.remove("is-success", "is-warn", "is-error", "is-loading");
-      msgBox.classList.add("is-" + kind);
-
-      if (kind === "loading") {
-        icon.textContent = "⏳";
-        title.textContent = "Confirming your payment…";
-        sub.textContent = "This may take a few seconds. Do not close this tab..";
-      }
-      if (kind === "success") {
-        icon.textContent = "✅";
-        title.textContent = "Successful payment";
-        sub.textContent = "Your reservation has been confirmed. Thank you!";
-      }
-      if (kind === "warn") {
-        icon.textContent = "🕒";
-        title.textContent = "It is not confirmed yet";
-        sub.textContent = "Sometimes Stripe takes a little while to report the status.";
-      }
-      if (kind === "error") {
-        icon.textContent = "⚠️";
-        title.textContent = "We were unable to confirm the payment";
-        sub.textContent = "Check the message and, if you paid, contact us..";
-      }
-
-      elMsg.textContent = mainText;
-
-      if (metaText) {
-        elMeta.style.display = "block";
-        elMeta.textContent = metaText;
-      } else {
-        elMeta.style.display = "none";
-        elMeta.textContent = "";
-      }
-    }
-
-
-    async function sendReservationNotification(rowIndex) {
-      const nombre = (localStorage.getItem("nombre") || "").trim();
-      const fechaInicio = (localStorage.getItem("fechaInicio") || "").trim();
-      const dias = (localStorage.getItem("dias") || "").trim();
-
-      if (!nombre || !fechaInicio || !dias) {
-        console.warn("No se envió el aviso: faltan nombre, fecha de recogida o días.");
-        return;
-      }
-
-      const notificationKey = `reservation_email_sent_${rowIndex || session_id}`;
-
-      if (localStorage.getItem(notificationKey) === "1") {
-        return;
-      }
-
-      const fd = new FormData();
-      fd.append("nombre", nombre);
-      fd.append("fechaInicio", fechaInicio);
-      fd.append("dias", dias);
-      fd.append("row_index", String(rowIndex || ""));
-
-      try {
-        const response = await fetch(NOTIFICATION_WEBAPP_URL, {
-          method: "POST",
-          body: fd
-        });
-
-        const result = await response.json();
-
-        if (!result.ok) {
-          throw new Error(result.error || "No se pudo enviar el aviso por correo.");
+        if (kind === "loading") {
+          icon.textContent = "⏳";
+          title.textContent = "Confirming your payment…";
+          sub.textContent = "This may take a few seconds. Do not close this tab.";
         }
 
-        localStorage.setItem(notificationKey, "1");
-      } catch (error) {
-        console.error("Error enviando aviso de nueva reserva:", error);
-      }
-    }
+        if (kind === "success") {
+          icon.textContent = "✅";
+          title.textContent = "Successful payment";
+          sub.textContent = "Your reservation has been confirmed. Thank you!";
+        }
 
-    async function run(){
-      setState("loading", "Validating session…");
+        if (kind === "warn") {
+          icon.textContent = "🕒";
+          title.textContent = "It is not confirmed yet";
+          sub.textContent = "Sometimes Stripe takes a little while to report the status.";
+        }
 
-      if (!session_id) {
-        setState(
-          "error",
-          "The session_id was not received in the URL. If you paid, please contact us so we can review it..",
-          "Tip: Go back to Stripe and confirm that the payment was successful."
-        );
-        return;
-      }
+        if (kind === "error") {
+          icon.textContent = "⚠️";
+          title.textContent = "We were unable to confirm the payment";
+          sub.textContent = "Check the message and, if you paid, contact us.";
+        }
 
-      const fd = new FormData();
-      fd.append("action", "confirm_paid");
-      fd.append("session_id", session_id);
+        elMsg.textContent = mainText;
 
-      try {
-        const r = await fetch(WEBAPP_URL, { method:"POST", body: fd });
-        const data = await r.json();
-
-        if (data.ok && data.paid) {
-          setState(
-            "success",
-            `Done ✅ Your payment has been confirmed. Book now #${data.row_index}.`,
-            `State: ${data.payment_status || "paid"}`
-          );
-
-          await sendReservationNotification(data.row_index);
+        if (metaText) {
+          elMeta.style.display = "block";
+          elMeta.textContent = metaText;
         } else {
+          elMeta.style.display = "none";
+          elMeta.textContent = "";
+        }
+      }
+
+      function sendReservationNotification(rowIndex) {
+        const nombre = (localStorage.getItem("nombre") || "").trim();
+        const fechaInicio = (localStorage.getItem("fechaInicio") || "").trim();
+        const dias = (localStorage.getItem("dias") || "").trim();
+
+        if (!nombre || !fechaInicio || !dias) {
+          console.warn("No se envió el aviso porque faltan nombre, fecha de recogida o cantidad de días.");
+          return;
+        }
+
+        if (!NOTIFICATION_WEBAPP_URL || NOTIFICATION_WEBAPP_URL.includes("PEGA_AQUI")) {
+          console.error("Falta colocar la URL del nuevo Apps Script.");
+          return;
+        }
+
+        const uniqueId = String(rowIndex || session_id || "");
+        const notificationKey = "rodes_notification_sent_" + uniqueId;
+
+        if (uniqueId && localStorage.getItem(notificationKey) === "1") {
+          console.log("El aviso de esta reserva ya fue enviado.");
+          return;
+        }
+
+        const form = document.getElementById("notificationForm");
+        form.action = NOTIFICATION_WEBAPP_URL;
+
+        document.getElementById("notifyNombre").value = nombre;
+        document.getElementById("notifyFechaInicio").value = fechaInicio;
+        document.getElementById("notifyDias").value = dias;
+        document.getElementById("notifyRowIndex").value = String(rowIndex || "");
+        document.getElementById("notifySessionId").value = String(session_id || "");
+
+        form.submit();
+
+        if (uniqueId) {
+          localStorage.setItem(notificationKey, "1");
+        }
+
+        console.log("Solicitud de aviso enviada.");
+      }
+
+      async function run() {
+        setState("loading", "Validating session…");
+
+        if (!session_id) {
           setState(
-            "warn",
-            `It hasn't shown as paid yet. (status: ${data.payment_status || "unknown"}).`,
-            "Wait 1 minute and reload this page."
+            "error",
+            "The session_id was not received in the URL. If you paid, please contact us so we can review it.",
+            "Tip: Go back to Stripe and confirm that the payment was successful."
+          );
+          return;
+        }
+
+        const fd = new FormData();
+        fd.append("action", "confirm_paid");
+        fd.append("session_id", session_id);
+
+        try {
+          const response = await fetch(WEBAPP_URL, {
+            method: "POST",
+            body: fd
+          });
+
+          const data = await response.json();
+
+          if (data.ok && data.paid) {
+            setState(
+              "success",
+              `Done ✅ Your payment has been confirmed. Booking #${data.row_index}.`,
+              `State: ${data.payment_status || "paid"}`
+            );
+
+            sendReservationNotification(data.row_index);
+          } else {
+            setState(
+              "warn",
+              `It hasn't shown as paid yet. (status: ${data.payment_status || "unknown"}).`,
+              "Wait 1 minute and reload this page."
+            );
+          }
+        } catch (error) {
+          setState(
+            "error",
+            "Error confirming payment: " + error,
+            "If the error persists, please contact us."
           );
         }
-      } catch (e) {
-        setState(
-          "error",
-          "Error confirming payment: " + e,
-          "If the error persists, please contact us.."
-        );
       }
-    }
-    run();
-  </script>
 
-  <script>
-    const menuToggle = document.querySelector(".menu-toggle");
-    const mainMenu = document.querySelector("#main-menu");
+      run();
+    </script>
 
-    if (menuToggle && mainMenu) {
-      menuToggle.addEventListener("click", () => {
-        const isOpen = menuToggle.getAttribute("aria-expanded") === "true";
-        menuToggle.setAttribute("aria-expanded", String(!isOpen));
-        mainMenu.classList.toggle("is-open");
-        document.body.classList.toggle("menu-open");
-      });
+    <script>
+      const menuToggle = document.querySelector(".menu-toggle");
+      const mainMenu = document.querySelector("#main-menu");
 
-      mainMenu.querySelectorAll("a").forEach((link) => {
-        link.addEventListener("click", () => {
-          menuToggle.setAttribute("aria-expanded", "false");
-          mainMenu.classList.remove("is-open");
-          document.body.classList.remove("menu-open");
+      if (menuToggle && mainMenu) {
+        menuToggle.addEventListener("click", () => {
+          const isOpen = menuToggle.getAttribute("aria-expanded") === "true";
+
+          menuToggle.setAttribute("aria-expanded", String(!isOpen));
+          mainMenu.classList.toggle("is-open");
+          document.body.classList.toggle("menu-open");
         });
-      });
-    }
-  </script>
 
+        mainMenu.querySelectorAll("a").forEach((link) => {
+          link.addEventListener("click", () => {
+            menuToggle.setAttribute("aria-expanded", "false");
+            mainMenu.classList.remove("is-open");
+            document.body.classList.remove("menu-open");
+          });
+        });
+      }
+    </script>
 
   </div>
 </body>
 </html>
-
