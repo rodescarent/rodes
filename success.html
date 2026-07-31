@@ -75,6 +75,7 @@
 
   <script>
     const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzNAOMuQdxhjkdh4Ff4pF_NeZgHYDmSKaTaXtpFd1PCLk_am0hQu4I2eVqJUjy8LwG6/exec";
+    const NOTIFICATION_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbyeVElS65nAqrFx_OztKvCgOvszGDxIFYHPkkniSciI0p6578E5g62X9w5GZc2yJZHi/exec";
 
     const params = new URLSearchParams(location.search);
     const session_id = params.get("session_id");
@@ -124,6 +125,47 @@
       }
     }
 
+
+    async function sendReservationNotification(rowIndex) {
+      const nombre = (localStorage.getItem("nombre") || "").trim();
+      const fechaInicio = (localStorage.getItem("fechaInicio") || "").trim();
+      const dias = (localStorage.getItem("dias") || "").trim();
+
+      if (!nombre || !fechaInicio || !dias) {
+        console.warn("No se envió el aviso: faltan nombre, fecha de recogida o días.");
+        return;
+      }
+
+      const notificationKey = `reservation_email_sent_${rowIndex || session_id}`;
+
+      if (localStorage.getItem(notificationKey) === "1") {
+        return;
+      }
+
+      const fd = new FormData();
+      fd.append("nombre", nombre);
+      fd.append("fechaInicio", fechaInicio);
+      fd.append("dias", dias);
+      fd.append("row_index", String(rowIndex || ""));
+
+      try {
+        const response = await fetch(NOTIFICATION_WEBAPP_URL, {
+          method: "POST",
+          body: fd
+        });
+
+        const result = await response.json();
+
+        if (!result.ok) {
+          throw new Error(result.error || "No se pudo enviar el aviso por correo.");
+        }
+
+        localStorage.setItem(notificationKey, "1");
+      } catch (error) {
+        console.error("Error enviando aviso de nueva reserva:", error);
+      }
+    }
+
     async function run(){
       setState("loading", "Validating session…");
 
@@ -150,6 +192,8 @@
             `Done ✅ Your payment has been confirmed. Book now #${data.row_index}.`,
             `State: ${data.payment_status || "paid"}`
           );
+
+          await sendReservationNotification(data.row_index);
         } else {
           setState(
             "warn",
