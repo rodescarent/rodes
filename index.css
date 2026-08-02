@@ -1318,3 +1318,11 @@ textarea {
   box-shadow:
     inset 0 0 0 1px rgba(243, 201, 135, 0.22);
 }
+
+.hero-copy__title span{
+    display: block;
+    margin-top: 10px;
+    font-size: 0.72em;
+    line-height: 1.08;
+    color: #e8bf73;
+}
