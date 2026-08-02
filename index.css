@@ -1319,10 +1319,13 @@ textarea {
     inset 0 0 0 1px rgba(243, 201, 135, 0.22);
 }
 
-.hero-copy__title span{
-    display: block;
-    margin-top: 10px;
-    font-size: 0.72em;
-    line-height: 1.08;
-    color: #e8bf73;
+
+.hero-copy__title > span {
+  display: block !important;
+  margin-top: 12px !important;
+  font-size: 0.58em !important;
+  line-height: 1.12 !important;
+  color: #e8bf73 !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.01em !important;
 }
