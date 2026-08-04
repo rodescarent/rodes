@@ -31,9 +31,21 @@
           <div class="topbar__links" id="main-menu">
             <a class="nav-link is-active" href="#inicio">Home</a>
             <a class="nav-link" href="autos.html">Cars</a>
-<a class="nav-link" href="html/identidad.html">Identidad</a>
             <a class="nav-link" href="html/quienessomos.html">Quienes somos</a>
             <a class="nav-link" href="html/porqueelegirnos.html">Porque elegirnos</a>
+            <a class="nav-link" href="html/comofunciona.html">Como funciona</a>
+            <a class="nav-link" href="html/identidad.html">Identidad</a>
+
+    <div class="nav-dropdown">
+        <button class="nav-link nav-dropdown__button" type="button" aria-expanded="false">Más
+        <span class="nav-dropdown__arrow" aria-hidden="true">▾</span>
+        </button>
+
+    <div class="nav-dropdown__menu">
+      <a href="html/eventos.html">Eventos</a>
+      <a href="html/historial.html">Historia</a>
+      <a href="html/privacidad.html">Privacidad</a>
+    </div>
           </div>
 
           
@@ -254,5 +266,37 @@ En RODES encontrarás vehículos 4x4 premium, equipo de camping, soluciones para
       });
     }
   </script>
+
+  <script>
+  const dropdown = document.querySelector(".nav-dropdown");
+  const dropdownButton = document.querySelector(".nav-dropdown__button");
+
+  if (dropdown && dropdownButton) {
+    dropdownButton.addEventListener("click", (event) => {
+      event.stopPropagation();
+
+      const isOpen = dropdown.classList.toggle("is-open");
+
+      dropdownButton.setAttribute(
+        "aria-expanded",
+        String(isOpen)
+      );
+    });
+
+    document.addEventListener("click", (event) => {
+      if (!dropdown.contains(event.target)) {
+        dropdown.classList.remove("is-open");
+        dropdownButton.setAttribute("aria-expanded", "false");
+      }
+    });
+
+    dropdown.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", () => {
+        dropdown.classList.remove("is-open");
+        dropdownButton.setAttribute("aria-expanded", "false");
+      });
+    });
+  }
+</script>
 </body>
 </html>
