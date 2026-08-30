@@ -1757,7 +1757,7 @@ body.menu-open{ overflow:hidden; }
 .page-autos .hero__title{
   margin: 0;
   color: #fff;
-  font-size: clamp(2.6rem, 5.3vw, 5rem);
+  font-size: clamp(2.1rem, 3vw, 5rem);
   line-height: .97;
   letter-spacing: -.05em;
   text-shadow: 0 4px 20px rgba(0,0,0,.55);
